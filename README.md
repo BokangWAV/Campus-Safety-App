@@ -3,6 +3,8 @@
 ## Overview
 The Campus Safety App is designed to enhance the security and safety of campus environments by providing essential tools for emergency alerts, incident reporting, and access to safety resources. This app aims to ensure a secure and responsive environment for students, faculty, and staff.
 
+[Link to site](https://witty-plant-0efd7e103.5.azurestaticapps.net/)
+
 ## Features
 - **Emergency Alerts**: Instant notifications to alert the campus community of emergencies.
 - **Incident Reporting**: Allows users to report incidents directly to campus security.
