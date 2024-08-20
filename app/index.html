@@ -1,13 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index page</title>
-    <script type="module" src="scripts/script.js" deter></script>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Login - Campus-Safety-App</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet">
+
+  <link href="/styles/main.css" rel="stylesheet">
+
 </head>
-<body>
-    <main id="main"></main>
-    <ul id="usersList"></ul>
+
+<body class="index-page">
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+      <a href="index.html" class="logo d-flex align-items-center me-auto">
+        <h1 class="sitename">Campus Safety</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html">Home<br></a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="dashboardtest.html">Dashboard</a></li>
+          <li><a href="faqs.html">FAQs</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="login.html" class="active">Login</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      <div class="sub-header-mobile">
+        <a class="btn-getstarted" href="register.html">Register</a>
+        <a href="#" class="options" id="options">Menu</a>
+      </div>   
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section dark-background">
+
+      <img src="assets/img/hero-bg.jpg" alt="" data-aos="fade-in">
+
+      <div class="container" style="text-shadow: 1px 1px black;">
+        <h2 data-aos="fade-up" data-aos-delay="100">Your Campus Safety,<br>Our Priority</h2>
+        <p data-aos="fade-up" data-aos-delay="200">Committed on delivering top-tier safety solutions for a secure and thriving campus environment.</p>
+        <div class="d-flex mt-4" style="display: flex; flex-flow:row wrap; justify-content: space-around;" data-aos="fade-up" data-aos-delay="300">
+          <a href="/register.html" class="btn-get-started">Register</a>
+          <a href="/login.html" class="btn-get-started">Login</a>
+        </div>
+      </div>
+
+    </section><!-- /Hero Section -->
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+
+      <div class="container">
+
+          <div class="col-lg-6 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200">
+            <h3>Making Wits safer and better.</h3>
+            <p class="fst-italic">
+              We are committed to providing a platform of relief and one to reach out to in events of danger or concern.
+            </p>
+            <ul>
+              <li><i class="bi bi-check-circle"></i> <span>Seamless, smart, simple.</span></li>
+              <li><i class="bi bi-check-circle"></i> <span>Our team is dedicated to ensuring your satisfaction and providing support when needed.</span></li>
+              <li><i class="bi bi-check-circle"></i> <span>We aim to provide a peace of mind.</span></li>
+            </ul>
+            <a href="/about.html"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+          </div>
+          
+        </div>
+
+      </div>
+
+    </section><!-- /About Section -->
+
+    
+    </section><!-- /Counts Section -->
+
+    <!-- Why Us Section -->
+    <section id="why-us" class="section why-us">
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="why-box">
+              <h3>What are we EXACTLY???</h3>
+              <p>
+                It is no secret that crime is a serious issue in our current landspace, especially in Johannesburg. Our Campus Safety App has got you covered with a solution: An environment where we all work together to make our campus a safer place to traverse.
+              </p>
+              <div class="text-center">
+                <a href="about.html" class="more-btn"><span>Learn More</span> <i class="bi bi-chevron-right"></i></a>
+              </div>
+            </div>
+          </div><!-- End Why Box -->
+
+          <div class="col-lg-8 d-flex align-items-stretch">
+            <div class="row gy-4" data-aos="fade-up" data-aos-delay="200">
+
+              <div class="col-xl-4">
+                <div class="icon-box d-flex flex-column justify-content-center align-items-center">
+                  <i class="bi bi-clipboard-data"></i>
+                  <h4>Emergency Alerts</h4>
+                  <p>Quick way to respond to emergencies of all degrees.</p>
+                </div>
+              </div><!-- End Icon Box -->
+
+              <div class="col-xl-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="icon-box d-flex flex-column justify-content-center align-items-center">
+                  <i class="bi bi-gem"></i>
+                  <h4>Security</h4>
+                  <p>24 hours access to security services anywhere on campus.</p>
+                </div>
+              </div>
+
+              <div class="col-xl-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="icon-box d-flex flex-column justify-content-center align-items-center">
+                  <i class="bi bi-inboxes"></i>
+                  <h4>Report</h4>
+                  <p>Receive an almost immediate response in time of need.</p>
+                </div>
+              </div><!-- End Icon Box -->
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+  </main>
+
+  <footer id="footer" class="footer position-relative light-background">
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright 2024</span> <strong class="px-1 sitename">TDKUs</strong> <span>All Rights Reserved</span></p>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <script src="/scripts/main.js"></script>
+
 </body>
+
 </html>
