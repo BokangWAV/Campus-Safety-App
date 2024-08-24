@@ -40,6 +40,7 @@ body {
     margin-bottom: 2rem;
     flex-grow: 1;
     overflow-y: auto;
+    width: 100%;
 }
 
 
@@ -69,6 +70,7 @@ body {
 
 .Main-Part .Chatbot-Conversation {
     overflow-y: auto;
+    width: 100%;
 }
 
 .Main-Part .Chatbot-Conversation .question{
