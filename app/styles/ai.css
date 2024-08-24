@@ -58,7 +58,7 @@ body {
 }
 
 .Main-Part .no-conversation .no-Conversation-div{
-    height: 80vh;
+    margin: auto;
 }
 
 .Main-Part .no-conversation .no-Conversation-div img{
@@ -165,6 +165,13 @@ body {
         padding: 5px;
     }
 
+
+
+    .Main-Part .no-conversation .no-Conversation-div img{
+        height: 250px;
+        width: 250px;
+    }
+
     .Main-Part .Chatbot-Conversation .question{
         margin-top: 15px;
         margin-bottom: 15px;
@@ -194,7 +201,7 @@ body {
 
 
     .Main-Part .ask-Section .Chatbot-Prompt{
-        width: 70%;
+        width: 75%;
         margin-left: 20px;
         margin-right: 5px;
     }
