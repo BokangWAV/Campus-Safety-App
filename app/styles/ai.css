@@ -136,6 +136,10 @@ body {
         margin-right: 30px;
     }
 
+    .Main-Part{
+        padding: 5px;
+    }
+
     .Main-Part .Chatbot-Conversation .question{
         margin-top: 15px;
         margin-bottom: 15px;
