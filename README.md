@@ -1,4 +1,4 @@
-![Static Web App CI/CD](https://github.com/DanielDanzo/Campus-Safety-App/actions/workflows/azure-static-web-apps-agreeable-forest-0b968ac03.yml/badge.svg)
+![Static Web App CI/CD](https://github.com/BokangWAV/Campus-Safety-App/actions/workflows/azure-static-web-apps-agreeable-forest-0b968ac03.yml/badge.svg)
 
 # Campus Safety App
 
