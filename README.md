@@ -1,3 +1,5 @@
+![Static Web App CI/CD](https://github.com/BokangWAV/Campus-Safety-App/actions/workflows/azure-static-web-apps-agreeable-forest-0b968ac03.yml/badge.svg)
+
 # Campus Safety App
 
 ## Overview
@@ -21,3 +23,6 @@ The Campus Safety App is designed to enhance the security and safety of campus e
 ### Prerequisites
 - **Web Browser**: Any modern web browser (Chrome, Firefox, Safari, etc.).
 - **Git**: Ensure Git is installed to clone the repository.
+
+## Documentation
+[Link to documentation](https://danieldanzo.gitbook.io/campus-safety-app)
