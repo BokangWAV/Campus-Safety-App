@@ -144,11 +144,10 @@ body {
         margin-top: 15px;
         margin-bottom: 15px;
         margin-left: 20%;
-        padding: 4px;
+        padding: 8px;
         padding-left: 18px;
         padding-right: 18px;
         margin-right: 4px;
-        line-height: 1.4px;
     }
 
 
@@ -170,7 +169,7 @@ body {
 
 
     .Main-Part .ask-Section .Chatbot-Prompt{
-        width: 75%;
+        width: 70%;
         margin-left: 20px;
         margin-right: 5px;
     }
