@@ -2,3 +2,4 @@ npm init -y
 npm install firebase
 npm install express
 npm install cors
+npm install dotenv
