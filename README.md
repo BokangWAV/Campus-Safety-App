@@ -23,3 +23,6 @@ The Campus Safety App is designed to enhance the security and safety of campus e
 ### Prerequisites
 - **Web Browser**: Any modern web browser (Chrome, Firefox, Safari, etc.).
 - **Git**: Ensure Git is installed to clone the repository.
+
+## Documentation
+[Link to documentation](https://danieldanzo.gitbook.io/campus-safety-app)
