@@ -132,29 +132,31 @@ body {
     }
 
     .Header h2{
+        font-size: 25;
         margin-right: 30px;
     }
 
     .Main-Part .Chatbot-Conversation .question{
-        margin-top: 25px;
-        margin-bottom: 25px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        margin-left: 20%;
         padding: 8px;
         padding-left: 18px;
         padding-right: 18px;
-        margin-right: 20px;
+        margin-right: 10px;
     }
 
 
     .Main-Part .Chatbot-Conversation .respose{
-        padding: 15px;
-        padding-left: 20px;
+        padding: 10px;
+        padding-left: 10px;
     }
 
 
 
     .Main-Part .Chatbot-Conversation .respose p{
-        line-height: 1rem;
-        font-size: 14px;
+        line-height: 1.7rem;
+        font-size: 28px;
     }
 
     
@@ -163,5 +165,10 @@ body {
     .Main-Part .ask-Section .Chatbot-Prompt{
         width: 85%;
         margin-left: 20px;
+        margin-right: 5px;
+    }
+
+    .Main-Part .ask-Section .Prompt-Btn{
+        margin-left: 5px;
     }
 }
