@@ -1,4 +1,4 @@
-import {  signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+import {  signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 import { collection, addDoc  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js"; 
 import { auth, provider, db } from "./init.js";
 
@@ -49,7 +49,7 @@ function GooglesignInUser(){
 */
 function NormalsignInUser(firstName, lastName, email, password){
     console.log(firstName, lastName, email, password);
-    signInWithEmailAndPassword(auth, email, password)
+    createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
