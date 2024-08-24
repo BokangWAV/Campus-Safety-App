@@ -1,3 +1,6 @@
+import { GooglesignInUser, NormalsignInUser } from "../modules/users.js";
+
+
 (function() {
   "use strict";
 
@@ -75,6 +78,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const menu = document.getElementById("options");
   const navmenuElements = document.getElementsByClassName("navmenu");
   const firstNavmenu = navmenuElements[0];
+  const googleBtn = document.getElementById('Google-Btn');
+  const registerBtn = document.getElementById('Register-Btn');
   
   //navDisplay(firstNavmenu);
 
@@ -100,4 +105,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+
+  googleBtn.addEventListener('click', ()=>{
+    GooglesignInUser()
+  });
+
+  registerBtn.addEventListener('click',()=>{
+    console.log(document.getElementById('firstName').value);
+    NormalsignInUser(document.getElementById('firstName').value,
+                      document.getElementById('lastName').value,
+                      document.getElementById('email').value,
+                      document.getElementById('password').value)
+  });
+
 });
+
+

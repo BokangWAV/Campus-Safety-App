@@ -252,6 +252,13 @@
     color: var(--contrast-color);
     background: color-mix(in srgb, var(--accent-color), transparent 15%);
   }
+
+  #header #container-header{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between ;
+    align-items: center;
+  }
   
   @media (max-width: 1200px) {
     .header .logo {
