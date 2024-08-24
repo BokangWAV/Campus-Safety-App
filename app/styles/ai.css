@@ -155,8 +155,9 @@ body {
 
 
     .Main-Part .Chatbot-Conversation .respose p{
+        width: 80%;
         line-height: 1.7rem;
-        font-size: 28px;
+        font-size: 20px;
     }
 
     
