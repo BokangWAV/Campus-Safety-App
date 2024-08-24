@@ -144,10 +144,11 @@ body {
         margin-top: 15px;
         margin-bottom: 15px;
         margin-left: 20%;
-        padding: 8px;
+        padding: 4px;
         padding-left: 18px;
         padding-right: 18px;
         margin-right: 4px;
+        line-height: 1.4px;
     }
 
 
