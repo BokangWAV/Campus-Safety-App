@@ -8,4 +8,4 @@ app.get('/',(req, res)=>{
     res.json({message: 'Exe Gents'});
 });
 
-app.listen(8080);
+app.listen(80);
