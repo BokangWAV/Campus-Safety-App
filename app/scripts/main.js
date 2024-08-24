@@ -1,4 +1,4 @@
-import { GooglesignInUser, NormalsignInUser } from "../modules/users.js";
+import { GooglesignInUser, NormalRegisterUser } from "../modules/users.js";
 
 
 (function() {
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   registerBtn.addEventListener('click',()=>{
     console.log(document.getElementById('firstName').value);
-    NormalsignInUser(document.getElementById('firstName').value,
+    NormalRegisterUser(document.getElementById('firstName').value,
                       document.getElementById('lastName').value,
                       document.getElementById('email').value,
                       document.getElementById('password').value)

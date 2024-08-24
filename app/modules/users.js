@@ -43,13 +43,33 @@ function GooglesignInUser(){
 
 
 
-/*  FUNCTION: This allows users to login with email and password
+/*  FUNCTION: This allows users to register with email and password
 *
 *
 */
-function NormalsignInUser(firstName, lastName, email, password){
+function NormalRegisterUser(firstName, lastName, email, password){
     console.log(firstName, lastName, email, password);
     createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            console.log("successfully logged in!!");
+            addNormalUser(firstName, lastName, email);
+            // ...
+
+            signOutUser();
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode,errorMessage);
+        });
+}
+
+
+
+function NormalSignInUser(email, password){
+    signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
@@ -111,4 +131,4 @@ function signOutUser(){
 }
 
 
-export { GooglesignInUser, NormalsignInUser }
+export { GooglesignInUser, NormalRegisterUser, NormalSignInUser }
