@@ -147,19 +147,19 @@ body {
         padding: 8px;
         padding-left: 18px;
         padding-right: 18px;
-        margin-right: 10px;
+        margin-right: 4px;
     }
 
 
     .Main-Part .Chatbot-Conversation .respose{
-        padding: 10px;
+        padding: 4px;
         padding-left: 10px;
     }
 
 
 
     .Main-Part .Chatbot-Conversation .respose p{
-        width: 80%;
+        width: 100%;
         line-height: 1.7rem;
         font-size: 20px;
     }
