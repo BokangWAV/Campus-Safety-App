@@ -1,0 +1,167 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #1E1E1E;
+    color: #E0E0E0;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.Header{
+    width: 100%;
+    position: fixed;
+    overflow-x: hidden;
+    top: 0;
+    left: 0;
+    height: 50px;
+    z-index: 999;
+    background-color: #1E1E1E;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.Header a{
+    color: #E0E0E0;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+.Header h2{
+    margin-right: 50px;
+}
+
+.Main-Part{
+    display: flex;
+    margin-top: 3rem;
+    padding: 20px;
+    margin-bottom: 2rem;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.Main-Part .Chatbot-Conversation {
+    overflow-y: auto;
+}
+
+.Main-Part .Chatbot-Conversation .question{
+    align-items: center;
+    position: relative;
+    right: 10px;
+    margin-left: 60% ;
+    background-color: #2D2D2D;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border: 1px solid #1E1E1E;
+    border-radius: 20px;
+    margin-right: 20px;
+}
+
+.Main-Part .Chatbot-Conversation .respose{
+    width: 80%;
+    padding: 20px;
+    padding-left: 25px;
+}
+
+.Main-Part .Chatbot-Conversation .respose p{
+    line-height: 2rem;
+    font-size: 18px;
+}
+
+
+
+
+.Main-Part .ask-Section{
+    width: 100%;
+    position: fixed;
+    overflow: hidden;
+    bottom: 0;
+    left: 0;
+    height: 80px;
+    background-color: #1E1E1E;
+    display: flex;
+    align-items: center;
+    padding: 2px;
+}
+
+.Main-Part .ask-Section .Chatbot-Prompt{
+    margin-left: 40px;
+    margin-right: 10px;
+    border-radius: 20px;
+    border: 1px solid #2D2D2D;
+    background-color: #2D2D2D  ; 
+    color: #E0E0E0;
+    height: 60%;
+    width: 90%;
+    box-sizing: border-box;
+    padding: 15px;
+    font-size: 19px;
+    font-style: normal;
+}
+
+.Main-Part .ask-Section .Chatbot-Prompt:focus{
+    outline: none;
+}
+
+
+.Main-Part .ask-Section .Prompt-Btn{
+    background-color: #E0E0E0;
+    outline: none;
+    box-sizing: border-box;
+    height: 50%;
+    margin-left: 7px;
+    border-radius: 50%;
+    border: 1px solid #2D2D2D;
+    width: 40px;
+}
+
+.Main-Part .ask-Section .Prompt-Btn:hover{
+    background-color: #B0B0B0;
+}
+
+
+
+@media (max-width: 800px){
+    .Header a{
+        margin-left: 10px;
+    }
+
+    .Header h2{
+        margin-right: 30px;
+    }
+
+    .Main-Part .Chatbot-Conversation .question{
+        margin-top: 25px;
+        margin-bottom: 25px;
+        padding: 8px;
+        padding-left: 18px;
+        padding-right: 18px;
+        margin-right: 20px;
+    }
+
+
+    .Main-Part .Chatbot-Conversation .respose{
+        padding: 15px;
+        padding-left: 20px;
+    }
+
+
+
+    .Main-Part .Chatbot-Conversation .respose p{
+        line-height: 1rem;
+        font-size: 14px;
+    }
+
+    
+
+
+    .Main-Part .ask-Section .Chatbot-Prompt{
+        width: 85%;
+        margin-left: 20px;
+    }
+}

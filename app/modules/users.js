@@ -25,7 +25,7 @@ function GooglesignInUser(){
         console.log(user.displayName.split(" ")[0], user.email);
         addGoogleUser(userFirstName, userLastName, userEmail);
 
-        signOutUser();
+        //signOutUser();
         // IdP data available using getAdditionalUserInfo(result)
         // ...
     }).catch((error) => {
@@ -57,7 +57,7 @@ function NormalRegisterUser(firstName, lastName, email, password){
             addNormalUser(firstName, lastName, email);
             // ...
 
-            signOutUser();
+            //signOutUser();
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -74,10 +74,9 @@ function NormalSignInUser(email, password){
             // Signed in 
             const user = userCredential.user;
             console.log("successfully logged in!!");
-            addNormalUser(firstName, lastName, email);
             // ...
 
-            signOutUser();
+            //signOutUser();
         })
         .catch((error) => {
             const errorCode = error.code;
