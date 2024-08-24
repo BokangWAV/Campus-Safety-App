@@ -7,7 +7,7 @@ const port = process.env.PORT || 3000;;
 
 app.use(cors());
 
-app.get('/',(req, res)=>{
+app.get('/get',(req, res)=>{
     console.log('We have an API');
     res.json({message: 'Exe Gents'});
 });
