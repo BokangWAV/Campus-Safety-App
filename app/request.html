@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Requests - Campus Safety App</title>
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link href="styles/dashboard.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Header for Web and Mobile -->
+  <div class="header">
+    <h2>Campus Safety</h2>
+    <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="headerMenu">
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="alerts.html">Emergency Alerts</a></li>
+      <li><a href="report.html">Report an Incident</a></li>
+      <li><a href="article.html">Articles</a></li>
+      <!-- <li><a href="resources.html">Safety Resources</a></li> -->
+      <li><a class="active" href="requests.html">Requests</a></li>
+      <li><a href="contact.html">Contact Security</a></li>
+    </ul>
+  </div>
+
+  <!-- Requests Container -->
+  <div class="dashboard-container">
+
+    <!-- Header -->
+    <div class="dashboard-header">
+      <h1>User Requests</h1>
+      <p>View and manage all user requests.</p>
+    </div>
+
+    <!-- Requests Content -->
+    <div class="dashboard-content">
+
+      <!-- Request Item -->
+      <div class="dashboard-card">
+        <h3>Alert Request</h3>
+        <p>User: John Doe</p>
+        <p>Requested On: August 25, 2024</p>
+        <p>Details: Request to issue a campus-wide alert for a suspicious individual sighted near the library.</p>
+        <a href="#">Review Request</a>
+      </div>
+
+      <!-- Request Item -->
+      <div class="dashboard-card">
+        <h3>Article Publication Request</h3>
+        <p>User: Jane Smith</p>
+        <p>Requested On: August 24, 2024</p>
+        <p>Details: Request to publish an article on fire safety measures for campus residents.</p>
+        <a href="#">Review Request</a>
+      </div>
+
+      <!-- Request Item -->
+      <div class="dashboard-card">
+        <h3>Alert Request</h3>
+        <p>User: Alex Johnson</p>
+        <p>Requested On: August 23, 2024</p>
+        <p>Details: Request to issue a campus-wide alert for a weather warning.</p>
+        <a href="#">Review Request</a>
+      </div>
+
+      <!-- Add more request items as needed -->
+
+    </div>
+
+  </div>
+  
+  <script src="/scripts/dashboard.js"></script>
+  <script>
+    function toggleMobileMenu() {
+        const menu = document.getElementById('headerMenu');
+        menu.classList.toggle('active');
+    }
+  </script>
+
+</body>
+
+</html>
