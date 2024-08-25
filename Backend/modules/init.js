@@ -3,8 +3,8 @@
 //import {  getAuth, GoogleAuthProvider  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js"
 //import {  getStorage,} from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js';
 
-const initializeApp = require('firebase/app');
-const getFirestore = require('firebase/firestore');
+const {initializeApp} = require('firebase/app');
+const {getFirestore} = require('firebase/firestore');
 const {  getAuth, GoogleAuthProvider  } = require('firebase/auth');
 
 

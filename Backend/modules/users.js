@@ -5,7 +5,7 @@
 
 const {  signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword  } = require('firebase/auth');
 const { collection, addDoc  } = require('firebase/firestore');
-const { auth, provider, db } = require('./init/js');
+const { auth, provider, db } = require('./init.js');
 
 // Build Firebase credential with the Google ID token.
 //const credential = GoogleAuthProvider.credential(id_token);
