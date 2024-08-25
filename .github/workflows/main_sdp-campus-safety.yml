@@ -63,5 +63,5 @@ jobs:
         with:
           app-name: 'sdp-campus-safety'
           slot-name: 'Production'
-          package: .
+          package: './Backend'
           
