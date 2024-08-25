@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 
-app.get('/login',(req, res)=>{
+app.get('/',(req, res)=>{
     console.log('you can login');
     res.json({message: 'Exe Gents'});
 });
