@@ -1,6 +1,11 @@
-import {  signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-import { collection, addDoc  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js"; 
-import { auth, provider, db } from "./init.js";
+//import {  signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+//import { collection, addDoc  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js"; 
+//import { auth, provider, db } from "./init.js";
+
+
+const {  signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword  } = require('firebase/auth');
+const { collection, addDoc  } = require('firebase/firestore');
+const { auth, provider, db } = require('./init/js');
 
 // Build Firebase credential with the Google ID token.
 //const credential = GoogleAuthProvider.credential(id_token);
@@ -130,4 +135,4 @@ function signOutUser(){
 }
 
 
-export { GooglesignInUser, NormalRegisterUser, NormalSignInUser }
+module.exports = { GooglesignInUser, NormalRegisterUser, NormalSignInUser }

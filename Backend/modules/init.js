@@ -1,9 +1,12 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js"
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
-import {  getAuth, GoogleAuthProvider  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js"
-import {
-  getStorage,
-} from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js';
+//import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js"
+//import { getFirestore } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+//import {  getAuth, GoogleAuthProvider  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js"
+//import {  getStorage,} from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js';
+
+const initializeApp = require('firebase/app');
+const getFirestore = require('firebase/firestore');
+const {  getAuth, GoogleAuthProvider  } = require('firebase/auth');
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyCLDopG2959mh9Wtl3nDM0FAWZBNc3GGLo",
@@ -28,4 +31,4 @@ const provider = new GoogleAuthProvider();
 
 // Initialize Realtime Database and get a reference to the service
 
-export { db, auth, provider, firebaseConfig , getAuth};
+module.exports = { db, auth, provider, firebaseConfig , getAuth};
