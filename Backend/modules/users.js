@@ -16,6 +16,7 @@ const { auth, provider, db } = require('./init.js');
 *
 */
 function GooglesignInUser(){
+    console.log('signing User with Google');
     signInWithPopup(auth, provider)
     .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
