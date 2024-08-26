@@ -14,8 +14,8 @@
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <link href="styles/dashboard.css" rel="stylesheet">
-
+  <!-- Stylesheet -->
+  <link href="styles/request.css" rel="stylesheet">
 </head>
 
 <body>
@@ -48,11 +48,12 @@
       <p>View and manage all user requests.</p>
     </div>
 
-    <!-- Requests Content -->
-    <div class="dashboard-content">
-
+    <!-- Pending Requests Section -->
+    <div class="requests-section">
+      <h2>Pending Requests</h2>
+      
       <!-- Request Item -->
-      <div class="dashboard-card">
+      <div class="dashboard-card pending-request">
         <h3>Alert Request</h3>
         <p>User: John Doe</p>
         <p>Requested On: August 25, 2024</p>
@@ -61,7 +62,7 @@
       </div>
 
       <!-- Request Item -->
-      <div class="dashboard-card">
+      <div class="dashboard-card pending-request">
         <h3>Article Publication Request</h3>
         <p>User: Jane Smith</p>
         <p>Requested On: August 24, 2024</p>
@@ -69,21 +70,29 @@
         <a href="#">Review Request</a>
       </div>
 
+      <!-- Add more pending request items as needed -->
+
+    </div>
+
+    <!-- Accepted Requests Section -->
+    <div class="requests-section">
+      <h2>Accepted Requests</h2>
+      
       <!-- Request Item -->
-      <div class="dashboard-card">
+      <div class="dashboard-card accepted-request">
         <h3>Alert Request</h3>
         <p>User: Alex Johnson</p>
         <p>Requested On: August 23, 2024</p>
         <p>Details: Request to issue a campus-wide alert for a weather warning.</p>
-        <a href="#">Review Request</a>
+        <a href="#">View Details</a>
       </div>
 
-      <!-- Add more request items as needed -->
+      <!-- Add more accepted request items as needed -->
 
     </div>
 
   </div>
-  
+
   <script src="/scripts/dashboard.js"></script>
   <script>
     function toggleMobileMenu() {
