@@ -40,7 +40,7 @@ app.post('/articles', async (req, res) =>{
 
 app.delete('/articles/:name/:title', async (req, res)=>{
     const name = req.params['name'];
-    const title = req.params['title'];
+    const title = req.params['title']
     deleteArticle(name, title);
 });
 
