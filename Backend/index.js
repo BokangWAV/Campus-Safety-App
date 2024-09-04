@@ -15,7 +15,9 @@ app.use(cors());
 //-------------------------------------  ARTICLE SECTION  -------------------------------------------------//
 // This is to get all the articles in the database
 app.get('/articles', async (req, res)=>{
+    console.log("Sending request to get the Articles");
     const result = await getAllArticles();
+    console.log("Got the articles");
     res.json(result);
 });
 

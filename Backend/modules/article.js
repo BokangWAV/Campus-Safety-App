@@ -2,15 +2,19 @@ const { auth, provider, db } = require('./init.js');
 const { collection, getDocs, query, where, and, deleteDoc } = require('firebase/firestore');
 
 async function getAllArticles(){
+    console.log("Getting the articles");
     const q = query(collection(db,'articles'));
     const snapshot = await getDocs(q);
+    console.log("Got the articles");
 
     var count =0;
     var result = {};
     snapshot.forEach(doc =>{
+        console.log("Here is the first data", doc.data());
         result[count] = doc.data();
         count++;
     })
+    console.log("Done");
     return result;
 }
 
