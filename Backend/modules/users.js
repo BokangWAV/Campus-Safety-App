@@ -1,43 +1,117 @@
-const { collection, addDoc } = require('firebase/firestore');
-const { auth, provider, db } = require('./init.js');
+const { db } = require('./init.js');
 
 
-/*  FUNCTION: This adds user to the database after normal login
-*
-*
-*/
-async function addNormalUser(name, surname, email){
-    const docRef = await addDoc(collection(db, "users"), {
-        firstName: name,
-        lastName: surname,
-        email: email,
-        profile: {},
-        password: ""
+
+async function getAllUsers(){
+    const usersRef = db.collection('users');    // Get a reference to the users collection
+
+    var result = {};
+    // First page of results
+    await usersRef.get().then(snapshot => {
+        if (!snapshot.empty) {
+            var count =0;
+            
+            snapshot.forEach(doc =>{
+                result[count] = doc.data();
+                count++;
+            })
+        }
     });
+
+    return result;
+}
+
+
+
+async function getUser(uid){
+    let result = {};
+    var userRef = db.collection("users").doc(uid);
+
+    await userRef.get().then((doc) => {
+        if (doc.exists) {
+            result = doc.data();
+
+        }
+    }).catch((error) => {
+        //Do not do anything we just return an empty object
+    })
+
+    return result;
+}
+
+
+
+async function addUser(uid, user){
+    let added = true;   //Shows whether we added a user or we failed
+
+    const userRef = db.collection("users").doc(uid);    //Stores a reference to the user
+
+    await userRef.set({
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        phoneNumber: "",
+        age: 0,
+        profilePicture: "",
+        race: ""
+    })
+    .then(() => {
+        //console.log("Document successfully written!");
+    })
+    .catch((error) => {
+        //console.error("Error writing document: ", error);
+        added = false;
+    });
+
+    return added;
+}
+
+
+async function updateProfile(uid, user){
+    let updated = true;   //Shows whether we updated a user or we failed
+
+    const userRef = db.collection("users").doc(uid);    //Stores a reference to the user
+
+    await userRef.update({
+        phoneNumber: user.phoneNumber,
+        age: user.age,
+        race: user.race
+    })
+    .then(() => {
+       // console.log("Document successfully updated!");
+    })
+    .catch((error) => {
+        // The document probably doesn't exist.
+        //console.error("Error updating document: ", error);
+
+        updated = false;
+    });
+
+    return updated;
+}
+
+
+async function updateProfilePicture(uid, url){
+    let updated = true;   //Shows whether we updated a user or we failed
+
+    const userRef = db.collection("users").doc(uid);    //Stores a reference to the user
+
+    await userRef.update({
+        profilePicture: url,
+    })
+    .then(() => {
+       // console.log("Document successfully updated!");
+    })
+    .catch((error) => {
+        updated = false;
+    });
+
+    return updated;
 }
 
 
 
 
-/* FUNCTION: This will add the user who logged in with google to login
-*
-*
-*/
-async function addGoogleUser(name, surname, email){
-    const docRef = await addDoc(collection(db, "users"), {
-        firstName: name,
-        lastName: surname,
-        email: email,
-        profile: {},
-        password: ""
-    });
-      //console.log("Document written with ID: ", docRef.id);
-}
 
 
-
-
-
-
-
-module.exports = {  }
+module.exports = { getAllUsers, getUser, addUser, updateProfile, updateProfilePicture  }
