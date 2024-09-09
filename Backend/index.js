@@ -5,87 +5,182 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 
-//import { GooglesignInUser } from 'modules/users.js';
-//const { GooglesignInUser } = require('./modules/users.js');
-const { getAllArticles, getPendingArticles, getApprovedArticles, addArticle, deleteArticle } = require('./modules/article.js');
+// Get all functions to operate on articles
+const { getAllArticles, getPendingArticles, getApprovedArticles, addArticle, deleteArticle, addLike } = require('./modules/article.js');
+
+// Get all the functions to operate on users
+const {getAllUsers, getUser, addUser, updateProfile, updateProfilePicture} = require('./modules/users.js');
+
+//Get all the functions to use for Reports
+const { addReport, getAllReports, getUserReport } = require('./modules/report.js');
+
 
 app.use(cors());
 
 
-console.log("Setting up the firebase admin")
-var admin = require("firebase-admin");
-
-var serviceAccount = require("./cert.json");
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
-
-console.log("Firebase Admin setup")
-
-const db = admin.firestore();
-
+//----------------------------------- WELCOME THE USERS TO THE API ---------------------------------------//
 app.get('/', async (req, res)=>{
-    console.log("sending the query");
-    const usersRef = db.collection('users');
-
-    // First page of results
-    usersRef.get().then(snapshot => {
-        console.log("The snapshot has been returned");
-        if (!snapshot.empty) {
-            var count =0;
-            var result = {};
-            console.log("Formating the response");
-            snapshot.forEach(doc =>{
-                result[count] = doc.data();
-                count++;
-            })
-            console.log("Response formatted and ready to be sent back to user");
-            res.json(result);
-            console.log("Done");
-        }
-    });
-
+    res.json({message: "Welcome to the Campus Safety API"});    //Json response to Welcome the person querying
 });
 
 
+
+//------------------------------------- USER SECTION -----------------------------------------------------//
+//Get all user in the database
+app.get('/users', async (req, res)=>{
+    const response = await getAllUsers();   //Calls function to get all users
+    res.json(response); //Return the response
+});
+
+//Get user using their uid
+app.get('/users/:uid', async (req, res)=>{
+    const uid = req.params['uid'];  //Gets the user id from the parameters
+    const response = await getUser(uid);    //Calls function to get that specific user
+    res.json(response); //Return the response
+});
+
+//Add a user to the database
+app.post('/users/:uid', async (req, res)=>{
+    const uid = req.params['uid'];  //Gets the uid passed from the parameter
+    const user = req.body;  //These are the details of the user
+
+    //If the user is added then all is well send response code 200
+    //Else send an error
+    if(await addUser(uid, user)){
+        res.status(200);
+    }else{
+        res.status(404);
+    }
+    
+});
+
+//Update user profile details
+app.post('/users/profile/:uid', async (req, res)=>{
+    const uid = req.params['uid'];  //Gets the uid passed from the parameter
+    const user = req.body;  //These are the details of the user
+
+    //If the user is details is updated then all is well send response code 200
+    //Else send an error
+    if(await updateProfile(uid, user)){
+        res.status(200);
+    }else{
+        res.status(404);
+    }
+    
+});
+
+//Update the profile picture of the user
+app.post('/user/profilePicture/:uid', async (req, res)=>{
+    
+    const uid = req.params['uid'];  //Gets the uid passed from the parameter
+    const profileURL = req.body;  //This is the URL to the profile picture
+
+    //If the user profile is updated then all is well send response code 200
+    //Else send an error
+    if(await updateProfilePicture(uid, profileURL)){
+        res.status(200);
+    }else{
+        res.status(404);
+    }
+})
 
 
 
 //-------------------------------------  ARTICLE SECTION  -------------------------------------------------//
 // This is to get all the articles in the database
 app.get('/articles', async (req, res)=>{
-    console.log("Sending request to get the Articles");
-    const result = await getAllArticles();
-    console.log("Got the articles");
-    res.json(result);
+    const result = await getAllArticles();  // Call the function to get all the articles
+    res.json(result);   //Return the results of that action
 });
 
+//Get all the pending articles
 app.get('/articles/Pending', async (req, res)=>{
-    const result = await getPendingArticles();
-    res.json(result);
+    const result = await getPendingArticles();  //Call function to get all articles that are pending
+    res.json(result);   //Return the reponse of that action
 });
 
+//Get all the approved articles
 app.get('/articles/Approved', async (req, res)=>{
-    const result = await getApprovedArticles();
-    res.json(result);
+    const result = await getApprovedArticles(); //Call function to get all articles that are approved
+    res.json(result);   //Return the reponse of that action
 });
 
+//Add an article to the database
 app.post('/articles', async (req, res) =>{
-    const article = req.body;
-    if(addArticle(article)){
+    const article = req.body;   //Get the article contents to be added to the database from the body
+
+    //If the article is added then it is fine
+    //Else we send an error
+    if(await addArticle(article)){
         res.status(200);
     }else{
         res.status(404);
     }
 });
 
-app.delete('/articles/:name/:title', async (req, res)=>{
-    const name = req.params['name'];
-    const title = req.params['title']
-    deleteArticle(name, title);
+//Delete a post in the database
+app.delete('/articles/:uid/:title', async (req, res)=>{
+    const uid = req.params['name'];    //The uid of the user who posted the article
+    const title = req.params['title'];  //Title of the article to be deletedfrom the database
+
+    //If we deleted then it is fine 
+    //Else we must return an error
+    if(await deleteArticle(uid, title)){
+        res.status(200);
+    }else{
+        res.status(404);
+    }
 });
 
+//Update the number of likes on a post
+app.put('/articles/:name/:title', async (req, res)=>{
+    const name = req.params['name'];    //Get the name of the article we want ot update the likes from
+    const title = req.params['title'];  //Get the title of the article we want to add to the database
+
+    //If the action is successful we return a response code of 200
+    //Else we return an error code
+    if(await addLike(name, title)){
+        res.status(200);
+    }else{
+        res.status(404);
+    }
+});
+
+
+
+
+//------------------------------------- REPORTING SECTION -------------------------------------------------//
+//Get all the reports in the database
+app.get('/reports', async (req, res)=>{
+    const response = await getAllReports();     // Gets all the reports in the database
+    res.json(response);     //Return the reponse of all the Reports
+});
+
+//Add a new Report in the database
+app.post('/reports/:uid', async (req, res)=>{
+    const report = req.body;    //Stores the contents of the report
+    const uid = req.params['uid'];      //Stores the uid of the user who reports an incident
+
+    //If the action is successful we return a response code of 200
+    //Else we return an error code
+    if(await addReport(uid, report)){
+        res.status(200);
+    }else{
+        res.status(404);
+    }
+});
+
+//Get reports of a specific user
+app.get('/users/:uid', async (req, res)=>{
+    const uid = req.params['uid'];  //Gets the user id from the parameters
+    const response = await getUserReport(uid);    //Calls function to get that report for the specific user
+    res.json(response); //Return the response
+});
+
+
+
+
+//------------------------------------- SUMMARY SECTION -------------------------------------------------//
 
 
 
