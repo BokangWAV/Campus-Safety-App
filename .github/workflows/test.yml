@@ -38,3 +38,6 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./coverage
+          file: ./coverage/lcov.info
+          verbose: true # Enable verbose logging for debugging
