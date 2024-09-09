@@ -7,6 +7,9 @@ The Campus Safety App is designed to enhance the security and safety of campus e
 
 [Link to site](https://agreeable-forest-0b968ac03.5.azurestaticapps.net)
 
+## Testing Coverage
+[![codecov](https://codecov.io/gh/BokangWAV/Campus-Safety-App/graph/badge.svg?token=56J0XFJM1U)](https://codecov.io/gh/BokangWAV/Campus-Safety-App)
+
 ## Features
 - **Emergency Alerts**: Instant notifications to alert the campus community of emergencies.
 - **Incident Reporting**: Allows users to report incidents directly to campus security.
