@@ -16,6 +16,7 @@ const { addReport, getAllReports, getUserReport } = require('./modules/report.js
 
 
 app.use(cors());
+app.use(express.json())
 
 
 //----------------------------------- WELCOME THE USERS TO THE API ---------------------------------------//
