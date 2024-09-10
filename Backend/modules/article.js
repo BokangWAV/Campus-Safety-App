@@ -1,94 +1,156 @@
-const { auth, provider, db } = require('./init.js');
-const { collection, getDocs, query, where, and, deleteDoc } = require('firebase/firestore');
+const { db } = require('./init.js');
+
 
 async function getAllArticles(){
-    console.log("Getting the articles");
-    const q = query(collection(db,'articles'));
-    const snapshot = await getDocs(q);
-    console.log("Got the articles");
+    const usersRef = db.collection('articles');    // Get a reference to the articles collection
 
-    var count =0;
     var result = {};
-    snapshot.forEach(doc =>{
-        console.log("Here is the first data", doc.data());
-        result[count] = doc.data();
-        count++;
-    })
-    console.log("Done");
+    // First page of results
+    await usersRef.get().then(snapshot => {
+        if (!snapshot.empty) {
+            var count =0;
+            
+            snapshot.forEach(doc =>{
+                result[count] = doc.data();
+                count++;
+            })
+        }
+    });
+
     return result;
+    
 }
 
 
 async function getPendingArticles(){
-    const q = query(collection(db, 'articles'), where('status', '==','pending'));
-    const snapshot = await getDocs(q);
+    const usersRef = db.collection('articles').where("status", "==", "pending");    // Get a reference to the articles collection
 
-    var count =0;
     var result = {};
-    snapshot.forEach(doc =>{
-        result[count] = doc.data();
-        count++;
-    })
+    // First page of results
+    await usersRef.get().then(snapshot => {
+        if (!snapshot.empty) {
+            var count =0;
+            
+            snapshot.forEach(doc =>{
+                result[count] = doc.data();
+                count++;
+            })
+        }
+    });
+
     return result;
 }
 
 
 async function getApprovedArticles(){
-    const q = query(collection(db, 'articles'), where('status', '==','approved'));
-    const snapshot = await getDocs(q);
+    const usersRef = db.collection('articles').where("status", "==", "approved");    // Get a reference to the articles collection
 
-    var count =0;
     var result = {};
-    snapshot.forEach(doc =>{
-        result[count] = doc.data();
-        count++;
-    })
+    // First page of results
+    await usersRef.get().then(snapshot => {
+        if (!snapshot.empty) {
+            var count =0;
+            
+            snapshot.forEach(doc =>{
+                result[count] = doc.data();
+                count++;
+            })
+        }
+    });
+
     return result;
 }
 
 
 async function addArticle(article){
-    try {
-        const query = collection(db, 'articles');
-        const docref = await addDoc(query, {
-            likes: 0,
-            content: article.content,
-            surname: article.surname,
-            title: article.title,
-            name: article.name,
-            article_id:5,
-            status: pending
-        });
+    let added = true;
+    const usersRef = db.collection('articles')
+    // Add a new document with a generated id.
+    await usersRef.add({
+        likes: 0,
+        content: article.content,
+        surname: article.surname,
+        title: article.title,
+        name: article.name,
+        userID: article.uid,
+        status: "pending"
+    })
+    .then((docRef) => {
+        //console.log("Document written with ID: ", docRef.id);
+    })
+    .catch((error) => {
+        //console.error("Error adding document: ", error);
+        added = false;
+    });
 
-        return true;
-    } catch (error) {
-        console.error('Error adding article:', error);
-        return false;
-    }
+    return added;
 }
 
 
-async function deleteArticle(name, title){
-    try {
-        const query = query(collection(db, 'articles'), where('name', '==', name), where('title','==',title));
-        const snapshot = await getDocs(query);
-        await deleteDoc(snapshot.docs[0].ref)
-        .then(()=>{
-            //succefull
-        }).catch((error)=>{
-            console.log(error);
-        });
-    } catch (error) {
-        console.log(error);
-    }
+async function deleteArticle(uid, title){
+    let deleted = true;
+    const usersRef = db.collection('articles').where("userID", "==", uid).where("title", "==", title);
+
+    await usersRef.delete()
+    .then(() => {
+        //console.log("Document successfully deleted!");
+    }).catch((error) => {
+        //console.error("Error removing document: ", error);
+        deleted = false;
+    });
+
+    return deleted;
     
 }
 
 
+async function getArticle(name, title){
+    let response = {}
+    const usersRef = db.collection('articles').where("name", "==", name).where("title", "==", title);
+
+    await usersRef.get()
+    .then((snapshot) => {
+        if (!snapshot.empty) {
+            snapshot.forEach(doc =>{
+                result = doc.data();
+            })
+        }
+    }).catch((error) => {
+        //console.error("Error removing document: ", error);
+    });
+
+    return response;
+}
+
+
+
+async function addLike(name, title){
+    let added = true;
+    const articlesRef = db.collection('articles').where("name", "==", name).where("title", "==", title);
+    const article = await getArticle(name, title);
+    const numLikes = article.likes + 1;
+
+    await articlesRef.update({
+        likes: numLikes
+    })
+    .then(() => {
+        //console.log("Document successfully updated!");
+    })
+    .catch((error) => {
+        // The document probably doesn't exist.
+        //console.error("Error updating document: ", error);
+        added = false;
+    });
+
+    return added;
+
+}
 
 
 
 
 
 
-module.exports = { getAllArticles, getPendingArticles, getApprovedArticles, addArticle, deleteArticle };
+
+
+module.exports = { getAllArticles, getPendingArticles, getApprovedArticles, addArticle, deleteArticle, addLike };
