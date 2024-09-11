@@ -1,6 +1,5 @@
-import {  signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-import { collection, addDoc  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js"; 
-import { auth, provider, db } from "./init.js";
+import {  signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js"; 
+import { auth, provider} from "./init.js";
 import { smoothTRansition } from "../scripts/main.js";
 
 // Build Firebase credential with the Google ID token.
@@ -22,8 +21,8 @@ function GooglesignInUser(){
         const userFirstName = user.displayName.split(" ")[0]; //Name of the user
         const userLastName = user.displayName.split(" ")[1];  //Surname of the user
         const userEmail = user.email;  // Email of the user
-        console.log(user.uid);
-        console.log(user.displayName.split(" ")[0], user.email);
+        //console.log(user.uid);
+        //console.log(user.displayName.split(" ")[0], user.email);
 
 
         window.localStorage.setItem('uid', user.uid);
@@ -33,15 +32,19 @@ function GooglesignInUser(){
             lastName: userLastName
           };
         //addGoogleUser(userFirstName, userLastName, userEmail);
-        await fetch(`http://https://sdp-campus-safety.azurewebsites.net/users/${user.uid}`, {
+        await fetch(`http://sdp-campus-safety.azurewebsites.net/users/${user.uid}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(currentUser),
           })
-        .then(response => response.json())
-        .then(data => console.log(data));
+        .then(() => {
+            created = true;
+            //console.log("added");
+        }).catch((error)=>{
+            console.error(error)
+        });
 
         //signOutUser();
         // IdP data available using getAdditionalUserInfo(result)
@@ -82,15 +85,22 @@ async function NormalRegisterUser(firstName, lastName, email, password, pTag){
 
             window.localStorage.setItem('uid', user.uid);
 
-            await fetch(`http://https://sdp-campus-safety.azurewebsites.net/users/${user.uid}`, {
+            console.log("fetching");
+            await fetch(`http://sdp-campus-safety.azurewebsites.net/users/${user.uid}`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(currentUser),
               })
-            .then(response => response.json())
-            .then(data => created = true);
+            .then(() => {
+                created = true;
+                //console.log("added");
+            })
+            .catch((error)=>{
+                console.error(error)
+            });
+            console.log("fetching");
 
             
         })
@@ -123,7 +133,7 @@ async function NormalSignInUser(email, password, pTag){
             // ...
 
             signed = true;
-            console.log(signed);
+            //console.log(signed);
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -141,37 +151,6 @@ async function NormalSignInUser(email, password, pTag){
 }
 
 
-/*  FUNCTION: This adds user to the database after normal login
-*
-*
-*/
-async function addNormalUser(name, surname, email){
-    const docRef = await addDoc(collection(db, "users"), {
-        firstName: name,
-        lastName: surname,
-        email: email,
-        profile: {},
-        password: ""
-    });
-}
-
-
-
-
-/* FUNCTION: This will add the user who logged in with google to login
-*
-*
-*/
-async function addGoogleUser(name, surname, email){
-    const docRef = await addDoc(collection(db, "users"), {
-        firstName: name,
-        lastName: surname,
-        email: email,
-        profile: {},
-        password: ""
-    });
-      //console.log("Document written with ID: ", docRef.id);
-}
 
 
 
