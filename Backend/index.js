@@ -48,12 +48,13 @@ app.post('/users/:uid', async (req, res)=>{
     const uid = req.params['uid'];  //Gets the uid passed from the parameter
     const user = req.body;  //These are the details of the user
 
+
     //If the user is added then all is well send response code 200
     //Else send an error
     if(await addUser(uid, user)){
-        res.status(200);
+        res.status(200).send('User added successfully');
     }else{
-        res.status(404);
+        res.status(404).send('Unable to add user');
     }
     
 });
@@ -66,9 +67,9 @@ app.put('/users/profile/:uid', async (req, res)=>{
     //If the user is details is updated then all is well send response code 200
     //Else send an error
     if(await updateProfile(uid, user)){
-        res.status(200);
+        res.status(200).send('Updated profile successfully');
     }else{
-        res.status(404);
+        res.status(404).send('Unable to update profile');
     }
     
 });
@@ -82,9 +83,9 @@ app.put('/user/profilePicture/:uid', async (req, res)=>{
     //If the user profile is updated then all is well send response code 200
     //Else send an error
     if(await updateProfilePicture(uid, profileURL)){
-        res.status(200);
+        res.status(200).send('Updated Profile Picture successfully');
     }else{
-        res.status(404);
+        res.status(404).send('Unable to update Profile Picture');
     }
 })
 
@@ -116,9 +117,9 @@ app.post('/articles', async (req, res) =>{
     //If the article is added then it is fine
     //Else we send an error
     if(await addArticle(article)){
-        res.status(200);
+        res.status(200).send('Article added successfully');
     }else{
-        res.status(404);
+        res.status(404).send('Unable to add article');
     }
 });
 
@@ -130,9 +131,9 @@ app.delete('/articles/:uid/:title', async (req, res)=>{
     //If we deleted then it is fine 
     //Else we must return an error
     if(await deleteArticle(uid, title)){
-        res.status(200);
+        res.status(200).send('Deleted article successfully');
     }else{
-        res.status(404);
+        res.status(404).send('Unable to delete article');
     }
 });
 
@@ -144,9 +145,9 @@ app.put('/articles/:name/:title', async (req, res)=>{
     //If the action is successful we return a response code of 200
     //Else we return an error code
     if(await addLike(name, title)){
-        res.status(200);
+        res.status(200).send('Updated Likes successfully');
     }else{
-        res.status(404);
+        res.status(404).send('Unable to update Likes');
     }
 });
 
@@ -168,9 +169,9 @@ app.post('/reports/:uid', async (req, res)=>{
     //If the action is successful we return a response code of 200
     //Else we return an error code
     if(await addReport(uid, report)){
-        res.status(200);
+        res.status(200).send('Report added successfully');
     }else{
-        res.status(404);
+        res.status(404).send('Unable to add report');
     }
 });
 
@@ -198,9 +199,9 @@ app.post('/alert', async (req, res)=>{
     //If the action is successful we return a response code of 200
     //Else we return an error code
     if(await addAlert(alert)){
-        res.status(200);
+        res.status(200).send('Alert added successfully');
     }else{
-        res.status(404);
+        res.status(404).send('Unable to add alert');
     }
 });
 
@@ -211,9 +212,9 @@ app.delete('/alert/:uid', async (req, res)=>{
     //If we deleted then it is fine 
     //Else we must return an error
     if(await deleteReport(alertuid)){
-        res.status(200);
+        res.status(200).send('Deleted alert successfully');
     }else{
-        res.status(404);
+        res.status(404).send('Unable to delete alert');
     }
 });
 
@@ -225,9 +226,9 @@ app.put('/alert/:uid', async (req, res)=>{
     //If the action is successful we return a response code of 200
     //Else we return an error code
     if(await updateViewAlert(reportID, processor)){
-        res.status(200);
+        res.status(200).send('Updated alert successfully');
     }else{
-        res.status(404);
+        res.status(404).send('Unable to update alert');
     }
 });
 
