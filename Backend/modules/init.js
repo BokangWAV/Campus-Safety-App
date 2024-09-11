@@ -4,7 +4,7 @@ const serviceAccount = {
   "type": process.env.CERT_TYPE,
   "project_id": process.env.CERT_PROJECT_ID,
   "private_key_id": process.env.CERT_PRIVATE_KEY_ID,
-  "private_key": process.env.CERT_PRIVATE_KEY,
+  "private_key": process.env.CERT_PRIVATE_KEY.replace(/\\n/g, '\n'),
   "client_email": process.env.CERT_CLIENT_EMAIL,
   "client_id": process.env.CERT_CLIENT_ID,
   "auth_uri": process.env.CERT_AUTH_URI,
