@@ -1,141 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Register - Campus Safety App</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+          integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="stylesheet" href="./styles/register.css">
+    <script src="./scripts/main.js" defer type="module"></script>
 
-  <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <style>
+      .google-login {
+        display: flex;
+        margin-Top: 30px;
+        color: black;
+        align-items: center;
+        background-color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: 500;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Black shadow */
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet">
+      .google-login:hover {
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.7); /* Stronger shadow on hover */
+        color: #f2f2f2;
+      }
 
-  <link href="styles/main.css" rel="stylesheet">
-
+      .google-img {
+        height: 5px;
+        width: 5px;
+        margin-right: 20px;
+      }
+    </style>
 </head>
+<body style="display:flex; align-items:center; justify-content:center;">
+  <section class="login-page">
+    <Article class="form">
+      <form id="full-form" class="register-form">
+        <h2 id="header"> Welcome</h2>
+        <button id="submit-btn" type="button">Submit</button>
 
-<body class="register-page">
-
-  <header id="header" class="header d-flex align-items-center sticky-top">
-    <div class="container-fluid container-xl position-relative d-flex align-items-center">
-
-      <a href="index.html" class="logo d-flex align-items-center me-auto">
-        <h1 class="sitename">Campus Safety</h1>
-      </a>
-
-      <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="index.html">Home<br></a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="dashboardtest.html">Dashboard</a></li>
-          <li><a href="faqs.html">FAQs</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="login.html" class="active">Login</a></li>
-        </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
-
-      <div class="sub-header-mobile">
-        <a class="btn-getstarted" href="register.html">Register</a>
-        <a href="#" class="options" id="options">Menu</a>
-      </div>     
-
-    </div>
-  </header>
-
-  <main class="main">
-
-    <div class="page-title" data-aos="fade">
-      <div class="heading">
-        <div class="container">
-          <div class="row d-flex justify-content-center text-center">
-            <div class="col-lg-8">
-              <h1>Register</h1>
-              <p class="mb-0">Create your account and stay safe with Campus Safety.</p>
-            </div>
-          </div>
-        </div>
+          
+      </form>
+      <div id="GoogleDiv" style="display: flex; width: 100%; justify-content: center;">
+        <button id="google-login" class="google-login" style=" display: flex; 
+        margin-Top: 10px;
+        color: black;
+        width: 30%;
+        justify-content: center;
+        background-color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: 500;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Black shadow */
+        cursor: pointer;
+        transition: all 0.3s ease;">
+          <img id="google-img" alt="svgImg" src="./assets/Undraw/google.png"
+          style="height: 40px;
+          width: 40px;"/>
+        </button>
       </div>
-      <nav class="breadcrumbs">
-        <div class="container">
-          <ol>
-            <li><a href="index.html">Home</a></li>
-            <li class="current">Register</li>
-          </ol>
-        </div>
-      </nav>
-    </div>
-
-    <!-- Register Section -->
-    <section id="register" class="register section">
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-        <div class="row justify-content-center">
-          <div class="col-lg-6">
-            <form method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
-              <div class="row gy-4">
-
-                <div class="col-md-6">
-                  <input id="firstName" type="text" name="first_name" class="form-control" placeholder="First Name" required="">
-                </div>
-
-                <div class="col-md-6">
-                  <input id="lastName" type="text" name="last_name" class="form-control" placeholder="Last Name" required="">
-                </div>
-
-                <div class="col-md-12">
-                  <input id="email" type="email" class="form-control" name="email" placeholder="Email" required="">
-                </div>
-
-                <div class="col-md-12">
-                  <input id="password" type="password" class="form-control" name="password" placeholder="Password" required="">
-                </div>
-
-                <div class="col-md-12">
-                  <input id="confirmPassword" type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" required="">
-                </div>
-
-                <div class="col-md-12 text-center">
-                  <div class="loading">Loading</div>
-                  <div class="error-message"></div>
-                  <div class="sent-message">Your registration request has been sent. Thank you!</div>
-
-                  <input type="button" value="Sign In with Google" id="Google-Btn">
-                  <input type="button" value="Register" id="Register-Btn">
-                  <button type="submit" class="btn btn-success rounded-pill">Register</button>
-                </div>
-
-              </div>
-            </form>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-  </main>
-
-  <footer id="footer" class="footer position-relative light-background">
-
-    <div class="container copyright text-center mt-4">
-      <p>© <span>Copyright 2024</span> <strong class="px-1 sitename">TDKUs</strong> <span>All Rights Reserved</span></p>
-    </div>
-
-  </footer>
-
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-  <div id="preloader"></div>
-
-  <script src="scripts/main.js" type="module"></script>
-
+     
+    </Article>
+  </section>  
 </body>
-
 </html>

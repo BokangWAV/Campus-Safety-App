@@ -43,19 +43,14 @@ async function getUser(uid){
 
 async function addUser(uid, user){
     let added = true;   //Shows whether we added a user or we failed
-    let userExists = false;
 
     const verifyRef = db.collection("users").doc(uid);
-    await verifyRef.get()
-    .then(()=>{
-        userExists = true
-    }).catch(error=>{
-        console.error(error);
-    })
+    const doc = await verifyRef.get();
 
-    if(userExists){
-        return;
+    if (doc.exists) {
+        return !added;
     }
+
 
     const userRef = db.collection("users").doc(uid);    //Stores a reference to the user
 
