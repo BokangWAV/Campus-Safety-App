@@ -14,6 +14,9 @@ const {getAllUsers, getUser, addUser, updateProfile, updateProfilePicture} = req
 //Get all the functions to use for Reports
 const { addReport, getAllReports, getUserReport } = require('./modules/report.js');
 
+//Get all the functions to use for Alerts
+const { getAllAlerts, addAlert, deleteReport, updateViewAlert } = require('./modules/alert.js')
+
 
 app.use(cors());
 app.use(express.json())
@@ -56,7 +59,7 @@ app.post('/users/:uid', async (req, res)=>{
 });
 
 //Update user profile details
-app.post('/users/profile/:uid', async (req, res)=>{
+app.put('/users/profile/:uid', async (req, res)=>{
     const uid = req.params['uid'];  //Gets the uid passed from the parameter
     const user = req.body;  //These are the details of the user
 
@@ -71,7 +74,7 @@ app.post('/users/profile/:uid', async (req, res)=>{
 });
 
 //Update the profile picture of the user
-app.post('/user/profilePicture/:uid', async (req, res)=>{
+app.put('/user/profilePicture/:uid', async (req, res)=>{
     
     const uid = req.params['uid'];  //Gets the uid passed from the parameter
     const profileURL = req.body;  //This is the URL to the profile picture
@@ -121,7 +124,7 @@ app.post('/articles', async (req, res) =>{
 
 //Delete a post in the database
 app.delete('/articles/:uid/:title', async (req, res)=>{
-    const uid = req.params['name'];    //The uid of the user who posted the article
+    const uid = req.params['uid'];    //The uid of the user who posted the article
     const title = req.params['title'];  //Title of the article to be deletedfrom the database
 
     //If we deleted then it is fine 
@@ -181,8 +184,52 @@ app.get('/users/:uid', async (req, res)=>{
 
 
 
-//------------------------------------- SUMMARY SECTION -------------------------------------------------//
+//------------------------------------- ALERT SECTION -------------------------------------------------//
+//Get all the alerts in the database
+app.get('/alert', async (req, res)=>{
+    const response = await getAllAlerts();     // Gets all the reports in the database
+    res.json(response);     //Return the reponse of all the Reports
+});
 
+//Add a new alert in the database
+app.post('/alert', async (req, res)=>{
+    const alert = req.body;    //Stores the contents of the report
+
+    //If the action is successful we return a response code of 200
+    //Else we return an error code
+    if(await addAlert(alert)){
+        res.status(200);
+    }else{
+        res.status(404);
+    }
+});
+
+//Delete a alert in the database
+app.delete('/alert/:uid', async (req, res)=>{
+    const alertuid = req.params['uid'];    //The uid of the user who posted the article
+
+    //If we deleted then it is fine 
+    //Else we must return an error
+    if(await deleteReport(alertuid)){
+        res.status(200);
+    }else{
+        res.status(404);
+    }
+});
+
+//Update the alert status
+app.put('/alert/:uid', async (req, res)=>{
+    const reportID = req.params['uid'];    //Get the report ID from which to update status
+    const processor = req.body;
+
+    //If the action is successful we return a response code of 200
+    //Else we return an error code
+    if(await updateViewAlert(reportID, processor)){
+        res.status(200);
+    }else{
+        res.status(404);
+    }
+});
 
 
 
