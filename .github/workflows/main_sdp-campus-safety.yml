@@ -20,8 +20,27 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
+
+      - name: Install latest npm
+        run: npm install -g npm@10.8.3
+           
       - name: Install dependencies
         run: npm install
+
+      - name: Install cors
+        run: npm install cors
+
+      - name: Install dotenv
+        run: npm install dotenv
+
+      - name: Install express
+        run: npm install express
+
+      - name: Install firebase-admin
+        run: npm install firebase-admin
+
+      - name: Install firebase
+        run: npm install firebase
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
