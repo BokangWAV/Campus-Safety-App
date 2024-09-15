@@ -15,7 +15,10 @@ const {getAllUsers, getUser, addUser, updateProfile, updateProfilePicture} = req
 const { addReport, getAllReports, getUserReport } = require('./modules/report.js');
 
 //Get all the functions to use for Alerts
-const { getAllAlerts, addAlert, deleteReport, updateViewAlert } = require('./modules/alert.js')
+const { getAllAlerts, addAlert, deleteReport, updateViewAlert } = require('./modules/alert.js');
+
+//Get all the functions to use for Notifications
+const { getAllNotifications, getAllReadNotifications, getAllUnreadNotifications, updateNotificationStatus } = require('./modules/notification.js');
 
 
 app.use(cors());
@@ -123,7 +126,7 @@ app.post('/articles', async (req, res) =>{
     }
 });
 
-//Delete a post in the database
+//Delete a article in the database
 app.delete('/articles/:uid/:title', async (req, res)=>{
     const uid = req.params['uid'];    //The uid of the user who posted the article
     const title = req.params['title'];  //Title of the article to be deletedfrom the database
@@ -138,13 +141,28 @@ app.delete('/articles/:uid/:title', async (req, res)=>{
 });
 
 //Update the number of likes on a post
-app.put('/articles/:name/:title', async (req, res)=>{
+app.put('/articles/like/:name/:title', async (req, res)=>{
     const name = req.params['name'];    //Get the name of the article we want ot update the likes from
     const title = req.params['title'];  //Get the title of the article we want to add to the database
 
     //If the action is successful we return a response code of 200
     //Else we return an error code
     if(await addLike(name, title)){
+        res.status(200).send('Updated Likes successfully');
+    }else{
+        res.status(404).send('Unable to update Likes');
+    }
+});
+
+
+//Approve a pending article
+app.put('/articles/approve/:name/:title', async (req, res)=>{
+    const name = req.params['name'];    //Get the name of the article we want ot update the likes from
+    const title = req.params['title'];  //Get the title of the article we want to add to the database
+
+    //If the action is successful we return a response code of 200
+    //Else we return an error code
+    if(await approveArticle(name, title)){
         res.status(200).send('Updated Likes successfully');
     }else{
         res.status(404).send('Unable to update Likes');
@@ -193,12 +211,13 @@ app.get('/alert', async (req, res)=>{
 });
 
 //Add a new alert in the database
-app.post('/alert', async (req, res)=>{
+app.post('/alert/:uid', async (req, res)=>{
     const alert = req.body;    //Stores the contents of the report
+    const uid = req.params['uid'];
 
     //If the action is successful we return a response code of 200
     //Else we return an error code
-    if(await addAlert(alert)){
+    if(await addAlert(uid, alert)){
         res.status(200).send('Alert added successfully');
     }else{
         res.status(404).send('Unable to add alert');
@@ -231,6 +250,53 @@ app.put('/alert/:uid', async (req, res)=>{
         res.status(404).send('Unable to update alert');
     }
 });
+
+
+
+//------------------------------------- NOTIFICATIONS SECTION -------------------------------------------------//
+//Get all the notifications in the database
+app.get('/notifications/:uid', async (req, res)=>{
+    const uid = req.params['uid'];  //get the uid that will be used to check whether or not notification has been viewed
+
+    const response = await getAllNotifications(uid);     // Gets all the notifications in the database
+    res.json(response);     //Return the reponse of all the Reports
+});
+
+//Get all the notifications in the database that are unread
+app.get('/notifications/read/:uid', async (req, res)=>{
+    const uid = req.params['uid'];  //get the uid that will be used to check whether or not notification has been viewed
+
+    const response = await getAllReadNotifications(uid);     // Gets all the notifications in the database
+    res.json(response);     //Return the reponse of all the Reports
+});
+
+
+//Get all the notifications in the database are read
+app.get('/notifications/unread/:uid', async (req, res)=>{
+    const uid = req.params['uid'];  //get the uid that will be used to check whether or not notification has been viewed
+
+    const response = await getAllUnreadNotifications(uid);     // Gets all the notifications in the database
+    res.json(response);     //Return the reponse of all the Reports
+});
+
+
+//Update the notification status
+app.put('/notifications/status/:uid', async (req, res)=>{
+    const uid = req.params['uid'];  //get the uid for that user
+    const notificationID = req.body.notificationID
+
+    //If the action is successful we return a response code of 200
+    //Else we return an error code
+    if(await updateNotificationStatus(uid, notificationID)){
+        res.status(200).send('Updated Likes successfully');
+    }else{
+        res.status(404).send('Unable to update Likes');
+    }
+});
+
+
+
+
 
 
 
