@@ -85,7 +85,7 @@ async function NormalRegisterUser(firstName, lastName, email, password, pTag){
 
             window.localStorage.setItem('uid', user.uid);
 
-            console.log("fetching");
+            //console.log("fetching");
             await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${user.uid}`, {
                 method: 'POST',
                 headers: {
