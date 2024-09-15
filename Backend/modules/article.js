@@ -4,15 +4,12 @@ const { db } = require('./init.js');
 async function getAllArticles(){
     const usersRef = db.collection('articles');    // Get a reference to the articles collection
 
-    var result = {};
+    var result = [];
     // First page of results
     await usersRef.get().then(snapshot => {
         if (!snapshot.empty) {
-            var count =0;
-            
             snapshot.forEach(doc =>{
-                result[count] = doc.data();
-                count++;
+                result.push(doc.data());
             })
         }
     });
@@ -25,15 +22,12 @@ async function getAllArticles(){
 async function getPendingArticles(){
     const usersRef = db.collection('articles').where("status", "==", "pending");    // Get a reference to the articles collection
 
-    var result = {};
+    var result = [];
     // First page of results
     await usersRef.get().then(snapshot => {
         if (!snapshot.empty) {
-            var count =0;
-            
             snapshot.forEach(doc =>{
-                result[count] = doc.data();
-                count++;
+                result.push(doc.data());
             })
         }
     });
@@ -45,15 +39,12 @@ async function getPendingArticles(){
 async function getApprovedArticles(){
     const usersRef = db.collection('articles').where("status", "==", "approved");    // Get a reference to the articles collection
 
-    var result = {};
+    var result = [];
     // First page of results
     await usersRef.get().then(snapshot => {
         if (!snapshot.empty) {
-            var count =0;
-            
             snapshot.forEach(doc =>{
-                result[count] = doc.data();
-                count++;
+                result.push(doc.data());
             })
         }
     });
@@ -75,8 +66,36 @@ async function addArticle(article){
         userID: article.uid,
         status: "pending"
     })
-    .then((docRef) => {
-        //console.log("Document written with ID: ", docRef.id);
+    .then(async (docRef) => {
+        var user = {};
+
+        const q = db.collection('users').doc(article.uid);
+
+        await q.get().then((doc) => {
+            if (doc.exists) {
+                const response = doc.data();
+                user["firstName"] = response.firstName;
+                user["lastName"] = response.lastName;
+                user["profilePicture"] = response.profilePicture;
+            }
+        }).catch((error) => {
+            //Do not do anything we just return an empty object
+        })
+
+        console.log(user);
+
+        const usersRef = db.collection('users').where("role", "==", "manager");
+
+        const idArray = []
+        await usersRef.get().then(snapshot => {
+            if (!snapshot.empty) {
+                snapshot.forEach(doc =>{
+                    idArray.push(doc.id);
+                })
+            }
+        });
+
+        await appendNotifications(idArray, `${title} article requires approval`, user);
     })
     .catch((error) => {
         //console.error("Error adding document: ", error);
@@ -147,10 +166,58 @@ async function addLike(name, title){
 }
 
 
+async function approveArticle(name, title){
+    let added = true;
+    const articlesRef = db.collection('articles').where("name", "==", name).where("title", "==", title);
+
+    await articlesRef.update({
+        status: "approved"
+    })
+    .then(async () => {
+        var user = {};
+
+        const q = db.collection('users').doc(article.uid);
+
+        await q.get().then((doc) => {
+            if (doc.exists) {
+                const response = doc.data();
+                user["firstName"] = response.firstName;
+                user["lastName"] = response.lastName;
+                user["profilePicture"] = response.profilePicture;
+            }
+        }).catch((error) => {
+            //Do not do anything we just return an empty object
+        })
+
+        console.log(user);
+
+        const usersRef = db.collection('users').where("role", "==", "manager");
+
+        const idArray = []
+        await usersRef.get().then(snapshot => {
+            if (!snapshot.empty) {
+                snapshot.forEach(doc =>{
+                    idArray.push(doc.id);
+                })
+            }
+        });
+
+        await appendNotifications(idArray, `article ${title} has been approved`, user);
+    })
+    .catch((error) => {
+        // The document probably doesn't exist.
+        //console.error("Error updating document: ", error);
+        added = false;
+    });
+
+    return added;
+}
 
 
 
 
 
 
-module.exports = { getAllArticles, getPendingArticles, getApprovedArticles, addArticle, deleteArticle, addLike };
+
+
+module.exports = { getAllArticles, getPendingArticles, getApprovedArticles, addArticle, deleteArticle, addLike, approveArticle };
