@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>8/32</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>8/32</span>
             </div>
         
             
@@ -141,7 +141,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -151,6 +151,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -158,20 +172,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -179,7 +179,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -214,7 +214,7 @@ import { getFirestore, collection, addDoc } from "https://www.gstatic.com/fireba
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 &nbsp;
 &nbsp;
-const firebaseConfig = <span class="cstat-no" title="statement not covered" >{</span>
+const firebaseConfig = {
     apiKey: "AIzaSyCLDopG2959mh9Wtl3nDM0FAWZBNc3GGLo",
     authDomain: "tdkus-fcf53.firebaseapp.com",
     projectId: "tdkus-fcf53",
@@ -224,14 +224,14 @@ const firebaseConfig = <span class="cstat-no" title="statement not covered" >{</
     measurementId: "G-5BPYZE953B"
 };
 &nbsp;
-const app = <span class="cstat-no" title="statement not covered" >initializeApp(firebaseConfig);</span>
-const db = <span class="cstat-no" title="statement not covered" >getFirestore(app);</span>
-const auth = <span class="cstat-no" title="statement not covered" >getAuth(app);</span>
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 &nbsp;
-let currentUserName = <span class="cstat-no" title="statement not covered" >"";</span>
-let currentUserSurname = <span class="cstat-no" title="statement not covered" >"";</span>
+let currentUserName = "";
+let currentUserSurname = "";
 &nbsp;
-<span class="cstat-no" title="statement not covered" >onAuthStateChanged(auth, <span class="fstat-no" title="function not covered" >(u</span>ser) =&gt; {</span>
+onAuthStateChanged(auth, <span class="fstat-no" title="function not covered" >(u</span>ser) =&gt; {
 <span class="cstat-no" title="statement not covered" >    if (user) {</span>
         // User is signed in
 <span class="cstat-no" title="statement not covered" >        console.log("User ID:", user.uid);</span>
@@ -252,7 +252,7 @@ let currentUserSurname = <span class="cstat-no" title="statement not covered" >"
     }
 });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >document.addEventListener("DOMContentLoaded", <span class="fstat-no" title="function not covered" >()</span>=&gt;{</span>
+document.addEventListener("DOMContentLoaded", <span class="fstat-no" title="function not covered" >()</span>=&gt;{
     
 <span class="cstat-no" title="statement not covered" >    document.getElementById('articleForm').addEventListener('submit', <span class="fstat-no" title="function not covered" >fu</span>nction(event) {</span>
 <span class="cstat-no" title="statement not covered" >        event.preventDefault();</span>
@@ -289,7 +289,7 @@ async function <span class="fstat-no" title="function not covered" >postArticles
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-09T13:56:15.616Z
+                at 2024-09-15T16:37:45.160Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
