@@ -32,7 +32,7 @@ function GooglesignInUser(){
             lastName: userLastName
           };
         //addGoogleUser(userFirstName, userLastName, userEmail);
-        await fetch(`http://sdp-campus-safety.azurewebsites.net/users/${user.uid}`, {
+        await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${user.uid}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -85,8 +85,8 @@ async function NormalRegisterUser(firstName, lastName, email, password, pTag){
 
             window.localStorage.setItem('uid', user.uid);
 
-            console.log("fetching");
-            await fetch(`http://sdp-campus-safety.azurewebsites.net/users/${user.uid}`, {
+            //console.log("fetching");
+            await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${user.uid}`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

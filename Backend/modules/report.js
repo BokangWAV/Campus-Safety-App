@@ -20,8 +20,34 @@ async function addReport(uid, report){
         videoUrls: report.videoUrls,
         uid: uid
     })
-    .then(() => {
-        //console.log("Document successfully written!");
+    .then(async () => {
+        var user2 = {};
+
+        const q = db.collection.doc(uid);
+
+        await q.get().then((doc) => {
+            if (doc.exists) {
+                const response = doc.data();
+                user2["firstName"] = response.firstName;
+                user2["lastName"] = response.lastName;
+                user2["profilePicture"] = response.profilePicture;
+            }
+        }).catch((error) => {
+            //Do not do anything we just return an empty object
+        })
+
+        const usersRef = db.collection('users').where("role", "==", "manager");
+
+        const idArray = []
+        await usersRef.get().then(snapshot => {
+            if (!snapshot.empty) {
+                snapshot.forEach(doc =>{
+                    idArray.push(doc.id);
+                })
+            }
+        });
+
+        await appendNotifications(idArray, 'added a new report', user2);
     })
     .catch((error) => {
         //console.error("Error writing document: ", error);
@@ -36,15 +62,12 @@ async function addReport(uid, report){
 async function getAllReports(){
     const usersRef = db.collection('reports');    // Get a reference to the reports collection
 
-    var result = {};
+    var result = [];
     // First page of results
     await usersRef.get().then(snapshot => {
         if (!snapshot.empty) {
-            var count =0;
-            
             snapshot.forEach(doc =>{
-                result[count] = doc.data();
-                count++;
+                result.push(doc.data());
             })
         }
     });
@@ -57,15 +80,12 @@ async function getAllReports(){
 async function getUserReport(uid){
     const usersRef = db.collection('articles').where("uid", "==", uid);    // Get a reference to the articles collection
 
-    var result = {};
+    var result = [];
     // First page of results
     await usersRef.get().then(snapshot => {
         if (!snapshot.empty) {
-            var count =0;
-            
             snapshot.forEach(doc =>{
-                result[count] = doc.data();
-                count++;
+                result.push(doc.data());
             })
         }
     });
