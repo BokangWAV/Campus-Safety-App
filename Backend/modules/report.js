@@ -7,8 +7,6 @@ async function addReport(uid, report){
     const userRef = db.collection("reports");    //Stores a reference to the user
 
     await userRef.add({
-        firstName : report.firstName,
-        lastName: report.lastName,
         geoLocation: report.geoLocation,
         description: report.description,
         location: report.description,
