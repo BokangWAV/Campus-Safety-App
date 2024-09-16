@@ -45,44 +45,37 @@
     </div>
   </div>
 
-   <div class="main-container">
-  <div class="dashboard-container">
-    <div class="dashboard-header">
-      <h1>Articles</h1>
-      <p>Avenue of freedom and idea-sharing for you.</p>
+  <div class="main-container">
+    <div class="dashboard-container">
+      <div class="dashboard-header">
+        <h1>Report History</h1>
+        <p>Summary of past reports and alerts made by you.</p>
+      </div>
+
+      <div class="dashboard-content">
+        <!-- Content will be injected here by JavaScript -->
+      </div>
     </div>
-    <div id="dashboard-header" class="write-article-section">
-      <h2>Got Something to Share?</h2>
-      <p>Your voice matters. Share your thoughts, experiences, and insights with the campus community.</p>
-      <a href="/articleCreate.html" class="btn-write-article">Start Writing Your Article</a>
-    </div>      
-  </div>
-
-  <div class="dashboard-content">
-  
-  </div>
-
   </div>
 
   <!-- <div id="preloader"></div> -->
 
-  <script src="/scripts/article.js" type="module"></script>
+  <script src="/scripts/summary.js" type="module"></script>
   <!-- <script src="/scripts/main.js"></script> -->
   <script>
-    
-function toggleMobileMenu() {
-    const menu = document.getElementById('headerMenu');
-    menu.classList.toggle('active');
-}
+    function toggleMobileMenu() {
+      const menu = document.getElementById('headerMenu');
+      menu.classList.toggle('active');
+    }
 
-function toggleDropdown() {
-    const dropdownMenu = document.getElementById('dropdownMenu');
-    dropdownMenu.classList.toggle('active');
-}
+    function toggleDropdown() {
+      const dropdownMenu = document.getElementById('dropdownMenu');
+      dropdownMenu.classList.toggle('active');
+    }
 
-function triggerAlert(type) {
-    alert(type + " Alert triggered!");
-}
+    function triggerAlert(type) {
+      alert(type + " Alert triggered!");
+    }
   </script>
 
 </body>

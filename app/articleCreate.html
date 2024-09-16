@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Create Article - Campus Safety App</title>
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link href="/styles/dashboard.css" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/articlesCreate.css">
+</head>
+
+<body>
+  <div class="header">
+    <h2>Campus Safety</h2>
+    <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="headerMenu">
+      <li><a href="/dashboardtest.html" class="active">Dashboard</a></li>
+      <li><a href="alerts.html">Emergency Alerts</a></li>
+      <li><a href="report.html">Report an Incident</a></li>
+      <li><a href="articles.html">Articles</a></li>
+      <li><a href="contact.html">Contact Security</a></li>
+    </ul>
+  </div>
+
+  <div class="main-container">
+    <div class="dashboard-container">
+      <div class="form-container">
+        <h2>Write Your Article</h2>
+        <form id="articleForm">
+          <div class="form-group"></div>
+          <div class="form-group">
+            <label for="articleTitle">Article Title</label>
+            <input type="text" id="articleTitle" name="articleTitle" placeholder="Enter the title of your article" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="articleContent">Article Content</label>
+            <textarea id="articleContent" name="articleContent" placeholder="Start writing your article here..." required></textarea>
+          </div>
+          <div class="form-group">
+            <button id="post" type="submit">Submit Article</button>
+          </div>
+        </form>
+        <a href="/dashboardtest.html" class="back-link">Back to Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- <script src="/scripts/main.js" type="module"></script> -->
+  <script src="/scripts/create.js" type="module"></script>
+  <script>
+    function toggleMobileMenu() {
+      const menu = document.getElementById('headerMenu');
+      menu.classList.toggle('active');
+    }
+
+    function toggleDropdown() {
+      const dropdownMenu = document.getElementById('dropdownMenu');
+      dropdownMenu.classList.toggle('active');
+    }
+  </script>
+
+</body>
+</html>

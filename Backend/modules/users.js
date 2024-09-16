@@ -5,15 +5,12 @@ const { db } = require('./init.js');
 async function getAllUsers(){
     const usersRef = db.collection('users');    // Get a reference to the users collection
 
-    var result = {};
+    var result = [];
     // First page of results
     await usersRef.get().then(snapshot => {
         if (!snapshot.empty) {
-            var count =0;
-            
             snapshot.forEach(doc =>{
-                result[count] = doc.data();
-                count++;
+                result.push(doc.data());
             })
         }
     });
@@ -24,12 +21,12 @@ async function getAllUsers(){
 
 
 async function getUser(uid){
-    let result = {};
+    let result = [];
     var userRef = db.collection("users").doc(uid);
 
     await userRef.get().then((doc) => {
         if (doc.exists) {
-            result = doc.data();
+            result.push(doc.data());
 
         }
     }).catch((error) => {
@@ -56,8 +53,9 @@ async function addUser(uid, user){
 
     await userRef.set({
         email: user.email,
-        firstname: user.firstName,
-        lastname: user.lastName,
+        role: "user",
+        firstName: user.firstName,
+        lastName: user.lastName,
         phoneNumber: "",
         age: 0,
         profilePicture: "",
