@@ -1,6 +1,13 @@
 window.onload = async function () {
     try {
-      const response = await fetch('/profile-data');
+        
+        const uid = "tGbbA7VNkhZtmb8IbvLt0fckxIu2";
+        const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${uid}`, {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+        });
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
   
       const result = await response.json();
@@ -15,7 +22,6 @@ window.onload = async function () {
       document.getElementById('lastname').value = user.lastname || '';
       document.getElementById('race').value = user.race || '';
       document.getElementById('phoneNumber').value = user.phoneNumber || '';
-      document.getElementById('email').value = user.email || '';
       document.getElementById('age').value = user.age || '';
   
     } catch (error) {
