@@ -11,6 +11,8 @@ import { smoothTRansition } from "../scripts/main.js";
 *
 */
 function GooglesignInUser(){
+    let created = false;
+    
     signInWithPopup(auth, provider)
     .then(async (result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
@@ -60,6 +62,8 @@ function GooglesignInUser(){
         console.log(errorMessage);
         // ...
     });
+
+    return created;
 }
 
 
