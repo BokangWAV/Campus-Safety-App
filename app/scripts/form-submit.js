@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
       };
   
       try {
-        const uid = "tGbbA7VNkhZtmb8IbvLt0fckxIu2";
+        const uid = window.localStorage.getItem('uid');
         const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/users/profile/${uid}`, {
           method: 'PUT',
           headers: {
