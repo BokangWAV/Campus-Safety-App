@@ -1,4 +1,4 @@
-![Static Web App CI/CD](https://github.com/BokangWAV/Campus-Safety-App/actions/workflows/azure-static-web-apps-agreeable-forest-0b968ac03.yml/badge.svg) ![Static Web App CI/CD](https://github.com/BokangWAV/Campus-Safety-App/actions/workflows/main_sdp-campus-safety.yml/badge.svg)
+![Static Web App CI/CD](https://github.com/BokangWAV/Campus-Safety-App/actions/workflows/azure-static-web-apps-agreeable-forest-0b968ac03.yml/badge.svg) ![Static Web App CI/CD](https://github.com/BokangWAV/Campus-Safety-App/actions/workflows/main_sdp-campus-safety.yml/badge.svg) [![codecov](https://codecov.io/gh/BokangWAV/Campus-Safety-App/graph/badge.svg?token=56J0XFJM1U)](https://codecov.io/gh/BokangWAV/Campus-Safety-App)
 
 # Campus Safety App
 
@@ -6,6 +6,10 @@
 The Campus Safety App is designed to enhance the security and safety of campus environments by providing essential tools for emergency alerts, incident reporting, and access to safety resources. This app aims to ensure a secure and responsive environment for students, faculty, and staff.
 
 [Link to site](https://agreeable-forest-0b968ac03.5.azurestaticapps.net)
+
+## Testing Coverage
+[![codecov](https://codecov.io/gh/BokangWAV/Campus-Safety-App/graph/badge.svg?token=56J0XFJM1U)](https://codecov.io/gh/BokangWAV/Campus-Safety-App)
+![Codecov Sunburst](https://codecov.io/gh/BokangWAV/Campus-Safety-App/graphs/sunburst.svg?token=56J0XFJM1U)
 
 ## Features
 - **Emergency Alerts**: Instant notifications to alert the campus community of emergencies.
