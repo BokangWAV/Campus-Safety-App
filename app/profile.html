@@ -5,11 +5,11 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>My Profile</title>
 
-  <!-- Favicons -->
+ 
   <link href="assets/img/favicon.png" rel="icon">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-  <!-- Fonts -->
+  
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -38,19 +38,92 @@
 
   <div class="profile-container">
     <div class="profile-card">
-      <!-- Profile picture -->
-      <div class="profile-img" id="profileImg"></div>
+      <div class="profile-img-wrapper">
+        <div class="profile-img" id="profileImg">
+          <img id="profilePic" src="" alt="Profile Picture">
+        </div>
+        <button class="edit-button" onclick="document.getElementById('imageUpload').click()">Edit Image</button>
+      </div>
+      <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+  
       <h1 class="name" id="name"></h1>
       <p class="info" id="race"></p>
       <p class="info" id="phone"></p>
       <p class="info" id="email"></p>
       <p class="info" id="studentId"></p>
-
+  
       <button class="edit-button" onclick="window.location.href='/edit-profile.html'">Edit</button>
     </div>
   </div>
+  
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-storage.js";
 
-  <script type="module" src="/scripts/profiledata.js"></script>
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyCLDopG2959mh9Wtl3nDM0FAWZBNc3GGLo",
+      authDomain: "tdkus-fcf53.firebaseapp.com",
+      projectId: "tdkus-fcf53",
+      storageBucket: "tdkus-fcf53.appspot.com",
+      messagingSenderId: "144411393779",
+      appId: "1:144411393779:web:54a4013e6da2a974b4c186",
+      measurementId: "G-5BPYZE953B"
+    };
+
+    
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    const userId = 'tGbbA7VNkhZtmb8IbvLt0fckxIu2'; 
+
+    
+    async function loadProfile() {
+      const userDocRef = doc(db, 'users', userId);
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        document.getElementById("name").textContent = `${userData.firstname} ${userData.lastname}`;
+        document.getElementById("race").textContent = userData.race;
+        document.getElementById("phone").textContent = userData.phoneNumber;
+        document.getElementById("email").textContent = userData.email;
+        document.getElementById("studentId").textContent = `ID: ${userId}`;
+
+        
+        if (userData.profilePicture) {
+          document.getElementById("profilePic").src = userData.profilePicture;
+        } else {
+          document.getElementById("profilePic").src = 'assets/img/default-profile.png'; // default image
+        }
+      }
+    }
+
+    window.onload = loadProfile;
+
+   
+    document.getElementById("imageUpload").addEventListener("change", async function(event) {
+      const file = event.target.files[0];
+      const storageRef = ref(storage, `profile_pictures/${userId}/${file.name}`);
+
+     
+      await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(storageRef);
+
+     
+      const userDocRef = doc(db, 'users', userId);
+      await updateDoc(userDocRef, {
+        profilePicture: downloadURL
+      });
+
+      
+      document.getElementById("profilePic").src = downloadURL;
+
+      alert("Profile picture updated successfully!");
+    });
+  </script>
 
 </body>
-</html>

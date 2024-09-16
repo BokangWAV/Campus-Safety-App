@@ -81,6 +81,21 @@ app.post('/update-profile', (req, res) => {
     res.json({ success: true, message: 'Profile updated successfully' });
 });
   
+app.post('/update-profile-picture', (req, res) => {
+    const { profilePicture } = req.body;
+    const userId = "some_user_id"; // You would typically get this from authentication
+  
+    // Update the user profile in your database with the new profilePicture URL
+    db.collection('users').doc(userId).update({ profilePicture })
+      .then(() => {
+        res.json({ success: true, message: 'Profile picture updated successfully' });
+      })
+      .catch(error => {
+        console.error('Error updating profile picture:', error);
+        res.status(500).json({ success: false, message: 'Failed to update profile picture' });
+      });
+  });
+  
 
 app.listen(port, ()=>{
     console.log(`Server running at http://localhost:${port}/`);

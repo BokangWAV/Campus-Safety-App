@@ -45,4 +45,4 @@ const provider = new GoogleAuthProvider();
 
 // Initialize Realtime Database and get a reference to the service
 
-export { db, auth, provider, firebaseConfig , getAuth};
+export { db, auth, provider, firebaseConfig , getAuth, getStorage};

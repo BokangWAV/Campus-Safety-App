@@ -1,4 +1,4 @@
-const { response } = require('express');
+//const { response } = require('express');
 const { auth, provider, db } = require('./init.js');
 const { collection, getDocs, query, where } = require('firebase/firestore');
 
@@ -28,19 +28,4 @@ async function getUser() {
     }
 }
 
-// Fetch all users from Firebase Firestore
-async function getAllUsers(){
-    const q = query(collection(db,'users'));
-    let count = 0;
-    let result = {};
-
-    const snapshot = await getDocs(q);
-    snapshot.forEach(doc => {
-        result[count] = doc.data();
-        count++;
-    });
-
-    return result;
-}
-
-module.exports = { getAllUsers, getUser };
+module.exports = { getUser };
