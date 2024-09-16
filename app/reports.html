@@ -14,11 +14,9 @@
   <link href="styles/dashboard.css" rel="stylesheet">
 
   <style>
-
     form div {
       margin-bottom: 1.5rem;
     }
-
 
     input[type="text"],
     textarea,
@@ -56,7 +54,6 @@
       background-color: #214a61;
     }
 
-
     .dashboard-card {
       max-width: 600px;
       margin: 0 auto;
@@ -66,13 +63,11 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
-
     @media (max-width: 800px) {
       .dashboard-card {
         padding: 1rem;
       }
     }
-
 
     .dashboard-card,
     .dashboard-card:hover {
@@ -83,8 +78,6 @@
 </head>
 
 <body>
-
-
   <div class="header">
     <h2>Campus Safety</h2>
     <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
@@ -111,24 +104,6 @@
     <div class="dashboard-content">
       <div class="dashboard-card">
         <form id="reportForm" onsubmit="event.preventDefault(); submitReport();">
-          <div>
-            <label for="reportType">Select Report Type:</label>
-            <select id="reportType" required>
-              <option value="Major">Type 1 - Major Alert</option>
-              <option value="Minor">Type 2 - Minor Alert</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="fname">First Name:</label>
-            <input type="text" id="fname" required>
-          </div>
-
-          <div>
-            <label for="lname">Last Name:</label>
-            <input type="text" id="lname" required>
-          </div>
-
           <div>
             <label for="geoLocation">Your Current Location (Latitude, Longitude):</label>
             <input type="text" id="geoLocation" readonly>
@@ -169,7 +144,6 @@
     </div>
   </div>
 
-
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyCLDopG2959mh9Wtl3nDM0FAWZBNc3GGLo",
@@ -194,9 +168,6 @@
     }
 
     async function submitReport() {
-      const reportType = document.getElementById("reportType").value;
-      const firstName = document.getElementById("fname").value;
-      const lastName = document.getElementById("lname").value;
       const geoLocation = document.getElementById("geoLocation").value;
       const description = document.getElementById("description").value;
       const location = document.getElementById("location").value;
@@ -217,14 +188,11 @@
 
       try {
         const reportData = {
-          firstName: firstName,
-          lastName: lastName,
           geoLocation: geoLocation,
           description: description,
           location: location,
           urgencyLevel: urgencyLevel,
           status: "Open",
-          reportType: reportType,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           imageUrls: imageUrls,
           videoUrls: videoUrls
@@ -239,7 +207,6 @@
       }
     }
 
-
     function getLocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -252,7 +219,6 @@
         document.getElementById('geoLocation').value = "Geolocation is not supported by this browser.";
       }
     }
-
 
     window.onload = function () {
       getLocation();
