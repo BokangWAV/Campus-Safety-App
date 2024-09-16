@@ -12,8 +12,7 @@ async function addReport(uid, report){
         location: report.description,
         urgencyLevel: report.urgencyLevel,
         status: report.status,
-        reportType: report.reportType,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        timestamp: report.timestamp,
         imageUrls: report.imageUrls,
         videoUrls: report.videoUrls,
         uid: uid
