@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>User Dashboard - Campus Safety App</title>
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link href="/styles/dashboard.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <div class="header">
+    <h2>Campus Safety</h2>
+    <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="headerMenu">
+      <li><a href="/dashboardtest.html" class="active">Dashboard</a></li>
+      <li><a href="alerts.html">Emergency Alerts</a></li>
+      <li><a href="report.html">Report an Incident</a></li>
+      <li><a>Articles</a></li>
+      <!-- <li><a href="resources.html">Safety Resources</a></li> -->
+      <li><a href="contact.html">Contact Security</a></li>
+    </ul>
+
+    <div class="dropdown-menu" id="dropdownMenu">
+      <ul>
+        <li><a href="item1.html">Item 1</a></li>
+        <li><a href="item2.html">Item 2</a></li>
+        <li><a href="item3.html">Item 3</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div class="dashboard-container">
+      <div class="dashboard-header">
+        <h1>Report History</h1>
+        <p>Summary of past reports and alerts made by you.</p>
+      </div>
+
+      <div class="dashboard-content">
+        <!-- Content will be injected here by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- <div id="preloader"></div> -->
+
+  <script src="/scripts/summary.js" type="module"></script>
+  <!-- <script src="/scripts/main.js"></script> -->
+  <script>
+    function toggleMobileMenu() {
+      const menu = document.getElementById('headerMenu');
+      menu.classList.toggle('active');
+    }
+
+    function toggleDropdown() {
+      const dropdownMenu = document.getElementById('dropdownMenu');
+      dropdownMenu.classList.toggle('active');
+    }
+
+    function triggerAlert(type) {
+      alert(type + " Alert triggered!");
+    }
+  </script>
+
+</body>
+
+</html>
