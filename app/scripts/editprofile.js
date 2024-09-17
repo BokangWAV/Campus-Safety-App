@@ -12,6 +12,8 @@ window.onload = async function () {
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
   
       const result = await response.json();
+
+        console.log(response):
       //console.log('User data fetched:', result); // Debugging line
   
       const user = Array.isArray(result) ? result[0] : result; // Assuming user is at index 0, if it's in an array
