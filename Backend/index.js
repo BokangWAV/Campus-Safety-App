@@ -4,7 +4,6 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
-const path = require('path');
 
 // Get all functions to operate on articles
 const { getAllArticles, getPendingArticles, getApprovedArticles, addArticle, deleteArticle, addLike } = require('./modules/article.js');
@@ -94,9 +93,6 @@ app.put('/user/profilePicture/:uid', async (req, res)=>{
 })
 
 
-app.use(express.static(path.join(__dirname, '../app')));
-
-app.use(express.json());
 
 //-------------------------------------  ARTICLE SECTION  -------------------------------------------------//
 // This is to get all the articles in the database
@@ -300,53 +296,9 @@ app.put('/notifications/status/:uid', async (req, res)=>{
 
 
 
-//-------------------------------------  PROFILE SECTION  -------------------------------------------------//
 
-app.get('/profile', async (req, res)=>{
-    //const result = await getAllUsers();
-    //const result = await getUser();
-    //res.json(result);
-    res.sendFile(path.join(__dirname, '../app', 'profile.html'));
-});
 
-app.get('/profile-data', async (req, res) => {
-    try {
-        const result = await getUser();
-        //console.log(result);
-        if (!result) {
-            return res.status(404).json({ error: "User not found" });
-        }
-        res.json(result); 
-    } catch (error) {
-        console.error('Error fetching user data:', error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-});
 
-app.post('/update-profile', (req, res) => {
-    const userData = req.body;  // Assuming you're using body-parser or express.json()
-    console.log('Received user data:', userData);
-    
-    //would typically save the user data to the database
-  
-    res.json({ success: true, message: 'Profile updated successfully' });
-});
-  
-app.post('/update-profile-picture', (req, res) => {
-    const { profilePicture } = req.body;
-    const userId = "some_user_id"; // You would typically get this from authentication
-  
-    // Update the user profile in your database with the new profilePicture URL
-    db.collection('users').doc(userId).update({ profilePicture })
-      .then(() => {
-        res.json({ success: true, message: 'Profile picture updated successfully' });
-      })
-      .catch(error => {
-        console.error('Error updating profile picture:', error);
-        res.status(500).json({ success: false, message: 'Failed to update profile picture' });
-      });
-  });
-  
 
 app.listen(port, ()=>{
     console.log(`Server running at http://localhost:${port}/`);
