@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Edit Profile</title>
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link href="./styles/dashboard.css" rel="stylesheet">
+  <link href="./styles/edit-profile.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <div class="header">
+    <h2>Campus Safety</h2>
+  </div>
+    <ul id="headerMenu">
+      <li><a class="active">Dashboard</a></li>
+      <li><a href="profile.html">Profile Page</a></li>
+      <li><a href="alerts.html">Emergency Alerts</a></li>
+      <li><a href="reports.html">Report an Incident</a></li>
+      <li><a href="articleCreate.html">Create An Article</a></li>
+      <li><a href="article.html">Articles</a></li>
+      <li><a href="request.html">Requests</a></li>
+      <li><a href="ai-page.html">Chat With Our Bot</a></li>
+
+      <!-- <li><a href="resources.html">Safety Resources</a></li> -->
+      <li><a href="unavailable.html">Contact Security</a></li>
+    </ul>
+
+  <div class="header">
+    <h3>Edit Profile</h3>
+  </div>
+  
+  <div class="profile-container">
+    <form class="edit-profile-card" id="editProfileForm">
+      <label for="firstname">First Name:</label>
+      <input type="text" id="firstname" name="firstname">
+
+      <label for="lastname">Last Name:</label>
+      <input type="text" id="lastname" name="lastname">
+
+      <label for="race">Race:</label>
+      <input type="text" id="race" name="race">
+
+      <label for="phoneNumber">Phone Number:</label>
+      <input type="text" id="phoneNumber" name="phoneNumber">
+
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="age">
+
+      <!-- Submit Button -->
+      <button type="submit">Save Changes</button>
+    </form>
+  </div>
+
+  <script type="module" src="./scripts/editprofile.js"></script>
+  <script type="module" src="./scripts/form-submit.js"></script>
+
+</body>
+</html>

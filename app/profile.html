@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>User Dashboard - Campus Safety App</title>
+  <title>My Profile</title>
 
-  <!-- Favicons -->
+ 
   <link href="assets/img/favicon.png" rel="icon">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-  <!-- Fonts -->
+  
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <link href="/styles/dashboard.css" rel="stylesheet">
+  <link href="./styles/dashboard.css" rel="stylesheet">
+  <link href="./styles/profile.css" rel="stylesheet">
 
 </head>
 
@@ -37,48 +37,29 @@
       <li><a href="request.html">Requests</a></li>
       <li><a href="ai-page.html">Chat With Our Bot</a></li>
       <li><a href="unavailable.html">Contact Security</a></li>
-      <!-- <li><a href="resources.html">Safety Resources</a></li> -->
     </ul>
+  </div>
 
-    <div class="dropdown-menu" id="dropdownMenu">
-      <ul>
-        <li><a href="item1.html">Item 1</a></li>
-        <li><a href="item2.html">Item 2</a></li>
-        <li><a href="item3.html">Item 3</a></li>
-      </ul>
+  <div class="profile-container">
+    <div class="profile-card">
+      <div class="profile-img-wrapper">
+        <div class="profile-img" id="profileImg">
+          <img id="profilePic" src="" alt="Profile Picture">
+        </div>
+        <button class="edit-button" onclick="document.getElementById('imageUpload').click()">Edit Image</button>
+      </div>
+      <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+  
+      <h1 class="name" id="name"></h1>
+      <p class="info" id="race"></p>
+      <p class="info" id="phone"></p>
+      <p class="info" id="email"></p>
+      <p class="info" id="studentId"></p>
+
+      <button class="edit-button" onclick="window.location.href='./edit-profile.html'">Edit</button>
     </div>
   </div>
 
-   <div class="main-container">
-  <div class="dashboard-container">
-    <div class="dashboard-header">
-      <h1>This page is currently unavailable.</h1>
-      <p>Come back near in the near future...</p>
-    </div>     
-  </div>
-
-  <div class="dashboard-content">
-  
-  </div>
-
-  </div>
-
-  <script>
-    function toggleMobileMenu() {
-        const menu = document.getElementById('headerMenu');
-        menu.classList.toggle('active');
-    }
-
-    function toggleDropdown() {
-        const dropdownMenu = document.getElementById('dropdownMenu');
-        dropdownMenu.classList.toggle('active');
-    }
-
-    function triggerAlert(type) {
-        alert(type + " Alert triggered!");
-    }
-  </script>
+  <script type="module" src="./scripts/profiledata.js"></script>
 
 </body>
-
-</html>

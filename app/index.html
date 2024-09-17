@@ -18,15 +18,31 @@
   <link href="vscode.css" rel="stylesheet">
 </head>
 
-<body>
+<body class="index-page">
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
-  <!-- Header for Web and Mobile -->
-  <div class="header">
-    <h2>Campus Safety</h2>
-    <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
+      <a href="index.html" class="logo d-flex align-items-center me-auto">
+        <h1 class="sitename">Campus Safety</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html">Home<br></a></li>
+          <li><a href="unavailable.html">About</a></li>
+          <!-- <li><a href="dashboardtest.html">Dashboard</a></li> -->
+          <li><a href="unavailable.html">FAQs</a></li>
+          <li><a href="unavailable.html">Contact</a></li>
+          <!-- <li><a href="login.html" class="active">Login</a></li> -->
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      <div class="sub-header-mobile">
+        <a class="btn-getstarted" href="register.html">Register</a>
+        <a href="#" class="options" id="options">Menu</a>
+      </div>   
+
     </div>
     <ul id="headerMenu">
       <li><a href="dashboard.html">Dashboard</a></li>

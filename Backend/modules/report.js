@@ -2,20 +2,17 @@ const { db } = require('./init.js');
 
 
 async function addReport(uid, report){
-    const added = true;     // Keeps track of whether or not we added the report
+    let added = true;     // Keeps track of whether or not we added the report
 
     const userRef = db.collection("reports");    //Stores a reference to the user
 
     await userRef.add({
-        firstName : report.firstName,
-        lastName: report.lastName,
         geoLocation: report.geoLocation,
         description: report.description,
         location: report.description,
         urgencyLevel: report.urgencyLevel,
         status: report.status,
-        reportType: report.reportType,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        timestamp: report.timestamp,
         imageUrls: report.imageUrls,
         videoUrls: report.videoUrls,
         uid: uid
@@ -34,6 +31,7 @@ async function addReport(uid, report){
             }
         }).catch((error) => {
             //Do not do anything we just return an empty object
+            console.error("Error writing document: ", error);
         })
 
         const usersRef = db.collection('users').where("role", "==", "manager");
@@ -50,7 +48,7 @@ async function addReport(uid, report){
         await appendNotifications(idArray, 'added a new report', user2);
     })
     .catch((error) => {
-        //console.error("Error writing document: ", error);
+        console.error("Error writing document: ", error);
         added = false;
     });
 

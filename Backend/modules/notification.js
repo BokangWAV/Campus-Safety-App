@@ -48,7 +48,7 @@ async function appendNotifications(array, message, user){
 
         await userRef.set({
             notificationID: count,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            timestamp: db.FieldValue.serverTimestamp(),
             reporter: reporter,
             profilePicture: user.profilePicture ,
             message: message,
