@@ -96,8 +96,77 @@
   </div>
   
   <script src="/scripts/dashboard.js" type="module"></script>
-  <script>
-    
+  <script type="module">
+
+    import { firebaseConfig} from "./modules/AI-init.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+    import { getVertexAI, getGenerativeModel } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-vertexai-preview.js";
+
+
+    // Initialize FirebaseApp
+    const firebaseApp = initializeApp(firebaseConfig);
+
+    // Initialize the Vertex AI service
+    const vertexAI = getVertexAI(firebaseApp);
+
+    // Initialize the generative model with a model that supports your use case
+    // Gemini 1.5 models are versatile and can be used with all API capabilities
+    const model = getGenerativeModel(vertexAI, { model: "gemini-1.5-flash" });
+
+    async function notifyUser() {
+      try {
+        const query = await fetch("https://us-central1-witslivelycampus.cloudfunctions.net/app/events");
+
+        if(!query.ok){
+          console.error("Error fetching Events");
+          return;
+        }
+
+        const events = await query.json();
+
+        var queryEvents = []  //Array to store all the queries we will send to the ai model
+        const date = "2024-10-01";
+        events.forEach(event => {
+          console.log("here");
+          if(date === event.date){
+            const queryElement = {}
+            queryElement["title"] = event.title;
+            queryElement["description"] = event.description;
+            queryElement["tags"] = event.tags;
+            queryEvents.push(queryElement);
+          }
+        });
+
+
+        queryEvents.forEach(async(event) =>{
+            const prompt = `
+                Given a description of an event as follows: 
+                ${event.description}
+                , and with the following tags: 
+                ${event.tags},
+                give one crucial suggest safety measures to take.
+                Keep the safety measure as short as possible without any explanations. 
+                This safety measure is for a user attending the event for a person attending the event.
+            `;
+
+            // To generate text output, call generateContent with the text input
+            const result = await model.generateContent(prompt);
+
+            const response = result.response;
+            let text = response.text();
+
+            alert("The "+event.title + " is happening today. "+text);
+
+        });
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    window.onload = await notifyUser();
+
+
     function toggleMobileMenu() {
         const menu = document.getElementById('headerMenu');
         menu.classList.toggle('active');
@@ -111,7 +180,7 @@
     function triggerAlert(type) {
         alert(type + " Alert triggered!");
     }
-      </script>
+    </script>
 
 </body>
 
