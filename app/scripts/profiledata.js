@@ -2,12 +2,7 @@ window.onload = async function () {
     try {
          const uid = window.localStorage.getItem('uid');
         console.log(uid);
-        const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${uid}`, {
-            method: 'GET',
-            headers: {
-            'Content-Type': 'application/json'
-            },
-        });
+        const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${uid}`);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
   
       const result = await response.json();
