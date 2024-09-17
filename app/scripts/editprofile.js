@@ -16,8 +16,8 @@ window.onload = async function () {
       //console.log('Processed user data:', user);
   
       // Update form fields with user data
-      document.getElementById('firstname').value = user.firstname || '';
-      document.getElementById('lastname').value = user.lastname || '';
+      document.getElementById('firstname').value = user.firstName || '';
+      document.getElementById('lastname').value = user.lastName || '';
       document.getElementById('race').value = user.race || '';
       document.getElementById('phoneNumber').value = user.phoneNumber || '';
       document.getElementById('age').value = user.age || '';
