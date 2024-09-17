@@ -61,28 +61,16 @@
       <p>Manage your safety and stay informed.</p>
     </div>
 
+    <a href="#" id="emergency" class="dashboard_header" style="text-decoration:none; color: yellow;">
+      <div class="dashboard-alert" id="emergency">
+        <h3>EMERGENCY!!</h3>
+        <p>Trigger immediate alerts for emergencies requiring attention.</p>
+      </div>
+    </a>
+
     <!-- Dashboard Content -->
     <div class="dashboard-content">
-          <!-- Card 5: Type 1 Alerts -->
-      <div class="dashboard-card">
-        <h3>Type 1 Alerts</h3>
-        <p>Trigger immediate alerts for emergencies requiring attention.</p>
-        <a href="#" onclick="triggerAlert('Type 1')">Trigger Alert</a>
-      </div>
-
-      <!-- Card 6: Type 2 Alerts -->
-      <div class="dashboard-card">
-        <h3>Type 2 Alerts</h3>
-        <p>Notify users of location-based threats like fires and storms.</p>
-        <a href="#" onclick="triggerAlert('Type 2')">Trigger Alert</a>
-      </div>
-
-      <!-- Card 7: Type 3 Alerts -->
-      <div class="dashboard-card">
-        <h3>Type 3 Alerts</h3>
-        <p>Inform users about non-emergency safety issues.</p>
-        <a href="#" onclick="triggerAlert('Type 3')">Trigger Alert</a>
-      </div>
+      
       <div class="dashboard-card">
         <h3>Emergency Alerts</h3>
         <p>Stay updated on campus alerts.</p>
@@ -98,11 +86,16 @@
         <p>Access emergency contacts and tips.</p>
         <a href="resources.html">View Resources</a>
       </div>
+      <div class="dashboard-card">
+        <h3>Emergency Contacts</h3>
+        <p>Get in touch with security personnel.</p>
+        <a href="contact.html">View Contacts</a>
+      </div>
     </div>
 
   </div>
   
-  <script src="/scripts/dashboard.js"></script>
+  <script src="/scripts/dashboard.js" type="module"></script>
   <script>
     
     function toggleMobileMenu() {
