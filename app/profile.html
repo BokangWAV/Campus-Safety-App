@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>My Profile</title>
+
+ 
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link href="./styles/dashboard.css" rel="stylesheet">
+  <link href="./styles/profile.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <div class="header">
+    <h2>Campus Safety</h2>
+    <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="headerMenu">
+      <li><a href="dashboardtest.html" class="active">Dashboard</a></li>
+      <li><a href="alerts.html">Emergency Alerts</a></li>
+      <li><a href="report.html">Report an Incident</a></li>
+      <li><a>Articles</a></li>
+      <li><a href="contact.html">Contact Security</a></li>
+    </ul>
+  </div>
+
+  <div class="profile-container">
+    <div class="profile-card">
+      <div class="profile-img-wrapper">
+        <div class="profile-img" id="profileImg">
+          <img id="profilePic" src="" alt="Profile Picture">
+        </div>
+        <button class="edit-button" onclick="document.getElementById('imageUpload').click()">Edit Image</button>
+      </div>
+      <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+  
+      <h1 class="name" id="name"></h1>
+      <p class="info" id="race"></p>
+      <p class="info" id="phone"></p>
+      <p class="info" id="email"></p>
+      <p class="info" id="studentId"></p>
+
+      <button class="edit-button" onclick="window.location.href='./edit-profile.html'">Edit</button>
+    </div>
+  </div>
+
+  <script type="module" src="./scripts/profiledata.js"></script>
+
+</body>

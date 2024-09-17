@@ -1,0 +1,91 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Container for the edit profile form */
+  .profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  
+  /* Styling for the edit profile form card */
+  .edit-profile-card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 500px; /* Control size for larger screens */
+  }
+  
+  /* Styling for input fields */
+  .edit-profile-card input[type="text"],
+  .edit-profile-card input[type="email"],
+  .edit-profile-card input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  
+  /* Styling for the submit button */
+  .edit-profile-card button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  /* Hover effect for the submit button */
+  .edit-profile-card button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Responsive design adjustments for smaller devices */
+  @media (max-width: 768px) {
+    .edit-profile-card {
+      padding: 30px;
+      width: 90%; /* Fits smaller devices like tablets */
+    }
+  
+    .edit-profile-card input[type="text"],
+    .edit-profile-card input[type="email"],
+    .edit-profile-card input[type="number"] {
+      font-size: 14px;
+    }
+  
+    .edit-profile-card button {
+      font-size: 14px;
+      padding: 10px 18px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .edit-profile-card {
+      padding: 20px;
+    }
+  
+    .edit-profile-card input[type="text"],
+    .edit-profile-card input[type="email"],
+    .edit-profile-card input[type="number"] {
+      font-size: 12px;
+    }
+  
+    .edit-profile-card button {
+      font-size: 12px;
+      padding: 8px 16px;
+    }
+  }
+  
