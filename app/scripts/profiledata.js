@@ -16,7 +16,7 @@ window.onload = async function () {
       document.getElementById('profileImg').style.backgroundImage = `url(${user.profilePicture})`; //|| 'assets/img/default.jpg'
   
       // Update name, race, phone, email, and other information
-      document.getElementById('name').innerText = `${user.firstname || 'First Name'} ${user.lastname || 'Last Name'}`;
+      document.getElementById('name').innerText = `${user.firstName || 'First Name'} ${user.lastName || 'Last Name'}`;
       document.getElementById('race').innerText = `Race: ${user.race || 'Unknown'}`;
       document.getElementById('phone').innerText = `Phone: ${user.phoneNumber || 'Not Provided'}`;
       document.getElementById('email').innerText = `Email: ${user.email || 'Not Provided'}`;
