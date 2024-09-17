@@ -31,6 +31,7 @@ async function addReport(uid, report){
             }
         }).catch((error) => {
             //Do not do anything we just return an empty object
+            console.error("Error writing document: ", error);
         })
 
         const usersRef = db.collection('users').where("role", "==", "manager");
@@ -47,7 +48,7 @@ async function addReport(uid, report){
         await appendNotifications(idArray, 'added a new report', user2);
     })
     .catch((error) => {
-        //console.error("Error writing document: ", error);
+        console.error("Error writing document: ", error);
         added = false;
     });
 
