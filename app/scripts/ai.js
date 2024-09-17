@@ -1,3 +1,18 @@
+import { firebaseConfig} from "./modules/AI-init.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import { getVertexAI, getGenerativeModel } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-vertexai-preview.js";
+
+
+// Initialize FirebaseApp
+const firebaseApp = initializeApp(firebaseConfig);
+
+// Initialize the Vertex AI service
+const vertexAI = getVertexAI(firebaseApp);
+
+    // Initialize the generative model with a model that supports your use case
+    // Gemini 1.5 models are versatile and can be used with all API capabilities
+    const model = getGenerativeModel(vertexAI, { model: "gemini-1.5-flash" });
+
 //Import stuff HERE:
 
 
@@ -41,14 +56,20 @@ promptBtn.addEventListener('click', ()=>{
     conversationList.appendChild(tempDiv);
 
     setTimeout(function() {
+
+            // To generate text output, call generateContent with the text input
+            const result = await model.generateContent(question);
+
+            const response = result.response;
+            let text = response.text();
         // HERE: Ask question to the chatbot using API
-        const response = "Hey, how are you doing? I am Campus-Safety bot. I am here to answer any of your safety related question that you might have. Please feel free to ask anything.";
+
 
         // Add response to the chat
         conversationList.innerHTML = conversationList.innerHTML + `
                     <div class="respose">
                         <p>
-                        ${response}
+                        ${text}
                         </p>
                     </div>
 
