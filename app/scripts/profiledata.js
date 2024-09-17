@@ -1,6 +1,7 @@
 window.onload = async function () {
     try {
-        const uid = "tGbbA7VNkhZtmb8IbvLt0fckxIu2";
+         const uid = window.localStorage.getItem('uid');
+        console.log(uid);
         const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${uid}`, {
             method: 'GET',
             headers: {
