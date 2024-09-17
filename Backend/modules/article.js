@@ -1,4 +1,5 @@
 const { db } = require('./init.js');
+const { appendNotifications } = require('./notification.js');
 
 
 async function getAllArticles(){
