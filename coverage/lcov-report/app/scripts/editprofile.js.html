@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for app/scripts/script.js</title>
+    <title>Code coverage report for app/scripts/editprofile.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">app/scripts</a> script.js</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">app/scripts</a> editprofile.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -32,21 +32,21 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -90,60 +90,75 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import{ db, auth} from "../modules/init.js";
-&nbsp;
-<span class="cstat-no" title="statement not covered" >document.addEventListener("DOMContentLoaded", <span class="fstat-no" title="function not covered" >as</span>ync function() {</span>
-    const main = <span class="cstat-no" title="statement not covered" >document.getElementById("main");</span>
-    const usersList = <span class="cstat-no" title="statement not covered" >document.getElementById("usersList");</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    main.innerHTML += "My current users:";</span>
-&nbsp;
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >window.onload = <span class="fstat-no" title="function not covered" >as</span>ync function () {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-        const usersCollection = <span class="cstat-no" title="statement not covered" >collection(db, "users");</span>
-&nbsp;
-        const querySnapshot = <span class="cstat-no" title="statement not covered" >await getDocs(usersCollection);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        if (!querySnapshot.empty) {</span>
-<span class="cstat-no" title="statement not covered" >            querySnapshot.forEach(<span class="fstat-no" title="function not covered" >(d</span>oc) =&gt; {</span>
-                const listItem = <span class="cstat-no" title="statement not covered" >document.createElement("li");</span>
-<span class="cstat-no" title="statement not covered" >                listItem.textContent = `${doc.data().name} ${doc.data().surname}`;</span>
-<span class="cstat-no" title="statement not covered" >                usersList.appendChild(listItem);</span>
-            });
-        } else {
-<span class="cstat-no" title="statement not covered" >            usersList.innerHTML = "&lt;li&gt;No users found&lt;/li&gt;";</span>
-        }
+        
+        const uid = <span class="cstat-no" title="statement not covered" >window.localStorage.getItem('uid');</span>
+<span class="cstat-no" title="statement not covered" >        console.log(uid);</span>
+        const response = <span class="cstat-no" title="statement not covered" >await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${uid}`, {</span>
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+        });
+<span class="cstat-no" title="statement not covered" >      if (!response.ok) <span class="cstat-no" title="statement not covered" >throw new Error(`HTTP error! status: ${response.status}`);</span></span>
+  
+      const result = <span class="cstat-no" title="statement not covered" >await response.json();</span>
+      //console.log('User data fetched:', result); // Debugging line
+  
+      const user = <span class="cstat-no" title="statement not covered" >Array.isArray(result) ? result[0] : result;</span> // Assuming user is at index 0, if it's in an array
+  
+      //console.log('Processed user data:', user);
+  
+      // Update form fields with user data
+<span class="cstat-no" title="statement not covered" >      document.getElementById('firstname').value = user.firstname || '';</span>
+<span class="cstat-no" title="statement not covered" >      document.getElementById('lastname').value = user.lastname || '';</span>
+<span class="cstat-no" title="statement not covered" >      document.getElementById('race').value = user.race || '';</span>
+<span class="cstat-no" title="statement not covered" >      document.getElementById('phoneNumber').value = user.phoneNumber || '';</span>
+<span class="cstat-no" title="statement not covered" >      document.getElementById('age').value = user.age || '';</span>
+  
     } catch (error) {
-<span class="cstat-no" title="statement not covered" >        console.error("Error fetching documents: ", error);</span>
-<span class="cstat-no" title="statement not covered" >        usersList.innerHTML = "&lt;li&gt;Error fetching users&lt;/li&gt;";</span>
+<span class="cstat-no" title="statement not covered" >      console.error('Error fetching or parsing user data:', error);</span>
     }
-});
+  };
+  
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -151,7 +166,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-17T10:55:02.431Z
+                at 2024-09-17T10:50:54.656Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

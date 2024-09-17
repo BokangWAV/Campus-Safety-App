@@ -61,28 +61,16 @@
       <p>Manage your safety and stay informed.</p>
     </div>
 
+    <a href="#" id="emergency" class="dashboard_header" style="text-decoration:none; color: yellow;">
+      <div class="dashboard-alert" id="emergency">
+        <h3>EMERGENCY!!</h3>
+        <p>Trigger immediate alerts for emergencies requiring attention.</p>
+      </div>
+    </a>
+
     <!-- Dashboard Content -->
     <div class="dashboard-content">
-          <!-- Card 5: Type 1 Alerts -->
-      <div class="dashboard-card">
-        <h3>Type 1 Alerts</h3>
-        <p>Trigger immediate alerts for emergencies requiring attention.</p>
-        <a href="#" onclick="triggerAlert('Type 1')">Trigger Alert</a>
-      </div>
-
-      <!-- Card 6: Type 2 Alerts -->
-      <div class="dashboard-card">
-        <h3>Type 2 Alerts</h3>
-        <p>Notify users of location-based threats like fires and storms.</p>
-        <a href="#" onclick="triggerAlert('Type 2')">Trigger Alert</a>
-      </div>
-
-      <!-- Card 7: Type 3 Alerts -->
-      <div class="dashboard-card">
-        <h3>Type 3 Alerts</h3>
-        <p>Inform users about non-emergency safety issues.</p>
-        <a href="#" onclick="triggerAlert('Type 3')">Trigger Alert</a>
-      </div>
+      
       <div class="dashboard-card">
         <h3>Emergency Alerts</h3>
         <p>Stay updated on campus alerts.</p>
@@ -98,81 +86,17 @@
         <p>Access emergency contacts and tips.</p>
         <a href="resources.html">View Resources</a>
       </div>
+      <div class="dashboard-card">
+        <h3>Emergency Contacts</h3>
+        <p>Get in touch with security personnel.</p>
+        <a href="contact.html">View Contacts</a>
+      </div>
     </div>
 
   </div>
   
   <script src="/scripts/dashboard.js" type="module"></script>
-  <script type="module">
-
-    import { firebaseConfig} from "./modules/AI-init.js";
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-    import { getVertexAI, getGenerativeModel } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-vertexai-preview.js";
-
-
-    // Initialize FirebaseApp
-    const firebaseApp = initializeApp(firebaseConfig);
-
-    // Initialize the Vertex AI service
-    const vertexAI = getVertexAI(firebaseApp);
-
-    // Initialize the generative model with a model that supports your use case
-    // Gemini 1.5 models are versatile and can be used with all API capabilities
-    const model = getGenerativeModel(vertexAI, { model: "gemini-1.5-flash" });
-
-    async function notifyUser() {
-      try {
-        const query = await fetch("https://us-central1-witslivelycampus.cloudfunctions.net/app/events");
-        
-        if(!query.ok){
-          console.error("Error fetching Events");
-          return;
-        }
-
-        const events = await query.json();
-        
-        var queryEvents = []  //Array to store all the queries we will send to the ai model
-        const date = "2024-10-01";
-        events.forEach(event => {
-          console.log("here");
-          if(date === event.date){
-            const queryElement = {}
-            queryElement["title"] = event.title;
-            queryElement["description"] = event.description;
-            queryElement["tags"] = event.tags;
-            queryEvents.push(queryElement);
-          }
-        });
-
-
-        queryEvents.forEach(async(event) =>{
-            const prompt = `
-                Given a description of an event as follows: 
-                ${event.description}
-                , and with the following tags: 
-                ${event.tags},
-                give one crucial suggest safety measures to take.
-                Keep the safety measure as short as possible without any explanations. 
-                This safety measure is for a user attending the event for a person attending the event.
-            `;
-
-            // To generate text output, call generateContent with the text input
-            const result = await model.generateContent(prompt);
-
-            const response = result.response;
-            let text = response.text();
-
-            alert("The "+event.title + " is happening today. "+text);
-
-        });
-
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    window.onload = await notifyUser();
-
+  <script>
     
     function toggleMobileMenu() {
         const menu = document.getElementById('headerMenu');

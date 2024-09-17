@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -186,9 +186,7 @@
 <a name='L121'></a><a href='#L121'>121</a>
 <a name='L122'></a><a href='#L122'>122</a>
 <a name='L123'></a><a href='#L123'>123</a>
-<a name='L124'></a><a href='#L124'>124</a>
-<a name='L125'></a><a href='#L125'>125</a>
-<a name='L126'></a><a href='#L126'>126</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L124'></a><a href='#L124'>124</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -198,9 +196,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -245,6 +240,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -320,15 +316,12 @@
 async function <span class="fstat-no" title="function not covered" >getAllUsers(</span>){
     const usersRef = <span class="cstat-no" title="statement not covered" >db.collection('users');</span>    // Get a reference to the users collection
 &nbsp;
-    var result = <span class="cstat-no" title="statement not covered" >{};</span>
+    var result = <span class="cstat-no" title="statement not covered" >[];</span>
     // First page of results
 <span class="cstat-no" title="statement not covered" >    await usersRef.get().then(<span class="fstat-no" title="function not covered" >sn</span>apshot =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        if (!snapshot.empty) {</span>
-            var count =<span class="cstat-no" title="statement not covered" >0;</span>
-            
 <span class="cstat-no" title="statement not covered" >            snapshot.forEach(<span class="fstat-no" title="function not covered" >do</span>c =&gt;{</span>
-<span class="cstat-no" title="statement not covered" >                result[count] = doc.data();</span>
-<span class="cstat-no" title="statement not covered" >                count++;</span>
+<span class="cstat-no" title="statement not covered" >                result.push(doc.data());</span>
             })
         }
     });
@@ -339,12 +332,12 @@ async function <span class="fstat-no" title="function not covered" >getAllUsers(
 &nbsp;
 &nbsp;
 async function <span class="fstat-no" title="function not covered" >getUser(</span>uid){
-    let result = <span class="cstat-no" title="statement not covered" >{};</span>
+    let result = <span class="cstat-no" title="statement not covered" >[];</span>
     var userRef = <span class="cstat-no" title="statement not covered" >db.collection("users").doc(uid);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    await userRef.get().then(<span class="fstat-no" title="function not covered" >(d</span>oc) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        if (doc.exists) {</span>
-<span class="cstat-no" title="statement not covered" >            result = doc.data();</span>
+<span class="cstat-no" title="statement not covered" >            result.push(doc.data());</span>
 &nbsp;
         }
     }).catch(<span class="fstat-no" title="function not covered" >(e</span>rror) =&gt; {
@@ -371,8 +364,9 @@ async function <span class="fstat-no" title="function not covered" >addUser(</sp
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    await userRef.set({</span>
         email: user.email,
-        firstname: user.firstName,
-        lastname: user.lastName,
+        role: "user",
+        firstName: user.firstName,
+        lastName: user.lastName,
         phoneNumber: "",
         age: 0,
         profilePicture: "",
@@ -445,7 +439,7 @@ async function <span class="fstat-no" title="function not covered" >updateProfil
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-15T16:37:45.160Z
+                at 2024-09-17T10:55:02.431Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
