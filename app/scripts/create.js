@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
         }
         
         postArticles(data);
+        alert("Article posted!");
   });
 
 })
