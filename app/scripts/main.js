@@ -263,7 +263,7 @@ submit_btn.addEventListener("click",async ()=>{
       const message = document.getElementById('inform');
       if(verifyRegisterFields(firstName.value, lastName.value, email.value, password.value,confirmPassword.value, message)){
         if(await NormalRegisterUser(firstName.value, lastName.value, email.value, password.value, message)){
-          window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/profile.html"
+          window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/edit-profile.html"
         }
       }
     }
