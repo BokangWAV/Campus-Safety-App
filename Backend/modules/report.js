@@ -2,7 +2,7 @@ const { db } = require('./init.js');
 
 
 async function addReport(uid, report){
-    const added = true;     // Keeps track of whether or not we added the report
+    let added = true;     // Keeps track of whether or not we added the report
 
     const userRef = db.collection("reports");    //Stores a reference to the user
 
