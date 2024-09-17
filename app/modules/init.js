@@ -7,9 +7,9 @@ import {
 
 
 // just configuring the dotenv to work here
-require('dotenv').config();
+//require('dotenv').config();
 //import './node_modules/dotenv/config.js';
-const dotenv = require('dotenv')
+//const dotenv = require('dotenv')
 /*
 const firebaseConfig = { 
   apiKey: "AIzaSyCLDopG2959mh9Wtl3nDM0FAWZBNc3GGLo",
