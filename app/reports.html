@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report an Incident - Campus Safety App</title>
+
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
+
+  <link href="styles/dashboard.css" rel="stylesheet">
+
+  <style>
+    form div {
+      margin-bottom: 1.5rem;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button[type="submit"] {
+      background-color: #1a3e57;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #214a61;
+    }
+
+    .dashboard-card {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 800px) {
+      .dashboard-card {
+        padding: 1rem;
+      }
+    }
+
+    .dashboard-card,
+    .dashboard-card:hover {
+      transform: none !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h2>Campus Safety</h2>
+    <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="headerMenu">
+      <li><a href="dashboardtest.html">Dashboard</a></li>
+      <li><a href="article.html">Articles</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="register.html">Register</a></li>
+      <li><a class="active" href="reports.html">Report an Incident</a></li>
+      <li><a href="request.html">Requests</a></li>
+    </ul>
+  </div>
+
+  <div class="header">
+    <h2>Campus Safety</h2>
+    <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="headerMenu">
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="alerts.html">Emergency Alerts</a></li>
+      <li><a class="active" href="report.html">Report an Incident</a></li>
+      <li><a href="article.html">Articles</a></li>
+      <li><a href="requests.html">Requests</a></li>
+      <li><a href="contact.html">Contact Security</a></li>
+    </ul>
+  </div>
+
+  <div class="dashboard-container">
+    <div class="dashboard-header">
+      <h1>Report an Incident</h1>
+      <p>Use the form below to submit a new incident report.</p>
+    </div>
+
+    <div class="dashboard-content">
+      <div class="dashboard-card">
+        <form id="reportForm" onsubmit="event.preventDefault(); submitReport();">
+          <div>
+            <label for="geoLocation">Your Current Location (Latitude, Longitude):</label>
+            <input type="text" id="geoLocation" readonly>
+          </div>
+
+          <div>
+            <label for="description">Incident Description:</label>
+            <textarea id="description" rows="4" required></textarea>
+          </div>
+
+          <div>
+            <label for="location">Incident Location:</label>
+            <input type="text" id="location" required>
+          </div>
+
+          <div>
+            <label for="urgencyLevel">Urgency Level:</label>
+            <select id="urgencyLevel" required>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="imageUpload">Upload Images (optional):</label>
+            <input type="file" id="imageUpload" accept="image/*" multiple>
+          </div>
+
+          <div>
+            <label for="videoUpload">Upload Videos (optional):</label>
+            <input type="file" id="videoUpload" accept="video/*" multiple>
+          </div>
+
+          <button type="submit">Submit Report</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCLDopG2959mh9Wtl3nDM0FAWZBNc3GGLo",
+      authDomain: "tdkus-fcf53.firebaseapp.com",
+      projectId: "tdkus-fcf53",
+      storageBucket: "tdkus-fcf53.appspot.com",
+      messagingSenderId: "144411393779",
+      appId: "1:144411393779:web:54a4013e6da2a974b4c186",
+      measurementId: "G-5BPYZE953B"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    async function uploadFiles(files, folderName) {
+      const uploadPromises = Array.from(files).map(file => {
+        const storageRef = storage.ref(`${folderName}/${file.name}`);
+        return storageRef.put(file).then(snapshot => snapshot.ref.getDownloadURL());
+      });
+      return Promise.all(uploadPromises);
+    }
+
+    async function submitReport() {
+      const geoLocation = document.getElementById("geoLocation").value;
+      const description = document.getElementById("description").value;
+      const location = document.getElementById("location").value;
+      const urgencyLevel = document.getElementById("urgencyLevel").value;
+      const imageFiles = document.getElementById("imageUpload").files;
+      const videoFiles = document.getElementById("videoUpload").files;
+
+      let imageUrls = [];
+      let videoUrls = [];
+
+      if (imageFiles.length > 0) {
+        imageUrls = await uploadFiles(imageFiles, 'incident_images');
+      }
+
+      if (videoFiles.length > 0) {
+        videoUrls = await uploadFiles(videoFiles, 'incident_videos');
+      }
+
+        const reportData = {
+          geoLocation: geoLocation,
+          description: description,
+          location: location,
+          urgencyLevel: urgencyLevel,
+          status: "Open",
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          imageUrls: imageUrls,
+          videoUrls: videoUrls
+        };
+
+        try {
+            const uid = "tGbbA7VNkhZtmb8IbvLt0fckxIu2";
+            const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/reports/${uid}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reportData)
+            });
+    
+            if (response.ok) {
+                //console.log('Updated user data:', updatedUser);
+                //window.location.href = "./profile.html";
+                //window.location.href = '/profile.html'; // Redirect after successful submission
+                document.getElementById("reportForm").reset();
+            } else {
+                console.error("Error submitting report:", error);
+                alert("Error submitting report. Please try again.");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+
+        //await db.collection('reports').add(reportData);
+        //alert("Report submitted successfully!");
+        
+    }
+
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          document.getElementById('geoLocation').value = position.coords.latitude + ", " + position.coords.longitude;
+        }, function (error) {
+          console.error("Error getting location: ", error);
+          document.getElementById('geoLocation').value = "Unable to retrieve location.";
+        });
+      } else {
+        document.getElementById('geoLocation').value = "Geolocation is not supported by this browser.";
+      }
+    }
+
+    window.onload = function () {
+      getLocation();
+    };
+  </script>
+
+</body>
+
+</html>
