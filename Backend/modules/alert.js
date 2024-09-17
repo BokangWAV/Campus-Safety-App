@@ -35,7 +35,7 @@ async function addAlert(uid, alert){
     .then(async (docRef) => {
         var user = {};
 
-        const q = db.collection('users').doc(uid);
+        const q = db.collection.doc(uid);
 
         await q.get().then((doc) => {
             if (doc.exists) {

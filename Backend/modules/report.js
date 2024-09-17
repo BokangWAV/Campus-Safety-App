@@ -20,7 +20,7 @@ async function addReport(uid, report){
     .then(async () => {
         var user2 = {};
 
-        const q = db.collection('users').doc(uid);
+        const q = db.collection.doc(uid);
 
         await q.get().then((doc) => {
             if (doc.exists) {
