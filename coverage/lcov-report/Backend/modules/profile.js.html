@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for app/scripts/script.js</title>
+    <title>Code coverage report for Backend/modules/profile.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">app/scripts</a> script.js</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">Backend/modules</a> profile.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -90,60 +90,72 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import{ db, auth} from "../modules/init.js";
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">//const { response } = require('express');
+const { auth, provider, db } = <span class="cstat-no" title="statement not covered" >require('./init.js');</span>
+const { collection, getDocs, query, where } = <span class="cstat-no" title="statement not covered" >require('firebase/firestore');</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >document.addEventListener("DOMContentLoaded", <span class="fstat-no" title="function not covered" >as</span>ync function() {</span>
-    const main = <span class="cstat-no" title="statement not covered" >document.getElementById("main");</span>
-    const usersList = <span class="cstat-no" title="statement not covered" >document.getElementById("usersList");</span>
+const uid = <span class="cstat-no" title="statement not covered" >"tGbbA7VNkhZtmb8IbvLt0fckxIu2"</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    main.innerHTML += "My current users:";</span>
-&nbsp;
+// Fetch user data from the Azure Web API
+async function <span class="fstat-no" title="function not covered" >getUser(</span>) { 
 <span class="cstat-no" title="statement not covered" >    try {</span>
-        const usersCollection = <span class="cstat-no" title="statement not covered" >collection(db, "users");</span>
-&nbsp;
-        const querySnapshot = <span class="cstat-no" title="statement not covered" >await getDocs(usersCollection);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        if (!querySnapshot.empty) {</span>
-<span class="cstat-no" title="statement not covered" >            querySnapshot.forEach(<span class="fstat-no" title="function not covered" >(d</span>oc) =&gt; {</span>
-                const listItem = <span class="cstat-no" title="statement not covered" >document.createElement("li");</span>
-<span class="cstat-no" title="statement not covered" >                listItem.textContent = `${doc.data().name} ${doc.data().surname}`;</span>
-<span class="cstat-no" title="statement not covered" >                usersList.appendChild(listItem);</span>
-            });
-        } else {
-<span class="cstat-no" title="statement not covered" >            usersList.innerHTML = "&lt;li&gt;No users found&lt;/li&gt;";</span>
+        const response = <span class="cstat-no" title="statement not covered" >await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${uid}`, {</span>
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        //console.log(response);
+<span class="cstat-no" title="statement not covered" >        if (!response.ok) {</span>
+<span class="cstat-no" title="statement not covered" >            throw new Error(`Error: ${response.statusText}`);</span>
         }
+&nbsp;
+        const userData = <span class="cstat-no" title="statement not covered" >await response.json();</span>
+        //console.log(userData); // Log user data for debugging
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return userData; </span>// Return the fetched user data
     } catch (error) {
-<span class="cstat-no" title="statement not covered" >        console.error("Error fetching documents: ", error);</span>
-<span class="cstat-no" title="statement not covered" >        usersList.innerHTML = "&lt;li&gt;Error fetching users&lt;/li&gt;";</span>
+<span class="cstat-no" title="statement not covered" >        console.error("Failed to fetch user data:", error);</span>
+<span class="cstat-no" title="statement not covered" >        return null; </span>// Handle error and return null or an appropriate response
     }
-});
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >module.exports = { getUser };</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
