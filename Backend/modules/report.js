@@ -1,3 +1,4 @@
+const { appendNotifications } = require('./notification.js');
 const { db } = require('./init.js');
 
 
