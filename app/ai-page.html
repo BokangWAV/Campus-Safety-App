@@ -7,6 +7,12 @@
 
     <link href="./styles/ai.css" rel="stylesheet">
 
+    <style>
+        .Main-Part .imageSend .ask-Section{
+          filter: sepia(1) hue-rotate(180deg) saturate(3) brightness(0.8);
+        }
+      </style>
+
     <script src="./scripts/ai.js" type="module" defer></script>
 </head>
 <body>
@@ -38,7 +44,8 @@
 
         <div class="ask-Section">
             <input type="text" placeholder="Ask anything about Safety" id="Chatbot-Prompt" class="Chatbot-Prompt">
-            <input type="button"  id="Prompt-Btn" class="Prompt-Btn">
+            <img id="Prompt-Btn" class="imageSend" alt="svgImg" src="./assets/Undraw/send.png"style="height: 35px; width: 35px;"/>
+
         </div>
     </main>
 </body>

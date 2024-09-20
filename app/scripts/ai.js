@@ -1,4 +1,4 @@
-import { firebaseConfig} from "./modules/AI-init.js";
+import { firebaseConfig} from "../modules/AI-init.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 import { getVertexAI, getGenerativeModel } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-vertexai-preview.js";
 
@@ -55,7 +55,7 @@ promptBtn.addEventListener('click', ()=>{
     tempDiv.appendChild(tempP);
     conversationList.appendChild(tempDiv);
 
-    setTimeout(function() {
+    setTimeout(async function() {
 
             // To generate text output, call generateContent with the text input
             const result = await model.generateContent(question);
@@ -63,6 +63,13 @@ promptBtn.addEventListener('click', ()=>{
             const response = result.response;
             let text = response.text();
         // HERE: Ask question to the chatbot using API
+        text = text
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')  
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')              
+            .replace(/^\*\s(.*?)$/gm, '<li>$1</li>');          
+
+
+        text = text.replace(/(<li>.*<\/li>)/g, '<ul>$1</ul>');
 
 
         // Add response to the chat
