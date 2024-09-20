@@ -54,7 +54,7 @@ async function getApprovedArticles(){
 }
 
 
-async function addArticle(article){
+async function addArticle(uid, article){
     let added = true;
     const usersRef = db.collection('articles')
     // Add a new document with a generated id.
@@ -64,7 +64,7 @@ async function addArticle(article){
         surname: article.surname,
         title: article.title,
         name: article.name,
-        userID: article.uid,
+        userID: uid,
         status: "pending"
     })
     .then(async (docRef) => {

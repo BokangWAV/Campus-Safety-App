@@ -114,12 +114,13 @@ app.get('/articles/Approved', async (req, res)=>{
 });
 
 //Add an article to the database
-app.post('/articles', async (req, res) =>{
+app.post('/articles/:uid', async (req, res) =>{
     const article = req.body;   //Get the article contents to be added to the database from the body
+    const uid = req.params['uid'];    //The uid of the user who posted the article
 
     //If the article is added then it is fine
     //Else we send an error
-    if(await addArticle(article)){
+    if(await addArticle(uid, article)){
         res.status(200).send('Article added successfully');
     }else{
         res.status(404).send('Unable to add article');
