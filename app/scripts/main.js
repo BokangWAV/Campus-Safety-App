@@ -283,11 +283,11 @@ submit_btn.addEventListener("click",async ()=>{
 });
 
 
-googleBtn.addEventListener('click', ()=>{
-    GooglesignInUser();
-   // if(await GooglesignInUser()){
+googleBtn.addEventListener('click', async ()=>{
+    //GooglesignInUser();
+    if(await GooglesignInUser()){
           window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/dashboardtest.html"
-     //   }
+    }
   
 });
 
