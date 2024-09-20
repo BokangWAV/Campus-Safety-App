@@ -13,4 +13,6 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-module.exports = { db };
+var FieldValue = require("firebase-admin").firestore.FieldValue;
+
+module.exports = { db, FieldValue };

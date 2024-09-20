@@ -1,4 +1,4 @@
-const {db} = require('./init.js');
+const {db, FieldValue} = require('./init.js');
 
 
 async function getAllNotifications(uid){
@@ -46,9 +46,9 @@ async function appendNotifications(array, message, user){
 
         const reporter = user.firstName + user.lastName;
 
-        await userRef.set({
+        await userRef.add({
             notificationID: count,
-            timestamp: db.FieldValue.serverTimestamp(),
+            timestamp: FieldValue.serverTimestamp(),
             reporter: reporter,
             profilePicture: user.profilePicture ,
             message: message,
