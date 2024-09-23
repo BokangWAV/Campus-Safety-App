@@ -13,8 +13,8 @@
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <link href="./styles/dashboard.css" rel="stylesheet">
-  <link href="./styles/profile.css" rel="stylesheet">
+  <link href="/styles/dashboard.css" rel="stylesheet">
+  <link href="/styles/profile.css" rel="stylesheet">
 
 </head>
 
@@ -28,7 +28,7 @@
       <span></span>
     </div>
     <ul id="headerMenu">
-      <li><a href="dashboardtest.html" class="active">Dashboard</a></li>
+      <li><a href="/dashboardtest.html" class="active">Dashboard</a></li>
       <li><a href="alerts.html">Emergency Alerts</a></li>
       <li><a href="report.html">Report an Incident</a></li>
       <li><a>Articles</a></li>
@@ -51,11 +51,79 @@
       <p class="info" id="phone"></p>
       <p class="info" id="email"></p>
       <p class="info" id="studentId"></p>
-
-      <button class="edit-button" onclick="window.location.href='./edit-profile.html'">Edit</button>
+  
+      <button class="edit-button" onclick="window.location.href='/edit-profile.html'">Edit</button>
     </div>
   </div>
+  
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-storage.js";
 
-  <script type="module" src="./scripts/profiledata.js"></script>
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyCLDopG2959mh9Wtl3nDM0FAWZBNc3GGLo",
+      authDomain: "tdkus-fcf53.firebaseapp.com",
+      projectId: "tdkus-fcf53",
+      storageBucket: "tdkus-fcf53.appspot.com",
+      messagingSenderId: "144411393779",
+      appId: "1:144411393779:web:54a4013e6da2a974b4c186",
+      measurementId: "G-5BPYZE953B"
+    };
+
+    
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    const userId = 'tGbbA7VNkhZtmb8IbvLt0fckxIu2'; 
+
+    
+    async function loadProfile() {
+      const userDocRef = doc(db, 'users', userId);
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        document.getElementById("name").textContent = `${userData.firstname} ${userData.lastname}`;
+        document.getElementById("race").textContent = userData.race;
+        document.getElementById("phone").textContent = userData.phoneNumber;
+        document.getElementById("email").textContent = userData.email;
+        document.getElementById("studentId").textContent = `ID: ${userId}`;
+
+        
+        if (userData.profilePicture) {
+          document.getElementById("profilePic").src = userData.profilePicture;
+        } else {
+          document.getElementById("profilePic").src = 'assets/img/default-profile.png'; // default image
+        }
+      }
+    }
+
+    window.onload = loadProfile;
+
+   
+    document.getElementById("imageUpload").addEventListener("change", async function(event) {
+      const file = event.target.files[0];
+      const storageRef = ref(storage, `profile_pictures/${userId}/${file.name}`);
+
+     
+      await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(storageRef);
+
+     
+      const userDocRef = doc(db, 'users', userId);
+      await updateDoc(userDocRef, {
+        profilePicture: downloadURL
+      });
+
+      
+      document.getElementById("profilePic").src = downloadURL;
+
+      alert("Profile picture updated successfully!");
+    });
+  </script>
 
 </body>
