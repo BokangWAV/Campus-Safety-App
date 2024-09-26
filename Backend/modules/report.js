@@ -46,7 +46,7 @@ async function addReport(uid, report){
             }
         });
 
-        appendNotifications(idArray, 'added a new report', user2);
+        appendNotifications(idArray, 'added a new report', user2, 'report', report.location,report.imageUrls );
     })
     .catch((error) => {
         console.error("Error writing document: ", error);
