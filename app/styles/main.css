@@ -58,7 +58,7 @@
   a {
     color: var(--accent-color);
     text-decoration: none;
-    transition: 0.3s;
+    transition: 0.3s ease;
   }
   
   a:hover {
@@ -66,6 +66,7 @@
     text-decoration: none;
   }
   
+  /* Headings */
   h1,
   h2,
   h3,
@@ -76,34 +77,31 @@
     font-family: var(--heading-font);
   }
   
-  /* PHP Email Form Messages
-  ------------------------------*/
-  .php-email-form .error-message {
+  /* PHP Email Form Messages */
+  .php-email-form .error-message,
+  .php-email-form .sent-message,
+  .php-email-form .loading {
     display: none;
-    background: #df1529;
-    color: #ffffff;
-    text-align: left;
     padding: 15px;
     margin-bottom: 24px;
     font-weight: 600;
+  }
+  
+  .php-email-form .error-message {
+    background-color: #df1529;
+    color: #ffffff;
+    text-align: left;
   }
   
   .php-email-form .sent-message {
-    display: none;
+    background-color: #059652;
     color: #ffffff;
-    background: #059652;
     text-align: center;
-    padding: 15px;
-    margin-bottom: 24px;
-    font-weight: 600;
   }
   
   .php-email-form .loading {
-    display: none;
-    background: var(--surface-color);
+    background-color: var(--surface-color);
     text-align: center;
-    padding: 15px;
-    margin-bottom: 24px;
   }
   
   .php-email-form .loading:before {
@@ -122,14 +120,12 @@
     0% {
       transform: rotate(0deg);
     }
-  
     100% {
       transform: rotate(360deg);
     }
   }
   
-  /* Pulsating Play Button
-  ------------------------------*/
+  /* Pulsating Play Button */
   .pulsating-play-btn {
     width: 94px;
     height: 94px;
@@ -138,6 +134,7 @@
     display: block;
     position: relative;
     overflow: hidden;
+    transition: transform 0.3s ease;
   }
   
   .pulsating-play-btn:before {
@@ -145,12 +142,7 @@
     position: absolute;
     width: 120px;
     height: 120px;
-    animation-delay: 0s;
-    animation: pulsate-play-btn 2s;
-    animation-direction: forwards;
-    animation-iteration-count: infinite;
-    animation-timing-function: steps;
-    opacity: 1;
+    animation: pulsate-play-btn 2s infinite steps;
     border-radius: 50%;
     border: 5px solid color-mix(in srgb, var(--accent-color), transparent 30%);
     top: -15%;
@@ -174,18 +166,6 @@
   }
   
   .pulsating-play-btn:hover:before {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translateX(-40%) translateY(-50%);
-    width: 0;
-    height: 0;
-    border: none;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    border-left: 15px solid #fff;
-    z-index: 200;
     animation: none;
     border-radius: 0;
   }
@@ -200,26 +180,28 @@
       transform: scale(0.6, 0.6);
       opacity: 1;
     }
-  
     100% {
       transform: scale(1, 1);
       opacity: 0;
     }
   }
   
-  /*--------------------------------------------------------------
-  # Global Header
-  --------------------------------------------------------------*/
+  /* Header Section */
   .header {
     color: var(--default-color);
     background-color: var(--background-color);
     padding: 15px 0;
-    transition: all 0.5s;
+    transition: all 0.5s ease;
     z-index: 997;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
   
   .header .logo {
-    line-height: 1;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 24px;
+    margin: 0;
   }
   
   .header .logo img {
@@ -244,23 +226,23 @@
     padding: 8px 25px;
     margin: 0 0 0 30px;
     border-radius: 50px;
-    transition: 0.3s;
+    transition: 0.3s ease;
   }
   
   .header .btn-getstarted:hover,
   .header .btn-getstarted:focus:hover {
-    color: var(--contrast-color);
     background: color-mix(in srgb, var(--accent-color), transparent 15%);
   }
-
-  #header #container-header{
+  
+  /* Flexbox Layout for Header */
+  #header #container-header {
     display: flex;
-    flex-direction: row;
-    justify-content:space-between ;
+    justify-content: space-between;
     align-items: center;
+    padding: 0 15px;
   }
   
-  @media (max-width: 1200px) {
+  @media (max-width: 768px) {
     .header .logo {
       order: 1;
     }
@@ -284,7 +266,7 @@
   # Navigation Menu
   --------------------------------------------------------------*/
   /* Navmenu - Desktop */
-  @media (min-width: 1200px) {
+  @media (min-width: 120px) {
     .navmenu {
       padding: 0;
     }
@@ -395,7 +377,7 @@
   }
   
   /* Navmenu - Mobile */
-  @media (max-width: 1199px) {
+  @media (max-width: 768px) {
     .mobile-nav-toggle {
       color: var(--nav-color);
       font-size: 28px;

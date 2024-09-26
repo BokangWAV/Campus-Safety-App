@@ -3,166 +3,104 @@
 
 <head>
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Campus-Safety-App</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet">
-
-  <link href="/styles/main.css" rel="stylesheet">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles/main.css">
 </head>
 
 <body class="index-page">
   <header id="header" class="header d-flex align-items-center sticky-top">
-    <div class="container-fluid container-xl position-relative d-flex align-items-center">
-
-      <a href="index.html" class="logo d-flex align-items-center me-auto">
+    <div class="container-xl d-flex justify-content-between align-items-center">
+      <a href="index.html" class="logo">
         <h1 class="sitename">Campus Safety</h1>
       </a>
-
       <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="index.html">Home<br></a></li>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
           <li><a href="unavailable.html">About</a></li>
-          <!-- <li><a href="dashboardtest.html">Dashboard</a></li> -->
           <li><a href="unavailable.html">FAQs</a></li>
           <li><a href="unavailable.html">Contact</a></li>
-          <!-- <li><a href="login.html" class="active">Login</a></li> -->
         </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        <button class="mobile-nav-toggle d-xl-none"><i class="bi bi-list"></i></button>
       </nav>
-
-      <div class="sub-header-mobile">
-        <a class="btn-getstarted" href="register.html">Register</a>
-        <a href="#" class="options" id="options">Menu</a>
-      </div>   
-
     </div>
   </header>
 
   <main class="main">
-
     <!-- Hero Section -->
-    <section id="hero" class="hero section dark-background">
-
-      <img src="assets/img/hero-bg.jpg" alt="" data-aos="fade-in">
-
-      <div class="container" style="text-shadow: 1px 1px black;">
-        <h2 data-aos="fade-up" data-aos-delay="100">Your Campus Safety,<br>Our Priority</h2>
-        <p data-aos="fade-up" data-aos-delay="200">Committed on delivering top-tier safety solutions for a secure and thriving campus environment.</p>
-        <div class="d-flex mt-4" style="display: flex; flex-flow:row wrap; justify-content: space-around;" data-aos="fade-up" data-aos-delay="300">
-          <a href="/register.html" class="btn-get-started">Register</a>
-          <!-- <a href="/login.html" class="btn-get-started">Login</a> -->
-        </div>
+    <section id="hero" class="hero">
+      <div class="container text-center">
+        <h2>Your Campus Safety, Our Priority</h2>
+        <p>Committed to delivering top-tier safety solutions for a secure campus environment.</p>
+        <a href="register.html" class="btn-get-started">Register</a>
       </div>
-
-    </section><!-- /Hero Section -->
+    </section>
 
     <!-- About Section -->
     <section id="about" class="about section">
-
-      <div class="container">
-
-          <div class="col-lg-6 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200">
-            <h3>Making Wits safer and better.</h3>
-            <p class="fst-italic">
-              We are committed to providing a platform of relief and one to reach out to in events of danger or concern.
-            </p>
-            <ul>
-              <li><i class="bi bi-check-circle"></i> <span>Seamless, smart, simple.</span></li>
-              <li><i class="bi bi-check-circle"></i> <span>Our team is dedicated to ensuring your satisfaction and providing support when needed.</span></li>
-              <li><i class="bi bi-check-circle"></i> <span>We aim to provide a peace of mind.</span></li>
-            </ul>
-            <a href="/about.html"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
-          </div>
-          
-        </div>
-
+      <div class="container text-center">
+        <h3>Making Wits Safer and Better</h3>
+        <p class="subtext">We are committed to providing a platform of relief and one to reach out to in times of danger or concern.</p>
+        <ul class="benefits-list">
+          <li><i class="bi bi-check-circle"></i> Seamless, smart, simple.</li>
+          <li><i class="bi bi-check-circle"></i> Dedicated support for your safety.</li>
+          <li><i class="bi bi-check-circle"></i> Ensuring peace of mind.</li>
+        </ul>
+        <a href="about.html" class="btn-more">Read More</a>
       </div>
-
-    </section><!-- /About Section -->
-
-    
-    </section><!-- /Counts Section -->
+    </section>
 
     <!-- Why Us Section -->
     <section id="why-us" class="section why-us">
-
       <div class="container">
-
-        <div class="row gy-4">
-
-          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="row text-center">
+          <div class="col-lg-4">
             <div class="why-box">
-              <h3>What are we EXACTLY???</h3>
-              <p>
-                It is no secret that crime is a serious issue in our current landspace, especially in Johannesburg. Our Campus Safety App has got you covered with a solution: An environment where we all work together to make our campus a safer place to traverse.
-              </p>
-              <div class="text-center">
-                <a href="about.html" class="more-btn"><span>Learn More</span> <i class="bi bi-chevron-right"></i></a>
-              </div>
-            </div>
-          </div><!-- End Why Box -->
-
-          <div class="col-lg-8 d-flex align-items-stretch">
-            <div class="row gy-4" data-aos="fade-up" data-aos-delay="200">
-
-              <div class="col-xl-4">
-                <div class="icon-box d-flex flex-column justify-content-center align-items-center">
-                  <i class="bi bi-clipboard-data"></i>
-                  <h4>Emergency Alerts</h4>
-                  <p>Quick way to respond to emergencies of all degrees.</p>
-                </div>
-              </div><!-- End Icon Box -->
-
-              <div class="col-xl-4" data-aos="fade-up" data-aos-delay="300">
-                <div class="icon-box d-flex flex-column justify-content-center align-items-center">
-                  <i class="bi bi-gem"></i>
-                  <h4>Security</h4>
-                  <p>24 hours access to security services anywhere on campus.</p>
-                </div>
-              </div>
-
-              <div class="col-xl-4" data-aos="fade-up" data-aos-delay="400">
-                <div class="icon-box d-flex flex-column justify-content-center align-items-center">
-                  <i class="bi bi-inboxes"></i>
-                  <h4>Report</h4>
-                  <p>Receive an almost immediate response in time of need.</p>
-                </div>
-              </div><!-- End Icon Box -->
-
+              <h3>What are we exactly?</h3>
+              <p>An environment where we all work together to make our campus a safer place.</p>
+              <a href="about.html" class="btn-more">Learn More</a>
             </div>
           </div>
-
+          <div class="col-lg-8">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="icon-box">
+                  <i class="bi bi-clipboard-data"></i>
+                  <h4>Emergency Alerts</h4>
+                  <p>Respond to emergencies of all degrees.</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="icon-box">
+                  <i class="bi bi-shield-lock"></i>
+                  <h4>Security</h4>
+                  <p>24/7 access to security services on campus.</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="icon-box">
+                  <i class="bi bi-inboxes"></i>
+                  <h4>Report</h4>
+                  <p>Get almost immediate responses during emergencies.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
       </div>
-
+    </section>
   </main>
 
-  <footer id="footer" class="footer position-relative light-background">
-
-    <div class="container copyright text-center mt-4">
-      <p>© <span>Copyright 2024</span> <strong class="px-1 sitename">TDKUs</strong> <span>All Rights Reserved</span></p>
+  <footer id="footer" class="footer text-center">
+    <div class="container">
+      <p>© Copyright 2024 <strong class="sitename">TDKUs</strong>. All Rights Reserved.</p>
     </div>
-
   </footer>
 
-  <!-- Scroll Top -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-  <!-- Preloader -->
-  <!-- <div id="preloader"></div> -->
-
   <script src="/scripts/main.js"></script>
-
 </body>
 
 </html>
