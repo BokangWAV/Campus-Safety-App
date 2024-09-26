@@ -89,7 +89,7 @@ imageUploader.addEventListener('change',async ()=>{
     console.log("uploaded and updating user details....")
     const bodyElement = { url: imageUrls[0]}
     const uid = window.localStorage.getItem('uid');
-    await fetch(`http://localhost:8080/user/profilePicture/${uid}`, {
+    await fetch(`https://sdp-campus-safety.azurewebsites.net/user/profilePicture/${uid}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
