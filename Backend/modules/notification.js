@@ -27,9 +27,7 @@ async function appendNotifications(array, message, user){
     await q.get()
     .then((querySnapshot) => {
         if (!querySnapshot.empty) {
-            querySnapshot.forEach((doc) => {
-                count= doc.data().notifcationID;
-            });
+            count = querySnapshot.size
         } else {
             //console.log("No notifications found.");
         }

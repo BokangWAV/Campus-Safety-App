@@ -96,7 +96,7 @@ async function addArticle(uid, article){
             }
         });
 
-        await appendNotifications(idArray, `${title} article requires approval`, user);
+        appendNotifications(idArray, `${title} article requires approval`, user);
     })
     .catch((error) => {
         //console.error("Error adding document: ", error);

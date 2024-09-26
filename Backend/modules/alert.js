@@ -30,7 +30,9 @@ async function addAlert(uid, alert){
         firstName: alert.firstName,
         lastName: alert.lastName,
         status: "processing",
-        viewer: ""
+        viewer: "",
+        lat: alert.lat,
+        lon: alert.lon
     })
     .then(async (docRef) => {
         var user = {};
@@ -59,7 +61,7 @@ async function addAlert(uid, alert){
             }
         });
 
-        await appendNotifications(idArray, 'requires immediate attention', user);
+        appendNotifications(idArray, 'requires immediate attention', user);
     })
     .catch((error) => {
         //console.error("Error adding document: ", error);
@@ -93,7 +95,7 @@ async function updateViewAlert(reportID, report){
     const articlesRef = db.collection('articles').where("alertNo", "==", reportID);
 
     await articlesRef.update({
-        status: "processed",
+        status: "ASSISTED",
         viewer: report.viewer
     })
     .then(() => {
