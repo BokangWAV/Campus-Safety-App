@@ -23,7 +23,7 @@ async function appendNotifications(array, message, user, type, location, inciden
     var count = 0;
 
     //Get the last number of the appended notification
-    const q = db.collection('notifications').orderBy('timestamp', 'desc').limit(1); // Limit to only the most recent document
+    const q = db.collection('notifications'); // Limit to only the most recent document
     await q.get()
     .then((querySnapshot) => {
         if (!querySnapshot.empty) {
