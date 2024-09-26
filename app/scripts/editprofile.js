@@ -8,7 +8,7 @@ window.onload = async function () {
   
       const result = await response.json();
 
-        console.log(response):
+        console.log(response)
       //console.log('User data fetched:', result); // Debugging line
   
       const user = Array.isArray(result) ? result[0] : result; // Assuming user is at index 0, if it's in an array

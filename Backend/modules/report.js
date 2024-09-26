@@ -10,7 +10,7 @@ async function addReport(uid, report){
     await userRef.add({
         geoLocation: report.geoLocation,
         description: report.description,
-        location: report.description,
+        location: report.location,
         urgencyLevel: report.urgencyLevel,
         status: report.status,
         timestamp: report.timestamp,
@@ -46,7 +46,7 @@ async function addReport(uid, report){
             }
         });
 
-        await appendNotifications(idArray, 'added a new report', user2);
+        appendNotifications(idArray, 'added a new report', user2);
     })
     .catch((error) => {
         console.error("Error writing document: ", error);

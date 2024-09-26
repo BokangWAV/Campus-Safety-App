@@ -16,6 +16,11 @@
   <link href="./styles/dashboard.css" rel="stylesheet">
   <link href="./styles/profile.css" rel="stylesheet">
 
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
+
 </head>
 
 <body>
@@ -43,9 +48,9 @@
     <div class="profile-card">
       <div class="profile-img-wrapper">
         <div class="profile-img" id="profileImg">
-          <img id="profilePic" src="" alt="Profile Picture">
+          <img id="profilePic"  alt="Profile Picture">
         </div>
-        <button class="edit-button" onclick="document.getElementById('imageUpload').click()">Edit Image</button>
+        <button id="edit-button" class="edit-button" onclick="document.getElementById('imageUpload').click() ">Edit Image</button>
       </div>
       <input type="file" id="imageUpload" accept="image/*" style="display: none;">
   

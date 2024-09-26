@@ -3,7 +3,7 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.13.0/firebas
 import {  getAuth, GoogleAuthProvider  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js"
 import {
   getStorage,
-} from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js';
+} from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-storage.js';
 
 
 // just configuring the dotenv to work here
@@ -41,8 +41,8 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-//const storage = getStorage();
+const storage = getStorage(app);
 
 // Initialize Realtime Database and get a reference to the service
 
-export { db, auth, provider, firebaseConfig , getAuth, getStorage};
+export { db, auth, provider, firebaseConfig , getAuth, getStorage, storage};
