@@ -25,7 +25,6 @@ async function addAlert(uid, alert){
     // Add a new document with a generated id.
     await reportsRef.add({
         alertDate: FieldValue.serverTimestamp(),
-        alertNo: count+1,
         details: "EMERGENCY",
         firstName: alert.firstName,
         lastName: alert.lastName,
