@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
-
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+  
 const firebaseConfig = {
     apiKey: "AIzaSyCLDopG2959mh9Wtl3nDM0FAWZBNc3GGLo",
     authDomain: "tdkus-fcf53.firebaseapp.com",
@@ -13,57 +14,47 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
-document.addEventListener("DOMContentLoaded", async function() {
-    try {
-        const list = [];
-        const articlesCollection = collection(db, "articles");
+let currentUserName = "";
+let currentUserSurname = "";
 
-        const querySnapshot = await getDocs(articlesCollection);
-
-        if (!querySnapshot.empty) {
-            querySnapshot.forEach((doc) => {
-                let author = `${doc.data().name} ${doc.data().surname}`;
-                let hold = doc.data().content;
-                let holder = hold.split("").slice(0, 150).join("");
-                createArticles(
-                    `${doc.data().title} <sub><small><i>${doc.data().views} views</i></small></sub>`,author, holder, hold);
-            });
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        if (user.displayName) {
+            const separateDetails = user.displayName.split(" ");
+            currentUserName = separateDetails[0] || "Unknown";
+            currentUserSurname = separateDetails[1] || "Unknown";
         }
-    } catch (error) {
-        console.log("Error:", error);
+        console.log("First Name:", currentUserName);
+        console.log("Surname:", currentUserSurname);
+    } else {
+        // No user is signed in
+        console.log("No user is signed in");
+        currentUserName = "Unknown";
+        currentUserSurname = "Unknown";
     }
 });
 
-function createArticles(title, author, subtext, fullText){
-    const dashboardContent = document.createElement("div");
-    dashboardContent.classList.add("dashboard-content");    
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("emergency").addEventListener("click", postAlert);
+});
 
-    const dashboardCard = document.createElement("div");
-    dashboardCard.classList.add("dashboard-card");
-
-    let heading = document.createElement("h3");
-    heading.innerHTML = title;
-    dashboardCard.appendChild(heading);
-
-    const p = document.createElement("p");
-    p.textContent = author;
-    dashboardCard.appendChild(p);
-
-    const readDiv = document.createElement("div");
-    readDiv.setAttribute("id", "read");
-    readDiv.textContent = subtext + "... Read More";
-
-    dashboardCard.addEventListener("mouseover", function() {
-        readDiv.textContent = fullText;
-    });
-
-    dashboardCard.addEventListener("mouseout", function() {
-        readDiv.textContent = subtext + "... Read More";
-    });
-
-    dashboardCard.appendChild(readDiv);
-    dashboardContent.appendChild(dashboardCard);
-
-    document.body.appendChild(dashboardContent);
+async function postAlert() {
+    const alertCollection = collection(db, 'alert');
+    const data = {
+        details: "EMERGENCY",
+        alert_no: 1,
+        surname: currentUserSurname,
+        name: currentUserName,
+        alert_date: new Date().toISOString(),
+    };
+    await addDoc(alertCollection, data)
+        .then((docRef) => {
+            console.log('Document written with ID: ', docRef.id);
+            alert(`${currentUserName} ${currentUserSurname} needs help urgently!!!!`);
+        })
+        .catch((error) => {
+            console.error('Error adding document:', error);
+        });
 }

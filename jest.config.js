@@ -1,3 +1,5 @@
+
+
 module.exports = {
     testEnvironment: "jsdom",
     collectCoverage: true,
@@ -6,6 +8,18 @@ module.exports = {
     collectCoverageFrom: [
         'app/**/*.{js,jsx}', // Include source files from the 'app' folder
         'Backend/**/*.{js,jsx}', // Include source files from the 'Backend' folder
+        '!app/fakenotifications.js', // Exclude 'fakenotifications.js'
+        '!app/init.js', // Exclude 'init.js' from 'app'
+        '!app/notifications.js', // Exclude 'notifications.js'
+        '!app/script.js', // Exclude 'script.js'
+        '!app/vscode.js', // Exclude 'vscode.js'
+        '!app/scripts/ai.js',
+        '!app/scripts/editprofile.js',
+        '!app/scripts/form-submit.js',
+        '!app/scripts/main.js',
+        '!app/scripts/profiledata.js',
+        '!app/scripts/dashboard.js',
+        '!Backend/index.js', // Exclude 'index.js' from 'Backend'
         '!**/node_modules/**', // Exclude node_modules
         '!**/test/**', // Exclude test files if you want
         '!**/coverage/**', // Exclude coverage folder

@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for Backend/modules/init.js</title>
+    <title>Code coverage report for app/modules/AI-init.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">Backend/modules</a> init.js</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">app/modules</a> AI-init.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
@@ -73,45 +73,27 @@
 <a name='L8'></a><a href='#L8'>8</a>
 <a name='L9'></a><a href='#L9'>9</a>
 <a name='L10'></a><a href='#L10'>10</a>
-<a name='L11'></a><a href='#L11'>11</a>
-<a name='L12'></a><a href='#L12'>12</a>
-<a name='L13'></a><a href='#L13'>13</a>
-<a name='L14'></a><a href='#L14'>14</a>
-<a name='L15'></a><a href='#L15'>15</a>
-<a name='L16'></a><a href='#L16'>16</a>
-<a name='L17'></a><a href='#L17'>17</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L11'></a><a href='#L11'>11</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var admin = <span class="cstat-no" title="statement not covered" >require("firebase-admin");</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// Your web app's Firebase configuration
+const firebaseConfig = <span class="cstat-no" title="statement not covered" >{</span>
+    apiKey: "AIzaSyCyfaLdePaeAXRTtYeSw52IMLQHGyyDvwc",
+    authDomain: "campus-safety-ai.firebaseapp.com",
+    projectId: "campus-safety-ai",
+    storageBucket: "campus-safety-ai.appspot.com",
+    messagingSenderId: "984148695266",
+    appId: "1:984148695266:web:0787755f81690f81d726bb"
+  };
 &nbsp;
-&nbsp;
-const base64EncodedServiceAccount = <span class="cstat-no" title="statement not covered" >process.env.BASE64_ENCODED_SERVICE_ACCOUNT;</span>
-const decodedServiceAccount = <span class="cstat-no" title="statement not covered" >Buffer.from(base64EncodedServiceAccount, 'base64').toString('utf-8');</span>
-const credentials = <span class="cstat-no" title="statement not covered" >JSON.parse(decodedServiceAccount);</span>
-&nbsp;
-&nbsp;
-<span class="cstat-no" title="statement not covered" >admin.initializeApp({</span>
-  credential: admin.credential.cert(credentials),
-});
-&nbsp;
-&nbsp;
-const db = <span class="cstat-no" title="statement not covered" >admin.firestore();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >module.exports = { db };</span>
-&nbsp;</pre></td></tr></table></pre>
+  export{firebaseConfig};</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->

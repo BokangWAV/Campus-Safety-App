@@ -1,3 +1,4 @@
+const { appendNotifications } = require('./notification.js');
 const { db } = require('./init.js');
 
 
@@ -20,7 +21,7 @@ async function addReport(uid, report){
     .then(async () => {
         var user2 = {};
 
-        const q = db.collection.doc(uid);
+        const q = db.collection('users').doc(uid);
 
         await q.get().then((doc) => {
             if (doc.exists) {
