@@ -260,7 +260,7 @@
     align-items: center;
   }
   
-  @media (max-width: 1200px) {
+  @media (max-width: 768px) {
     .header .logo {
       order: 1;
     }
@@ -284,7 +284,7 @@
   # Navigation Menu
   --------------------------------------------------------------*/
   /* Navmenu - Desktop */
-  @media (min-width: 1200px) {
+  @media (min-width: 768px) {
     .navmenu {
       padding: 0;
     }
@@ -395,7 +395,7 @@
   }
   
   /* Navmenu - Mobile */
-  @media (max-width: 1199px) {
+  @media (max-width: 768px) {
     .mobile-nav-toggle {
       color: var(--nav-color);
       font-size: 28px;
