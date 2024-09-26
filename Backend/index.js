@@ -81,7 +81,7 @@ app.put('/users/profile/:uid', async (req, res)=>{
 app.put('/user/profilePicture/:uid', async (req, res)=>{
     
     const uid = req.params['uid'];  //Gets the uid passed from the parameter
-    const profileURL = req.body;  //This is the URL to the profile picture
+    const profileURL = req.body.url;  //This is the URL to the profile picture
 
     //If the user profile is updated then all is well send response code 200
     //Else send an error
