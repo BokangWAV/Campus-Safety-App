@@ -1,4 +1,4 @@
-const { db } = require('./init.js');
+const {db, FieldValue} = require('./init.js');
 const { appendNotifications } = require('./notification.js');
 
 async function getAllAlerts(){
@@ -24,7 +24,7 @@ async function addAlert(uid, alert){
     const reportsRef = db.collection('alert')
     // Add a new document with a generated id.
     await reportsRef.add({
-        alertDate: firebase.firestore.FieldValue.serverTimestamp(),
+        alertDate: timestamp: FieldValue.serverTimestamp(),,
         alertNo: count+1,
         details: "EMERGENCY",
         firstName: alert.firstName,
