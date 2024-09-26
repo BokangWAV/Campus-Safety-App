@@ -1,0 +1,400 @@
+/* Reset basic styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: scroll;
+  }
+  
+  /* Header Styles */
+  .header {
+    width: 100%;
+    background-color: #1a3e57;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 60px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding: 0 2rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .header h2 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  .header ul {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .header ul li {
+    margin-left: 1.5rem;
+  }
+  
+  .header ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    display: block;
+    padding: 0.5rem;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .header ul li a:hover {
+    background-color: #214a61;
+  }
+  
+  .header .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 200px;
+    background-color: #214a61;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  
+  .header .dropdown-menu.active {
+    display: block;
+  }
+  
+  .header .dropdown-menu ul {
+    padding: 0;
+    margin: 0;
+  }
+  
+  .header .dropdown-menu ul li a {
+    color: #fff;
+    padding: 0.75rem;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s;
+  }
+  
+  .header .dropdown-menu ul li a:hover {
+    background-color: #1a3e57;
+  }
+  
+  /* Main Content Styles */
+  .container {
+    margin-top: 60px;
+    padding: 2rem;
+    max-width: 800px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  header {
+    text-align: center;
+    width: 100%;
+  }
+  
+  header h1 {
+    font-size: 2.5em;
+    color: #000;
+    margin-bottom: 10px;
+  }
+  
+  /* Notifications section styling */
+  .notifications-section {
+    padding: 5px;
+    background-color: #e0e0ff;
+    border-radius: 8px;
+    width: 100%;
+    text-align: left;
+    margin-top: 15px;
+  }
+  
+  .notifications-section h2 {
+    font-size: 1.8em;
+    color: #000;
+    margin-bottom: 15px;
+  }
+  
+  .notification-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  /* Individual notification styling */
+  .notification-item {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    background-color: #fdfdfd;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .notification-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .notification-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+  }
+  
+  .notification-details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .poster-name {
+    font-weight: bold;
+    font-size: 1em;
+  }
+  
+  .notification-location {
+    color: #666;
+    font-size: 0.9em;
+  }
+  
+  .notification-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .notification-message {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #333;
+  }
+  
+  .notification-timestamp {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+  }
+  
+  .incident-pic {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  
+  /* Additional styles for various notification statuses */
+  .notification-item.sent {
+    border-left: 4px solid #4CAF50;
+  }
+  
+  .notification-item.scheduled {
+    border-left: 4px solid #FF9800;
+  }
+  
+  /* Mobile Styles */
+  @media (max-width: 800px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem 2rem;
+    }
+  
+    .header ul {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 1rem;
+        padding: 0;
+    }
+  
+    .header ul.active {
+        display: flex;
+        background-color: #1a3e57;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        height: 200%;
+        transform: translateX(0%);
+        z-index: 999;
+        padding-top: 1rem;
+    }
+  
+    .header .mobile-nav-toggle {
+        display: block;
+        background-color: #214a61;
+        padding: 0.5rem;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+  
+    .header .mobile-nav-toggle span {
+        display: block;
+        width: 25px;
+        height: 2px;
+        background-color: #fff;
+        margin: 5px 0;
+    }
+  
+    .container {
+        margin-top: 60px;
+        padding: 1rem;
+    }
+  }
+  
+  /* Preloader Styles */
+  #preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    overflow: hidden;
+    background: var(--background-color);
+    transition: all 0.6s ease-out;
+  }
+  
+  #preloader:before {
+    content: "";
+    position: fixed;
+    top: calc(50% - 30px);
+    left: calc(50% - 30px);
+    border: 6px solid #ffffff;
+  }
+  /* Profile picture and notification header */
+  .notification-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+  }
+  
+  .notification-details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .poster-name {
+    font-weight: bold;
+    font-size: 1em;
+  }
+  
+  .notification-location {
+    color: #666;
+    font-size: 0.9em;
+  }
+  
+  /* Incident picture styling */
+  .incident-pic {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  
+  /* Other existing styles */
+  .notification-item {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    background-color: #fdfdfd;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .notification-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .notification-message {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #333;
+  }
+  
+  .notification-timestamp {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+  }
+  .notification-item {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    background-color: #fdfdfd;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+  }
+  
+  .notification-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  /* Initially, hide the incident image */
+  .notification-item .incident-pic {
+    display: none;
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  
+  /* When notification is expanded, display the incident image */
+  .notification-item.expanded .incident-pic {
+    display: block;
+  }
+  /* Unread message styles */
+  .notification-item.read {
+    background-color: #fdfdfd; /* Default background */
+    filter: none; /* No blur */
+    font-weight: normal; /* Normal text weight */
+  }
+  /* Unread notification style */
+  .notification-item.unread {
+    background-color: #fff8b3; /* Light yellow background for unread messages */
+  }
+  
+  /* Mark as read style */
+  .notification-item.read {
+    background-color: #fdfdfd;
+  }
+  
+  

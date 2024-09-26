@@ -60,7 +60,7 @@ async function addAlert(uid, alert){
             }
         });
 
-        appendNotifications(idArray, 'requires immediate attention', user);
+        appendNotifications(idArray, 'requires immediate attention', user, "alert", `${alert.lat} ${alert.lon}`, user.profilePicture);
     })
     .catch((error) => {
         //console.error("Error adding document: ", error);
