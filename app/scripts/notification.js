@@ -1,8 +1,22 @@
-document.addEventListener("DOMContentLoaded", function () {
+var notifications;
+
+document.addEventListener("DOMContentLoaded",async function () {
     const notificationList = document.getElementById("notification-list");
     const unreadCountElement = document.getElementById("unread-count");
   
+    try {
+      const uid = window.localStorage.getItem('uid');
+      console.log(uid);
+      const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/notifications/${uid}`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      notifications = await response.json()
+      console.log(notifications)
+    }catch(error){
+      console.error(error)
+    }
+
     // Example notifications array
+    /*
     const notifications = [
       {
         //user_id: "1",
@@ -26,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
         profile_link: "https://firebasestorage.googleapis.com/v0/b/tdkus-fcf53.appspot.com/o/incident_images%2FElm-St-Fire-7-23-17.jpg?alt=media&token=c8ea7cf3-0d0e-4", // Link to profile
         incident_image: null // No incident image
       }
-    ];
+    ];*/
   
     let unreadCount = notifications.filter(notification => notification.status === "unread").length;
   
@@ -100,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
       listItem.appendChild(incidentImage);
   
       // Toggle the display of additional info and the incident image on click
-      listItem.addEventListener("click", function () {
+      listItem.addEventListener("click", async function () {
         if (listItem.classList.contains("expanded")) {
           listItem.classList.remove("expanded");
           profilePic.style.display = "none";
@@ -117,10 +131,32 @@ document.addEventListener("DOMContentLoaded", function () {
           }
           // Mark notification as read and update unread count
           if (notification.status === "unread") {
-            notification.status = "read";
-            unreadCount--;
-            unreadCountElement.textContent = unreadCount;
-            listItem.classList.remove("unread");
+            try {
+              
+              const bodyElement = { notificationID: notification.notificationID}
+              const uid = window.localStorage.getItem('uid');
+              await fetch(`https://sdp-campus-safety.azurewebsites.net/notifications/status/${uid}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(bodyElement),
+              })
+              .then(() => {
+                //Show user profile
+                //loadData()
+                console.log("uploaded and updating user details....")
+                notification.status = "read";
+                unreadCount--;
+                unreadCountElement.textContent = unreadCount;
+                listItem.classList.remove("unread");
+              }).catch((error)=>{
+                console.error(error)
+              });
+            } catch (error) {
+              
+            }
+            
           }
         }
       });
