@@ -11,7 +11,10 @@ module.exports = {
         'Backend/**/*.{js,jsx}', // Include source files from the 'Backend' folder
         '!app/modules/AI-init.js',
         '!app/modules/users.js',
-        'app/scripts/*.{js, jsx}',
+        '!app/scripts/main.js',
+        '!app/scripts/profiledata.js',
+        '!app/scripts/script.js',
+        '!Backend/modules/notification.js',
         '!Backend/index.js',// Exclude 'index.js' from 'Backend'
         '!**/node_modules/**', // Exclude node_modules
         '!**/test/**', // Exclude test files if you want
