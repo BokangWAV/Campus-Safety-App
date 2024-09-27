@@ -1,23 +1,20 @@
+// Mock the environment variable before importing any modules that use it
+process.env.BASE64_ENCODED_SERVICE_ACCOUNT = Buffer.from(JSON.stringify({
+    "type": "service_account",
+    "project_id": "mock-project-id",
+    "private_key_id": "mock-private-key-id",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMOCK_PRIVATE_KEY\n-----END PRIVATE KEY-----\n",
+    "client_email": "mock-client-email@mock-project-id.iam.gserviceaccount.com",
+    "client_id": "mock-client-id",
+    "auth_uri": "https://mock-auth-uri",
+    "token_uri": "https://mock-token-uri",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://mock-cert-url"
+})).toString('base64');
+
 // app/__tests__/index.test.js
 const request = require('supertest');
 const app = require('../../Backend/index'); // Adjust the path if necessary
-
-// Set up the environment variable mock
-beforeAll(() => {
-    // Provide a mock base64 encoded service account JSON string
-    process.env.BASE64_ENCODED_SERVICE_ACCOUNT = Buffer.from(JSON.stringify({
-        "type": "service_account",
-        "project_id": "mock-project-id",
-        "private_key_id": "mock-private-key-id",
-        "private_key": "-----BEGIN PRIVATE KEY-----\nMOCK_PRIVATE_KEY\n-----END PRIVATE KEY-----\n",
-        "client_email": "mock-client-email@mock-project-id.iam.gserviceaccount.com",
-        "client_id": "mock-client-id",
-        "auth_uri": "https://mock-auth-uri",
-        "token_uri": "https://mock-token-uri",
-        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "client_x509_cert_url": "https://mock-cert-url"
-    })).toString('base64');
-});
 
 describe('Campus Safety API', () => {
     
@@ -126,5 +123,4 @@ describe('Campus Safety API', () => {
         expect(response.status).toBe(200);
         expect(response.text).toBe('Deleted alert successfully');
     });
-
 });
