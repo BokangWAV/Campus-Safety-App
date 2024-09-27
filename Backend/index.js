@@ -9,16 +9,19 @@ const port = process.env.PORT || 3000;
 const { getAllArticles, getPendingArticles, getApprovedArticles, addArticle, deleteArticle, addLike } = require('./modules/article.js');
 
 // Get all the functions to operate on users
-const {getAllUsers, getUser, addUser, updateProfile, updateProfilePicture} = require('./modules/users.js');
+const {getAllUsers, getUser, addUser, updateProfile, updateProfilePicture, setRole} = require('./modules/users.js');
 
 //Get all the functions to use for Reports
-const { addReport, getAllReports, getUserReport } = require('./modules/report.js');
+const { addReport, getAllReports, getUserReport, removeReport } = require('./modules/report.js');
 
 //Get all the functions to use for Alerts
 const { getAllAlerts, addAlert, deleteReport, updateViewAlert } = require('./modules/alert.js');
 
 //Get all the functions to use for Notifications
 const { getAllNotifications, getAllReadNotifications, getAllUnreadNotifications, updateNotificationStatus } = require('./modules/notification.js');
+
+//Get all the functions to use for FAQs
+const {getAllFAQ, getUserFAQ, respondFAQ, displayFAQ, deleteFAQ,  addFAQ} = require('./modules/FAQ.js');
 
 
 app.use(cors());
@@ -86,6 +89,23 @@ app.put('/user/profilePicture/:uid', async (req, res)=>{
     //If the user profile is updated then all is well send response code 200
     //Else send an error
     if(await updateProfilePicture(uid, profileURL)){
+        res.status(200).send('Updated Profile Picture successfully');
+    }else{
+        res.status(404).send('Unable to update Profile Picture');
+    }
+})
+
+
+// Change user priviledges to manager
+app.put('/user/role/:managerUid/:uid', async (req, res)=>{
+    
+    const managerUID = req.params['managerUid'];  //Gets the uid passed from the parameter
+    const uid = req.params['uid']
+    const role = req.body.role;
+
+    //If the user profile is updated then all is well send response code 200
+    //Else send an error
+    if(await setRole(managerUID, uid, role)){
         res.status(200).send('Updated Profile Picture successfully');
     }else{
         res.status(404).send('Unable to update Profile Picture');
@@ -195,11 +215,25 @@ app.post('/reports/:uid', async (req, res)=>{
 });
 
 //Get reports of a specific user
-app.get('/users/:uid', async (req, res)=>{
+app.get('/reports/:uid', async (req, res)=>{
     const uid = req.params['uid'];  //Gets the user id from the parameters
     const response = await getUserReport(uid);    //Calls function to get that report for the specific user
     res.json(response); //Return the response
 });
+
+
+//Updates the reports of the users to removed from the database
+app.put('/reports/:reportID', async (req, res)=>{
+    const reportID = req.params['reportID'];    //Get the id of the report
+
+    //If the action is successful we return a response code of 200
+    //Else we return an error code
+    if(await removeReport(reportID)){
+        res.status(200).send('Updated Likes successfully');
+    }else{
+        res.status(404).send('Unable to update Likes');
+    }
+})
 
 
 
@@ -241,15 +275,23 @@ app.delete('/alert/:uid', async (req, res)=>{
 //Update the alert status
 app.put('/alert/:uid', async (req, res)=>{
     const reportID = req.params['uid'];    //Get the report ID from which to update status
-    const processor = req.body;
 
     //If the action is successful we return a response code of 200
     //Else we return an error code
-    if(await updateViewAlert(reportID, processor)){
+    if(await updateViewAlert(reportID)){
         res.status(200).send('Updated alert successfully');
     }else{
         res.status(404).send('Unable to update alert');
     }
+});
+
+
+
+//Get all the alerts of a user in the database
+app.get('/alert/:uid', async (req, res)=>{
+    const uid = req.params['uid']
+    const response = await getUserAlerts(uid);     // Gets all the reports in the database
+    res.json(response);     //Return the reponse of all the Reports
 });
 
 
@@ -297,6 +339,73 @@ app.put('/notifications/status/:uid', async (req, res)=>{
 
 
 
+
+//--------------------------------------------------FAQ Section------------------------------------------------------------//
+//Get all FAQs
+app.get('/FAQs', async (req, res)=>{
+    const response = await getAllFAQ();
+    res.json(response);
+})
+
+
+//Get user FAQs
+app.get('/FAQs/:uid', async (req, res)=>{
+    const uid = req.params['uid']   //Get the uid of the user
+
+    const response = await getUserFAQ(uid);
+
+    res.json(response);
+})
+
+
+//Respond FAQs
+app.put('/FAQ/:FAQID', async (req, res)=>{
+    const FAQID = req.params['FAQID'];
+    const answer = req.body.answer;
+
+    if(await respondFAQ(FAQID, answer)){
+        res.status(200).send("Responded Successfully")
+    }else{
+        res.status(404).send("Unable to respond");
+    }
+});
+
+
+//Display FAQ
+app.put('/FAQ/publish/:FAQID', async (req, res)=>{
+    const FAQID = req.params['FAQID']
+
+    if(await displayFAQ(FAQID)){
+        res.status(200).send("Displayed Successfully");
+    }else{
+        res.status(404).send("Unable to display FAQ")
+    }
+
+})
+
+
+//Remove FAQs
+app.delete('/FAQ/:FAQID', async (req, res)=>{
+    const FAQID = req.params['FAQID']
+
+    if( await deleteFAQ(FAQID)){
+        res.status(200).send("Deleted Successfully")
+    }else(
+        res.status(404).send("Unable to delete FAQ")
+    )
+})
+
+
+//Add a FAQ
+app.post('/FAQ/:uid', async (req, res)=>{
+    const uid = req.params['uid'];
+
+    if( await addFAQ(uid)){
+        res.status(200).send("Added FAQ");
+    }else{
+        res.status(404).send("Unable to add FAQ");
+    }
+})
 
 
 

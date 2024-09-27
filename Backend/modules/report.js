@@ -7,6 +7,9 @@ async function addReport(uid, report){
 
     const userRef = db.collection("reports");    //Stores a reference to the user
 
+    const reportsDatabase = await getAllReports();
+    let count = reportsDatabase.length + 1;
+
     await userRef.add({
         geoLocation: report.geoLocation,
         description: report.description,
@@ -16,7 +19,9 @@ async function addReport(uid, report){
         timestamp: report.timestamp,
         imageUrls: report.imageUrls,
         videoUrls: report.videoUrls,
-        uid: uid
+        uid: uid,
+        reportID: count,
+        removed: false
     })
     .then(async () => {
         var user2 = {};
@@ -77,7 +82,7 @@ async function getAllReports(){
 
 
 async function getUserReport(uid){
-    const usersRef = db.collection('articles').where("uid", "==", uid);    // Get a reference to the articles collection
+    const usersRef = db.collection('reports').where("uid", "==", uid);    // Get a reference to the articles collection
 
     var result = [];
     // First page of results
@@ -94,6 +99,27 @@ async function getUserReport(uid){
 
 
 
+async function removeReport(reportID){
+    let removal = false;
+    const usersRef = db.collection('reports').where("reportID", "==", reportID);    // Get a reference to the articles collection
+
+    await usersRef.update({
+        removed: true
+    })
+    .then(() => {
+        removal = true
+       // console.log("Document successfully updated!");
+    })
+    .catch((error) => {
+        // The document probably doesn't exist.
+        //console.error("Error updating document: ", error);
+    });
+
+    return removal;
+}
 
 
-module.exports = { addReport, getAllReports, getUserReport  }
+
+
+
+module.exports = { addReport, getAllReports, getUserReport, removeReport  }
