@@ -105,9 +105,15 @@ async function getAllUnreadNotifications(uid){
 
 async function updateNotificationStatus(uid, notificationID){
     let added = true;
-    const articlesRef = db.collection('notifications').where("uid", "==", uid).where("notificationID", "==", notificationID);
+    const articlesRef = await db.collection('notifications').where("uid", "==", uid).where("notificationID", "==", notificationID).get();
 
-    await articlesRef.update({
+
+    const doc = articlesRef.docs[0];
+        
+        // Step 3: Update the document using the document ID
+    const articlesRef2 = db.collection('articles')
+
+    await articlesRef2.doc(doc.id).update({
         status: "read"
     })
     .then(async () => {

@@ -36,10 +36,15 @@ async function getUserFAQ(uid){
 }
 
 async function respondFAQ(FAQID, answer){
-    let responded = false;
-    const usersRef = db.collection('FAQ').where("FAQID", "==", FAQID);    // Get a reference to the articles collection
 
-    await usersRef.update({
+    let responded = false;
+    const usersRef = await db.collection('FAQ').where("FAQID", "==", FAQID).get();    // Get a reference to the articles collection
+
+    const doc = usersRef.docs[0];
+
+    const articlesRef2 = db.collection('FAQ')
+
+    await articlesRef2.doc(doc.id).update({
         answer: answer
     })
     .then(() => {
@@ -55,10 +60,15 @@ async function respondFAQ(FAQID, answer){
 }
 
 async function  displayFAQ(FAQID){
-    let displayable = false;
-    const usersRef = db.collection('FAQ').where("FAQID", "==", FAQID);    // Get a reference to the articles collection
 
-    await usersRef.update({
+    let displayable = false;
+    const usersRef = await db.collection('FAQ').where("FAQID", "==", FAQID).get();    // Get a reference to the articles collection
+
+    const doc = usersRef.docs[0];
+
+    const articlesRef2 = db.collection('FAQ')
+
+    await articlesRef2.doc(doc.id).update({
         status: "display"
     })
     .then(() => {
@@ -75,9 +85,13 @@ async function  displayFAQ(FAQID){
 
 async function deleteFAQ(FAQID){
     let deleted = true;
-    const usersRef = db.collection('FAQ').where("FAQID", "==", FAQID);
+    const usersRef = await db.collection('FAQ').where("FAQID", "==", FAQID).get();
 
-    await usersRef.delete()
+    const doc = usersRef.docs[0];
+
+    const articlesRef2 = db.collection('FAQ')
+
+    await articlesRef2.doc(doc.id).delete()
     .then(() => {
         //console.log("Document successfully deleted!");
     }).catch((error) => {

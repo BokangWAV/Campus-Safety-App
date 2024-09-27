@@ -109,9 +109,12 @@ async function addArticle(uid, article){
 
 async function deleteArticle(uid, title){
     let deleted = true;
-    const usersRef = db.collection('articles').where("userID", "==", uid).where("title", "==", title);
+    const usersRef = await db.collection('articles').where("userID", "==", uid).where("title", "==", title).get();
+    const doc = usersRef.docs[0];
 
-    await usersRef.delete()
+    const articlesRef2 = db.collection('article')
+
+    await articlesRef2.doc(doc.id).delete()
     .then(() => {
         //console.log("Document successfully deleted!");
     }).catch((error) => {
@@ -145,12 +148,17 @@ async function getArticle(name, title){
 
 
 async function addLike(name, title){
-    let added = true;
-    const articlesRef = db.collection('articles').where("name", "==", name).where("title", "==", title);
-    const article = await getArticle(name, title);
-    const numLikes = article.likes + 1;
 
-    await articlesRef.update({
+    let added = true;
+    const articlesRef =  await db.collection('articles').where("name", "==", name).where("title", "==", title).get();
+    const article = await getArticle(name, title);
+    const numLikes = Number(article.likes) + 1;
+
+    const doc = articlesRef.docs[0];
+
+    const articlesRef2 = db.collection('articles')
+
+    await articlesRef2.doc(doc.id).update({
         likes: numLikes
     })
     .then(() => {
@@ -168,10 +176,15 @@ async function addLike(name, title){
 
 
 async function approveArticle(name, title){
-    let added = true;
-    const articlesRef = db.collection('articles').where("name", "==", name).where("title", "==", title);
 
-    await articlesRef.update({
+    let added = true;
+    const articlesRef = await db.collection('articles').where("name", "==", name).where("title", "==", title).get();
+
+    const doc = articlesRef.docs[0];
+
+    const articlesRef2 = db.collection('articles')
+
+    await articlesRef2.doc(doc.id).update({
         status: "approved"
     })
     .then(async () => {
