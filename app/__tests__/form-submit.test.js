@@ -1,121 +1,110 @@
-/**
- * @jest-environment jsdom
- */
+import '../scripts/form-submit'; // Import your form-submit module
+import { fireEvent } from '@testing-library/dom';
 
-import fetchMock from 'jest-fetch-mock';
-
-fetchMock.enableMocks();
-
-describe('form-submit.js', () => {
-  let localStorageMock;
-  let event;
+describe('Edit Profile Form Submission', () => {
+  let form, firstNameInput, lastNameInput, raceInput, phoneNumberInput, ageInput;
 
   beforeEach(() => {
-    // Reset mocks before each test
-    fetchMock.resetMocks();
-
-    // Set up DOM elements for the test
+    // Set up the HTML structure for the tests
     document.body.innerHTML = `
       <form id="editProfileForm">
-        <input type="text" id="firstName" value="John" />
-        <input type="text" id="lastName" value="Doe" />
-        <input type="text" id="race" value="Caucasian" />
-        <input type="text" id="phoneNumber" value="1234567890" />
-        <input type="number" id="age" value="25" />
+        <input id="firstName" type="text" value="John" />
+        <input id="lastName" type="text" value="Doe" />
+        <input id="race" type="text" value="Asian" />
+        <input id="phoneNumber" type="text" value="1234567890" />
+        <input id="age" type="number" value="25" />
         <button type="submit">Submit</button>
       </form>
     `;
 
-    // Mock localStorage
-    localStorageMock = jest.spyOn(window.localStorage, 'getItem').mockReturnValue('test-uid');
+    // Get form elements
+    form = document.getElementById('editProfileForm');
+    firstNameInput = document.getElementById('firstName');
+    lastNameInput = document.getElementById('lastName');
+    raceInput = document.getElementById('race');
+    phoneNumberInput = document.getElementById('phoneNumber');
+    ageInput = document.getElementById('age');
 
-    // Create a mock event
-    event = new Event('submit');
-    jest.spyOn(event, 'preventDefault'); // Spy on preventDefault method to ensure it's called
+    // Set up mock for localStorage
+    window.localStorage.setItem('uid', '12345');
+
+    // Mock the fetch API
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ success: true }),
+      })
+    );
+
+    // Mock window.location
+    delete window.location; // Delete original location
+    window.location = { href: '' }; // Create a new mock location
   });
 
   afterEach(() => {
-    jest.restoreAllMocks(); // Clean up mocks after each test
+    // Clean up mock after each test
+    jest.clearAllMocks();
   });
 
-  test('should prevent default form submission and make a PUT request', async () => {
-    const form = document.getElementById('editProfileForm');
-    require('./form-submit'); // Simulate loading the JS file
+  it('should submit the form and redirect to profile page on successful update', async () => {
+    // Simulate form submission
+    fireEvent.submit(form);
 
-    // Mock the fetch call to simulate a successful response
-    fetchMock.mockResponseOnce(JSON.stringify({}), { status: 200 });
+    expect(fetch).toHaveBeenCalledWith('https://sdp-campus-safety.azurewebsites.net/users/profile/12345', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        firstName: firstNameInput.value,
+        lastName: lastNameInput.value,
+        race: raceInput.value,
+        phoneNumber: phoneNumberInput.value,
+        age: ageInput.value,
+      }),
+    });
 
-    // Trigger form submission
-    form.dispatchEvent(event);
+    // Wait for the fetch call to complete
+    await Promise.resolve();
 
-    expect(event.preventDefault).toHaveBeenCalled(); // Ensure default form submission is prevented
+    // Check if redirect happens
+    expect(window.location.href).toBe('./profile.html');
+  });
 
-    // Wait for async code to execute
-    await new Promise(setImmediate);
-
-    // Expect fetch to have been called with the correct URL and method
-    expect(fetchMock).toHaveBeenCalledWith(
-      'https://sdp-campus-safety.azurewebsites.net/users/profile/test-uid',
-      expect.objectContaining({
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          firstName: 'Caucasian',
-          lastName: 'Caucasian',
-          race: 'Caucasian',
-          phoneNumber: '1234567890',
-          age: '25',
-        }),
+  it('should alert when the response is not ok', async () => {
+    // Change fetch to simulate an unsuccessful update
+    fetch.mockImplementationOnce(() =>
+      Promise.resolve({
+        ok: false,
       })
     );
+
+    // Spy on alert
+    global.alert = jest.fn();
+
+    // Simulate form submission
+    fireEvent.submit(form);
+
+    // Wait for the fetch call to complete
+    await Promise.resolve();
+
+    expect(global.alert).toHaveBeenCalledWith('Failed to update');
+    expect(console.error).toHaveBeenCalledWith('Failed to update profile');
   });
 
-  test('should redirect to profile.html on successful update', async () => {
-    const form = document.getElementById('editProfileForm');
-    const locationMock = jest.spyOn(window.location, 'href', 'set'); // Mock window.location.href
+  it('should log an error on fetch failure', async () => {
+    // Mock fetch to throw an error
+    fetch.mockImplementationOnce(() => Promise.reject('API is down'));
 
-    require('./form-submit'); // Simulate loading the JS file
+    // Spy on console.error
+    console.error = jest.fn();
 
-    // Mock the fetch call to simulate a successful response
-    fetchMock.mockResponseOnce(JSON.stringify({}), { status: 200 });
+    // Simulate form submission
+    fireEvent.submit(form);
 
-    // Trigger form submission
-    form.dispatchEvent(event);
+    // Wait for the fetch call to complete
+    await Promise.resolve();
 
-    await new Promise(setImmediate); // Wait for async code to execute
-
-    // Expect window location to be updated to profile.html
-    expect(locationMock).toHaveBeenCalledWith('./profile.html');
-  });
-
-  test('should display an error alert on failed update', async () => {
-    fetchMock.mockResponseOnce(JSON.stringify({}), { status: 400 }); // Simulate a failed response
-    const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
-
-    const form = document.getElementById('editProfileForm');
-    require('./form-submit'); // Simulate loading the JS file
-
-    // Trigger form submission
-    form.dispatchEvent(event);
-
-    await new Promise(setImmediate); // Wait for async code to execute
-
-    expect(alertMock).toHaveBeenCalledWith('Failed to update');
-  });
-
-  test('should handle fetch error', async () => {
-    fetchMock.mockReject(new Error('Network error')); // Simulate a network error
-
-    const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
-
-    const form = document.getElementById('editProfileForm');
-    require('./form-submit'); // Simulate loading the JS file
-
-    // Trigger form submission
-    form.dispatchEvent(event);
-
-    await new Promise(setImmediate); // Wait for async code to execute
-
-    expect(consoleErrorMock).toHaveBeenCalledWith('Error:', expect.any(Error));
+    expect(console.error).toHaveBeenCalledWith('Error:', 'API is down');
   });
 });
