@@ -7,7 +7,8 @@ jest.mock('https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js', () => ({
 }));
 
 jest.mock('https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js', () => ({
-  getFirestore: jest.fn(() => ({})) // Mock implementation of getFirestore
+  getFirestore: jest.fn(() => ({})), // Mock implementation of getFirestore
+  getDocs: jest.fn()
 }));
 
 jest.mock('https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js', () => ({

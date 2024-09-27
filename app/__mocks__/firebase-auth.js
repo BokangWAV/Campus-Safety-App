@@ -31,10 +31,6 @@ export const signInWithPopup = jest.fn(() => Promise.resolve({
   // Export other functions if you use them
   // __mocks__/firebase-auth.js
 
-export const getAuth = jest.fn(() => ({
-    // Mock any properties or methods if needed
-  }));
-
   const getAuth = jest.fn().mockReturnValue({}); // Mock the auth object
   const onAuthStateChanged = jest.fn(() => ({
 
