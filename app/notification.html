@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Requests - Campus Safety App</title>
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link href="./styles/notification.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- Header for Web and Mobile -->
+  <div class="header">
+    <h2>Campus Safety</h2>
+    <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="headerMenu">
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="alerts.html">Notifications</a></li>
+      <li><a href="report.html">Report an Incident</a></li>
+      <li><a href="article.html">Articles</a></li>
+      <li><a class="active" href="requests.html">Requests</a></li>
+      <li><a href="contact.html">Contact Security</a></li>
+    </ul>
+  </div>
+
+  <div class="container">
+    <section class="notifications-section">
+      <h2>Notifications (<span id="unread-count">0</span> unread)</h2> <!-- Unread count -->
+      <ul id="notification-list" class="notification-list">
+        <!-- Notifications will be dynamically inserted here -->
+      </ul>
+    </section>
+  </div>
+
+  <script src="./scripts/notification.js"></script> <!-- Link to the fake notifications script -->
+
+</body>
+
+</html>
