@@ -59,7 +59,8 @@ async function addUser(uid, user){
         phoneNumber: "",
         age: 0,
         profilePicture: "",
-        race: ""
+        race: "",
+        gender: user.gender
     })
     .then(() => {
         //console.log("Document successfully written!");
@@ -116,8 +117,33 @@ async function updateProfilePicture(uid, url){
 }
 
 
+async function setRole(managerUID, uid, role){
+    const changed = false;
+    const manager = await getUser(managerUID);
+
+    if(!manager[0].role == "manager"){
+        return changed;
+    }
+
+    const userRef = db.collection("users").doc(uid);    //Stores a reference to the user
+
+    await userRef.update({
+        role: role,
+    })
+    .then(() => {
+       // console.log("Document successfully updated!");
+       changed = true;
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+
+    return changed;
+}
 
 
 
 
-module.exports = { getAllUsers, getUser, addUser, updateProfile, updateProfilePicture  }
+
+
+module.exports = { getAllUsers, getUser, addUser, updateProfile, updateProfilePicture, setRole  }

@@ -23,15 +23,23 @@ async function addAlert(uid, alert){
 
     const reportsRef = db.collection('alert')
     // Add a new document with a generated id.
+
+    var count = await getAllAlerts()
+    count = count.length + 1
+
     await reportsRef.add({
         alertDate: FieldValue.serverTimestamp(),
         details: "EMERGENCY",
         firstName: alert.firstName,
         lastName: alert.lastName,
         status: "processing",
-        viewer: "",
         lat: alert.lat,
-        lon: alert.lon
+        lon: alert.lon,
+        age: alert.age,
+        race: alert.age,
+        phoneNumber: alert.phoneNumber,
+        alertID: count,
+        uid: uid
     })
     .then(async (docRef) => {
         var user = {};
@@ -44,6 +52,9 @@ async function addAlert(uid, alert){
                 user["firstName"] = response.firstName;
                 user["lastName"] = response.lastName;
                 user["profilePicture"] = response.profilePicture;
+                user["race"] = response.race;
+                user["age"] = response.age;
+                user["phoneNumber"] = response.phoneNumber
             }
         }).catch((error) => {
             //Do not do anything we just return an empty object
@@ -74,7 +85,7 @@ async function addAlert(uid, alert){
 
 async function deleteReport(reportID){
     let deleted = true;
-    const usersRef = db.collection('articles').where("alertNo", "==", reportID);
+    const usersRef = db.collection('alert').where("alertID", "==", reportID);
 
     await usersRef.delete()
     .then(() => {
@@ -89,13 +100,12 @@ async function deleteReport(reportID){
 }
 
 
-async function updateViewAlert(reportID, report){
+async function updateViewAlert(reportID){
     let added = true;
-    const articlesRef = db.collection('articles').where("alertNo", "==", reportID);
+    const articlesRef = db.collection('alert').where("alertID", "==", reportID);
 
     await articlesRef.update({
-        status: "ASSISTED",
-        viewer: report.viewer
+        status: "ASSISTED"
     })
     .then(() => {
         //console.log("Document successfully updated!");
@@ -109,6 +119,21 @@ async function updateViewAlert(reportID, report){
     return added;
 }
 
+async function getUserAlerts(uid){
+    const usersRef = db.collection('alert').where("uid", "==", uid);    // Get a reference to the articles collection
+
+    var result = [];
+    // First page of results
+    await usersRef.get().then(snapshot => {
+        if (!snapshot.empty) {
+            snapshot.forEach(doc =>{
+                result.push(doc.data());
+            })
+        }
+    });
+
+    return result;
+}
 
 
 
@@ -118,4 +143,5 @@ async function updateViewAlert(reportID, report){
 
 
 
-module.exports = { getAllAlerts, addAlert, deleteReport, updateViewAlert }
+
+module.exports = { getAllAlerts, addAlert, deleteReport, updateViewAlert, getUserAlerts }
