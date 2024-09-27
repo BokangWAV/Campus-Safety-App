@@ -1,59 +1,110 @@
-/**
- * @jest-environment jsdom
- */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import { getVertexAI, getGenerativeModel } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-vertexai-preview.js";
+import '../scripts/ai'; // Import the ai.js file to initialize everything
 
-import '@testing-library/jest-dom'; // Import matchers
-import { fireEvent } from '@testing-library/dom';
+jest.mock("https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js");
+jest.mock("https://www.gstatic.com/firebasejs/10.13.0/firebase-vertexai-preview.js");
 
-describe('Chatbot Interaction', () => {
-  let svgSection, conversation_Main, promptBtn, prompt, conversationList;
+describe('AI Chatbot Functionality', () => {
+    let mockModel;
+    let mockApp;
 
-  beforeEach(() => {
-    // Mock the DOM structure
-    document.body.innerHTML = `
-      <div id="no-conversation"></div>
-      <div id="Chatbot-Conversation" class="noDisplay"></div>
-      <input type="text" id="Chatbot-Prompt">
-      <button id="Prompt-Btn">Send</button>
-      <div id="inner-Conversation"></div>
-    `;
+    beforeEach(() => {
+        mockApp = { /* Mock Firebase App */ };
+        initializeApp.mockReturnValue(mockApp);
+        mockModel = {
+            generateContent: jest.fn(() => Promise.resolve({
+                response: {
+                    text: jest.fn(() => "Mock response text")
+                }
+            }))
+        };
+        getVertexAI.mockReturnValue(mockModel);
+        getGenerativeModel.mockReturnValue(mockModel);
 
-    // Reference the DOM elements
-    svgSection = document.getElementById('no-conversation');
-    conversation_Main = document.getElementById('Chatbot-Conversation');
-    promptBtn = document.getElementById('Prompt-Btn');
-    prompt = document.getElementById('Chatbot-Prompt');
-    conversationList = document.getElementById('inner-Conversation');
-  });
+        // Set up the DOM elements required for the tests, matching your ai.html structure
+        document.body.innerHTML = `
+            <header class="Header">
+                <div>
+                    <a href="dashboardtest.html">
+                        Back
+                    </a>
+                </div>
+                    
+                <div>
+                    <h2>Campus-Safety Chatbot</h2>
+                </div>
+            </header>
+            <main class="Main-Part">
+                <section id="no-conversation" class="no-conversation">
+                    <div class="no-Conversation-div">
+                        <img src="assets/Undraw/chatbot-Svg.svg" alt="An example SVG image">
+                    </div>
+                </section>
 
-  test('User question is added to the conversation and chatbot responds', () => {
-    // Simulate user input
-    prompt.value = 'Is it safe on campus?';
+                <section id="Chatbot-Conversation" class="Chatbot-Conversation noDisplay">
+                    <div id="inner-Conversation" class="inner-Conversation"></div>
+                </section>
 
-    // Simulate button click
-    fireEvent.click(promptBtn);
+                <div class="ask-Section">
+                    <input type="text" placeholder="Ask anything about Safety" id="Chatbot-Prompt" class="Chatbot-Prompt">
+                    <img id="Prompt-Btn" class="imageSend" alt="svgImg" src="./assets/Undraw/send.png" style="height: 35px; width: 35px;"/>
+                </div>
+            </main>
+        `;
 
-    // Check if svgSection is hidden and conversation is displayed
-    expect(conversation_Main).toHaveClass('noDisplay');
-    // Check if the user question is added to the conversation
-    const questionDiv = conversationList.querySelector('.question');
-    //expect(questionDiv).toBeNull();
-    //expect(questionDiv).toHaveTextContent(null);
+        // Simulate DOMContentLoaded event to trigger the code in ai.js
+        document.dispatchEvent(new Event('DOMContentLoaded'));
+    });
 
-    // Simulate the 2-second delay for chatbot response
-    jest.advanceTimersByTime(2000);
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
 
-    // Check if the chatbot's response is added
-    const responseDiv = conversationList.querySelector('.respose');
-    //expect(responseDiv).toBeInTheDocument();
-    //expect(responseDiv).toHaveTextContent("Hey, how are you doing? I am Campus-Safety bot. I am here to answer any of your safety related question that you might have. Please feel free to ask anything.");
-  });
+    it('should initialize Firebase and Vertex AI correctly', () => {
+        expect(initializeApp).toHaveBeenCalled();
+        expect(getVertexAI).toHaveBeenCalledWith(mockApp);
+        expect(getGenerativeModel).toHaveBeenCalledWith(mockModel, { model: "gemini-1.5-flash" });
+    });
 
-  beforeAll(() => {
-    jest.useFakeTimers(); // Use fake timers for controlling setTimeout
-  });
+    it('should handle the prompt button click and generate response', async () => {
+        const promptInput = document.getElementById('Chatbot-Prompt');
+        const promptBtn = document.getElementById('Prompt-Btn');
+        const noConversation = document.getElementById('no-conversation');
+        const conversationMain = document.getElementById('Chatbot-Conversation');
+        const conversationList = document.getElementById('inner-Conversation');
 
-  afterAll(() => {
-    jest.useRealTimers(); // Clean up fake timers after tests
-  });
+        // Simulate entering a question
+        promptInput.value = 'What is campus safety?';
+        
+        // Simulate button click
+        promptBtn.click();
+
+        // Expect no-conversation section to be hidden
+        expect(noConversation.className).toContain('noDisplay');
+        
+        // Expect Chatbot-Conversation section to be displayed
+        expect(conversationMain.className).not.toContain('noDisplay');
+
+        // Wait for the asynchronous call to finish
+        await new Promise((r) => setTimeout(r, 2000));
+
+        // Check if the mock response was added to the conversation
+        expect(conversationList.innerHTML).toContain("Mocked AI Response for: What is campus safety?");
+    });
+
+    it('should not generate a response if the input is empty', () => {
+        const promptInput = document.getElementById('Chatbot-Prompt');
+        const promptBtn = document.getElementById('Prompt-Btn');
+        const conversationList = document.getElementById('inner-Conversation');
+
+        // Set empty value
+        promptInput.value = '';
+
+        // Simulate button click
+        promptBtn.click();
+
+        // Expect no content to be added to the conversation list
+        expect(conversationList.innerHTML).toBe('');
+    });
 });
