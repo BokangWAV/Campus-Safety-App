@@ -85,9 +85,13 @@ async function addAlert(uid, alert){
 
 async function deleteReport(reportID){
     let deleted = true;
-    const usersRef = db.collection('alert').where("alertID", "==", reportID);
+    const usersRef = await db.collection('alert').where("alertID", "==", reportID).get();
 
-    await usersRef.delete()
+    const doc = usersRef.docs[0];
+
+    const articlesRef2 = db.collection('FAQ')
+
+    await articlesRef2.doc(doc.id).delete()
     .then(() => {
         //console.log("Document successfully deleted!");
     }).catch((error) => {
@@ -101,10 +105,15 @@ async function deleteReport(reportID){
 
 
 async function updateViewAlert(reportID){
-    let added = true;
-    const articlesRef = db.collection('alert').where("alertID", "==", reportID);
 
-    await articlesRef.update({
+    let added = true;
+    const articlesRef = await db.collection('alert').where("alertID", "==", reportID).get();
+
+    const doc = articlesRef.docs[0];
+
+    const articlesRef2 = db.collection('alert')
+
+    await articlesRef2.doc(doc.id).update({
         status: "ASSISTED"
     })
     .then(() => {

@@ -101,9 +101,13 @@ async function getUserReport(uid){
 
 async function removeReport(reportID){
     let removal = false;
-    const usersRef = db.collection('reports').where("reportID", "==", reportID);    // Get a reference to the articles collection
+    const usersRef = await db.collection('reports').where("reportID", "==", reportID).get();    // Get a reference to the articles collection
 
-    await usersRef.update({
+    const doc = usersRef.docs[0];
+
+    const articlesRef2 = db.collection('articles')
+
+    await articlesRef2.doc(doc.id).update({
         removed: true
     })
     .then(() => {
