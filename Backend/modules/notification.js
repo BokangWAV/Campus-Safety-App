@@ -19,11 +19,11 @@ async function getAllNotifications(uid){
 
 
 
-async function appendNotifications(array, message, user){
+async function appendNotifications(array, message, user, type, location, incident_image){
     var count = 0;
 
     //Get the last number of the appended notification
-    const q = db.collection('notifications').orderBy('timestamp', 'desc').limit(1); // Limit to only the most recent document
+    const q = db.collection('notifications'); // Limit to only the most recent document
     await q.get()
     .then((querySnapshot) => {
         if (!querySnapshot.empty) {
@@ -42,17 +42,21 @@ async function appendNotifications(array, message, user){
         count = count +1;
         const userRef = db.collection("notifications");    //Stores a reference to the user
 
-        const reporter = user.firstName + user.lastName;
+        const reporter = user.firstName +" "+ user.lastName;
 
         await userRef.add({
             notificationID: count,
             timestamp: FieldValue.serverTimestamp(),
-            reporter: reporter,
-            profilePicture: user.profilePicture ,
+            posted_by_name: reporter,
+            profile_pic: user.profilePicture ,
+            profile_link: user.profilePicture,
             message: message,
             status: "unread",
             viewer: "",
-            uid: uid
+            uid: uid,
+            location: location,
+            incident_image: incident_image,
+            type: type
         })
         .then(() => {
             //console.log("Document successfully written!");
