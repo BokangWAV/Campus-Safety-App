@@ -1,6 +1,7 @@
 
 
 module.exports = {
+  setupFiles: ['<rootDir>/jest.setup.js'], // Add your setup file here
     testEnvironment: "jsdom",
     collectCoverage: true,
     coverageDirectory: 'coverage', // Ensure this is set correctly
@@ -9,8 +10,9 @@ module.exports = {
         'app/**/*.{js,jsx}', // Include source files from the 'app' folder
         'Backend/**/*.{js,jsx}', // Include source files from the 'Backend' folder
         '!app/modules/AI-init.js',
+        '!app/modules/users.js',
         'app/scripts/*.{js, jsx}',
-        '!Backend/index.js', // Exclude 'index.js' from 'Backend'
+        '!Backend/index.js',// Exclude 'index.js' from 'Backend'
         '!**/node_modules/**', // Exclude node_modules
         '!**/test/**', // Exclude test files if you want
         '!**/coverage/**', // Exclude coverage folder

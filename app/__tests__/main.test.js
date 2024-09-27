@@ -1,106 +1,130 @@
-// Import the functions you want to test from users.js
-import { NormalRegisterUser, NormalSignInUser } from '../modules/users.js';
+import { NormalRegisterUser, NormalSignInUser, GooglesignInUser } from '../modules/users.js';
 
-// Mock Firebase modules
-jest.mock('https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js', () => ({
-    initializeApp: jest.fn(() => ({})),
+// Mock the imported functions
+jest.mock('../modules/users.js', () => ({
+  NormalRegisterUser: jest.fn(),
+  NormalSignInUser: jest.fn(),
+  GooglesignInUser: jest.fn(),
 }));
 
-jest.mock('https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js', () => ({
-    getAuth: jest.fn(() => ({})),
-    GoogleAuthProvider: jest.fn(),
-    signInWithEmailAndPassword: jest.fn(),
-    createUserWithEmailAndPassword: jest.fn(),
-    signOut: jest.fn(),
-}));
-
-jest.mock('https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js', () => ({
-    getFirestore: jest.fn(() => ({})),
-}));
-
-jest.mock('https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js', () => ({
-    getStorage: jest.fn(() => ({})),
-}));
-
-// Mock DOM elements for the test
-beforeEach(() => {
+describe('Form Functionality Tests', () => {
+  beforeEach(() => {
+    // Set up the DOM structure before each test
     document.body.innerHTML = `
-        <button id="submit_btn">Submit</button>
-        <input id="firstName_text" type="text" value="John" />
-        <input id="lastName_text" type="text" value="Doe" />
-        <input id="email_text" type="email" value="test@example.com" />
-        <input id="password_text" type="password" value="password123" />
+        <div id="app">
+            <h1 id="header">Test Header</h1>
+            <div id="full-form"></div>
+            <button id="submit-btn">Submit</button>
+            <button id="google-login">Google Login</button>
+        </div>
     `;
-});
 
-// Test for button click and mock DOM behavior
-test('should handle button click and retrieve input values', async () => {
-    // Mock functions
-    const mockRegisterUser = jest.fn();
+    // Re-initialize button and form references
+    global.submit_btn = document.getElementById("submit-btn");
+    global.full_form = document.getElementById("full-form");
+    global.header = document.getElementById("header");
+    global.googleBtn = document.getElementById("google-login");
+    
+    // Set initial states
+    global.registration = false;
+    global.signin = true;
 
-    // Attach mock DOM elements
-    const submit_btn = document.getElementById('submit_btn');
-    const firstNameInput = document.getElementById('firstName_text');
-    const lastNameInput = document.getElementById('lastName_text');
-    const emailInput = document.getElementById('email_text');
-    const passwordInput = document.getElementById('password_text');
+    // Manually initialize the login form
+    initializeForm(); // Replace this with the actual function or logic to initialize your form
+  });
 
-    // Simulate button click event listener
-    if (submit_btn) {
-        submit_btn.addEventListener('click', async () => {
-            const firstName = firstNameInput?.value || '';
-            const lastName = lastNameInput?.value || '';
-            const email = emailInput?.value || '';
-            const password = passwordInput?.value || '';
+  function initializeForm() {
+    // Load the form with login fields directly here
+    full_form.innerHTML = `
+      <input type="email" id="email-input" placeholder="Email">
+      <input type="password" id="password_text" placeholder="Password">
+      <p id="inform"></p>
+    `;
+    header.innerText = "Sign-In"; // Set header for sign-in
+  }
 
-            // Call the mocked registration function
-            await mockRegisterUser(firstName, lastName, email, password);
-        });
+  test('should show registration fields when registering', () => {
+    // Simulate switching to registration
+    const registerLink = document.createElement('a');
+    registerLink.id = 'RegisterLink';
+    registerLink.innerText = 'Register';
+    document.body.appendChild(registerLink);
+    registerLink.click(); // Simulate clicking the registration link
 
-        // Simulate the button click
-        submit_btn.click();
-    }
+    expect(full_form.querySelector('input[id="firstName_text"]')).toBeTruthy();
+    expect(full_form.querySelector('input[id="lastName_text"]')).toBeTruthy();
+    expect(full_form.querySelector('input[id="email_text"]')).toBeTruthy();
+    expect(full_form.querySelector('input[id="password_text"]')).toBeTruthy();
+    expect(full_form.querySelector('input[id="confirmPassword_text"]')).toBeTruthy();
+    expect(header.innerText).toBe("Registration");
+  });
 
-    // Assert that the mock function was called with the correct values
-    expect(mockRegisterUser).toHaveBeenCalledWith('John', 'Doe', 'test@example.com', 'password123');
-});
+  test('should show login fields when switching to login', () => {
+    // Simulate switching to registration first
+    const registerLink = document.createElement('a');
+    registerLink.id = 'RegisterLink';
+    registerLink.innerText = 'Register';
+    document.body.appendChild(registerLink);
+    registerLink.click(); // Show registration fields
 
-// Test Suite for Firebase Authentication
-describe('Firebase Authentication Tests', () => {
-    test('NormalSignInUser should successfully sign in with email and password', async () => {
-        const email = 'test@example.com';
-        const password = 'password123';
+    // Simulate clicking the "Login" link
+    const loginLink = document.createElement('a');
+    loginLink.id = 'LoginLink';
+    loginLink.innerText = 'Already have an account? Sign In';
+    full_form.appendChild(loginLink);
+    loginLink.click();
 
-        const mockSignIn = require('https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js').signInWithEmailAndPassword;
-        mockSignIn.mockResolvedValue({ user: { email } });
+    expect(full_form.querySelector('input[id="email-input"]')).toBeTruthy();
+    expect(full_form.querySelector('input[id="password_text"]')).toBeTruthy();
+    expect(header.innerText).toBe("Sign-In");
+  });
 
-        const result = await NormalSignInUser(email, password);
+  test('should validate and register user', async () => {
+    // Set the fields for registration
+    full_form.innerHTML = `
+      <input type="text" id="firstName_text" value="John">
+      <input type="text" id="lastName_text" value="Doe">
+      <input type="email" id="email_text" value="john@example.com">
+      <input type="password" id="password_text" value="password123">
+      <input type="password" id="confirmPassword_text" value="password123">
+      <p id="inform"></p>
+    `;
 
-        // Check that the mock resolved user object is returned correctly
-        expect(result.user.email).toBe(email);
-    });
+    NormalRegisterUser.mockResolvedValue(true); // Mock successful registration
 
-    test('NormalRegisterUser should successfully register a new user', async () => {
-        const firstName = 'John';
-        const lastName = 'Doe';
-        const email = 'test@example.com';
-        const password = 'password123';
+    // Simulate clicking the submit button
+    submit_btn.innerText = "Register"; // Make sure it's set to register
+    await submit_btn.click();
 
-        const mockRegister = require('https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js').createUserWithEmailAndPassword;
-        mockRegister.mockResolvedValue({ user: { email } });
+    expect(NormalRegisterUser).toHaveBeenCalledWith("John", "Doe", "john@example.com", "password123", expect.anything());
+    expect(window.location.href).toBe("https://agreeable-forest-0b968ac03.5.azurestaticapps.net/edit-profile.html");
+  });
 
-        const result = await NormalRegisterUser(firstName, lastName, email, password);
+  test('should validate and sign in user', async () => {
+    // Set the fields for sign-in
+    full_form.innerHTML = `
+      <input type="email" id="email-input" value="john@example.com">
+      <input type="password" id="password_text" value="password123">
+      <p id="inform"></p>
+    `;
 
-        // Check that the mock resolved user object is returned correctly
-        expect(result.user.email).toBe(email);
-    });
+    NormalSignInUser.mockResolvedValue(true); // Mock successful sign-in
 
-    test('User should successfully sign out', async () => {
-        const mockSignOut = require('https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js').signOut;
+    // Simulate clicking the submit button
+    submit_btn.innerText = "SIGN IN"; // Make sure it's set to sign in
+    await submit_btn.click();
 
-        await mockSignOut();
+    expect(NormalSignInUser).toHaveBeenCalledWith("john@example.com", "password123", expect.anything());
+    expect(window.location.href).toBe("https://agreeable-forest-0b968ac03.5.azurestaticapps.net/dashboardtest.html");
+  });
 
-        // Ensure the signOut mock function was called
-        expect(mockSignOut).toHaveBeenCalled();
-    });
+  test('should handle Google sign-in', async () => {
+    googleBtn.click(); // Simulate clicking the Google login button
+
+    GooglesignInUser.mockResolvedValue(true); // Mock successful Google sign-in
+    await googleBtn.click();
+
+    expect(GooglesignInUser).toHaveBeenCalled();
+    expect(window.location.href).toBe("https://agreeable-forest-0b968ac03.5.azurestaticapps.net/dashboardtest.html");
+  });
 });

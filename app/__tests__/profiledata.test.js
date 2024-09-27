@@ -5,39 +5,33 @@ import { fireEvent } from '@testing-library/dom';
 global.fetch = jest.fn();
 
 // Mocking Firebase
-jest.mock('https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js', () => {
-  return {
-    initializeApp: jest.fn(),
-  };
-});
+jest.mock('https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js', () => ({
+  initializeApp: jest.fn(),
+}));
 
-jest.mock('https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js', () => {
-  return {
-    getFirestore: jest.fn(),
-  };
-});
+jest.mock('https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js', () => ({
+  getFirestore: jest.fn(),
+}));
 
-jest.mock('https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js', () => {
-  return {
-    getStorage: jest.fn(),
-    ref: jest.fn(() => ({
-      put: jest.fn(() => Promise.resolve({
-        ref: {
-          getDownloadURL: jest.fn(() => Promise.resolve('http://fakeurl.com/profile.jpg')),
-        },
-      })),
+jest.mock('https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js', () => ({
+  getStorage: jest.fn(),
+  ref: jest.fn(() => ({
+    put: jest.fn(() => Promise.resolve({
+      ref: {
+        getDownloadURL: jest.fn(() => Promise.resolve('http://fakeurl.com/profile.jpg')),
+      },
     })),
-  };
-});
+  })),
+}));
 
-// Add this block to handle the import of firebase
+// Mock firebase configuration and methods
 const firebase = {
   initializeApp: jest.fn(),
   firestore: jest.fn(() => ({})), // Mock firestore function
   storage: jest.fn(() => ({})), // Mock storage function
 };
 
-// Now assign the mock to the global scope
+// Assign the mock to the global scope
 global.firebase = firebase;
 
 describe('Edit Profile', () => {
@@ -148,7 +142,7 @@ describe('Edit Profile', () => {
     const loadDataSpy = jest.spyOn(window, 'loadData');
     const bodyElement = { url: 'http://fakeurl.com/profile.jpg' };
 
-    await imageUploader.dispatchEvent(new Event('change'));
+    await fireEvent.change(input); // Ensure the event is triggered correctly
 
     expect(fetch).toHaveBeenCalledWith(`https://sdp-campus-safety.azurewebsites.net/user/profilePicture/12345`, {
       method: 'PUT',
