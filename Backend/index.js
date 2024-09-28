@@ -340,14 +340,14 @@ app.put('/notifications/status/:uid', async (req, res)=>{
 
 //--------------------------------------------------FAQ Section------------------------------------------------------------//
 //Get all FAQs
-app.get('/FAQ', async (req, res)=>{
+app.get('/FAQs', async (req, res)=>{
     const response = await getAllFAQ();
     res.json(response);
 })
 
 
 //Get user FAQs
-app.get('/FAQ/:uid', async (req, res)=>{
+app.get('/FAQs/:uid', async (req, res)=>{
     const uid = req.params['uid']   //Get the uid of the user
 
     const response = await getUserFAQ(uid);
@@ -395,10 +395,10 @@ app.delete('/FAQ/:FAQID', async (req, res)=>{
 
 
 //Add a FAQ
-app.post('/FAQ', async (req, res)=>{
-    const FAQ = req.body;
+app.post('/FAQ/:uid', async (req, res)=>{
+    const uid = req.params['uid'];
 
-    if( await addFAQ(FAQ)){
+    if( await addFAQ(uid)){
         res.status(200).send("Added FAQ");
     }else{
         res.status(404).send("Unable to add FAQ");

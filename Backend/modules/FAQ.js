@@ -102,11 +102,13 @@ async function deleteFAQ(FAQID){
     return deleted;
 }
 
-async function addFAQ(FAQ){
+async function addFAQ(uid, FAQ){
     let added = true;   //Shows whether we added a user or we failed
 
     const verifyRef = db.collection("FAQ").doc(uid);
 
+    var user = await getUser(uid);
+    user = user[0]
 
     var count = await getAllFAQ()
     var count = count.length + 1
@@ -114,7 +116,11 @@ async function addFAQ(FAQ){
     await verifyRef.add({
         question: FAQ.question,
         answer: "",
+        uid: uid,
+        firstName: user.firstName,
+        lastName: user.lastName,
         FAQID: count,
+        profilePicture: user.profilePicture,
         status: "pending"
     })
     .then(() => {
