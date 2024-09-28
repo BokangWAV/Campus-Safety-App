@@ -3,7 +3,6 @@
 async function  loadData() {
     try {
          const uid = window.localStorage.getItem('uid');
-        console.log(uid);
         const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${uid}`);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
   
@@ -13,6 +12,12 @@ async function  loadData() {
       const user = Array.isArray(result) ? result[0] : result;  // Assuming user is at index 0, if it's in an array
       
       //console.log('Processed user data:', user);
+      window.localStorage.setItem('userFirstName', user.firstName)
+      window.localStorage.setItem('userLastName', user.lastName)
+      window.localStorage.setItem('userAge', user.age)
+      window.localStorage.setItem('userRace', user.race)
+      window.localStorage.setItem('userGender', user.gender)
+      window.localStorage.setItem('userPhoneNumber', user.phoneNumber)
   
       // Update the profile picture
       document.getElementById('profilePic').src = `${user.profilePicture}`; //|| 'assets/img/default.jpg'
@@ -23,6 +28,9 @@ async function  loadData() {
       document.getElementById('race').innerText = `Race: ${user.race || 'Unknown'}`;
       document.getElementById('phone').innerText = `Phone: ${user.phoneNumber || 'Not Provided'}`;
       document.getElementById('email').innerText = `Email: ${user.email || 'Not Provided'}`;
+      if(!user.gender == ''){
+        document.getElementById('gender').innerText = `Gender: ${user.gender}`;
+      }
       document.getElementById('studentId').innerText = `Age: ${user.age || 'Not Provided'}`;
     } catch (error) {
       console.error('Error fetching or parsing user data:', error);
