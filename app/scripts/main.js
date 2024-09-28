@@ -106,6 +106,10 @@ function showRegistrationInputs(){
   genderSelect.appendChild(OtherOption);
   full_form.appendChild(genderSelect);
 
+  genderSelect.addEventListener('change', ()=>{
+    genderSelect.style.color = "black";
+  });
+
   const pass1 = document.createElement('input');
   pass1.type = 'password';
   pass1.id = 'password_text';
