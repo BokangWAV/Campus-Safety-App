@@ -9,8 +9,8 @@ let countdown = 10;
 safeBtn.style.opacity = 0;
 var lat = 0;
 var lon = 0;
-var firstName = window.localStorage.getItem("firstName")  || "Daniel";
-var lastName = window.localStorage.getItem("LastName")  || "Mokone";
+var firstName = window.localStorage.getItem("userFirstName")  || "Daniel";
+var lastName = window.localStorage.getItem("userLastName")  || "Mokone";
 
 
 let intervalID = setInterval(()=>{
@@ -62,12 +62,18 @@ async function sendAlert() {
     const uid = window.localStorage.getItem("uid")
 
     const alert = {
-        firstName: firstName,
-        lastName: lastName,
+        firstName: window.localStorage.getItem("userFirstName"),
+        lastName: window.localStorage.getItem("userLastName"),
         lat: lat,
         lon: lon,
-        uid: uid
+        uid: uid,
+        age: window.localStorage.getItem('userAge'),
+        race: window.localStorage.getItem('userRace'),
+        gender: window.localStorage.getItem('userGender'),
+        phoneNumber: window.localStorage.getItem('userPhoneNumber')
     }
+
+    console.log(alert);
 
     await fetch(`https://sdp-campus-safety.azurewebsites.net/alert/${uid}`, {
         method: 'POST',
@@ -102,7 +108,8 @@ async function isSafe() {
         body: JSON.stringify(alert),
       })
     .then(() => {
-        console.log("Alert Sent!!")
+      console.log("Done")
+      window.location.href = './dashboardtest.html';
         //console.log("added");
     }).catch((error)=>{
         console.error(error)
