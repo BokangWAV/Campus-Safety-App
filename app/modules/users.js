@@ -36,6 +36,8 @@ async function GooglesignInUser(){
             lastName: userLastName,
             gender: userGender
           };
+
+        window.localStorage.setItem('user', currentUser);
         //addGoogleUser(userFirstName, userLastName, userEmail);
         await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${user.uid}`, {
             method: 'POST',
@@ -92,6 +94,7 @@ async function NormalRegisterUser(firstName, lastName, email, password, pTag, ge
               };
 
             window.localStorage.setItem('uid', user.uid);
+            window.localStorage.setItem('user', currentUser);
 
             //console.log("fetching");
             await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${user.uid}`, {
