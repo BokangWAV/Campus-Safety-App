@@ -10,19 +10,21 @@ import { smoothTRansition } from "../scripts/main.js";
 *
 *
 */
-function GooglesignInUser(){
+async function GooglesignInUser(){
     let created = false;
     
-    signInWithPopup(auth, provider)
+    await signInWithPopup(auth, provider)
     .then(async (result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         // The signed-in user info.
+        console.log(result);
         const user = result.user;
         const userFirstName = user.displayName.split(" ")[0]; //Name of the user
         const userLastName = user.displayName.split(" ")[1];  //Surname of the user
         const userEmail = user.email;  // Email of the user
+        const userGender = ""
         //console.log(user.uid);
         //console.log(user.displayName.split(" ")[0], user.email);
 
@@ -31,7 +33,8 @@ function GooglesignInUser(){
         const currentUser = {
             email: userEmail,
             firstName: userFirstName,
-            lastName: userLastName
+            lastName: userLastName,
+            gender: userGender
           };
         //addGoogleUser(userFirstName, userLastName, userEmail);
         await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${user.uid}`, {
@@ -72,7 +75,7 @@ function GooglesignInUser(){
 *
 *
 */
-async function NormalRegisterUser(firstName, lastName, email, password, pTag){
+async function NormalRegisterUser(firstName, lastName, email, password, pTag, gender){
     //console.log(firstName, lastName, email, password);
     let created = false;
     await createUserWithEmailAndPassword(auth, email, password)
@@ -84,7 +87,8 @@ async function NormalRegisterUser(firstName, lastName, email, password, pTag){
             const currentUser = {
                 email: email,
                 firstName: firstName,
-                lastName: lastName
+                lastName: lastName,
+                gender: gender
               };
 
             window.localStorage.setItem('uid', user.uid);
