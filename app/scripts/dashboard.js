@@ -16,45 +16,167 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-let currentUserName = "";
-let currentUserSurname = "";
-
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        if (user.displayName) {
-            const separateDetails = user.displayName.split(" ");
-            currentUserName = separateDetails[0] || "Unknown";
-            currentUserSurname = separateDetails[1] || "Unknown";
+async function fetchData(url) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        console.log("First Name:", currentUserName);
-        console.log("Surname:", currentUserSurname);
-    } else {
-        // No user is signed in
-        console.log("No user is signed in");
-        currentUserName = "Unknown";
-        currentUserSurname = "Unknown";
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
     }
-});
+}
 
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("emergency").addEventListener("click", postAlert);
+    let currentUserName = "";
+    let currentUserSurname = "";
+    let userUID = null;
+    let isUser = false;
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            userUID = user.uid;
+            if (user.displayName) {
+                const separateDetails = user.displayName.split(" ");
+                currentUserName = separateDetails[0] || "Unknown";
+                currentUserSurname = separateDetails[1] || "Unknown";
+            }
+            console.log("User is signed in:", currentUserName, currentUserSurname, userUID);
+            isUser = true;
+        }else{
+            console.log("No user is signed in");
+            currentUserName = "Unknown";
+            currentUserSurname = "Unknown";
+        }
+
+        const userDetails = fetchData(`https://sdp-campus-safety.azurewebsites.net/users/${userUID}`)
+        userDetails.then(data => {
+            if (Array.isArray(data) && data.length > 0) {
+                let user = data[0];
+                if(user.role == "user"){
+                    buildUserPage();
+                    document.getElementById("emergency").addEventListener("click", ()=>{
+                        let redirected = "current.html";
+                        document.location.href = `https://agreeable-forest-0b968ac03.5.azurestaticapps.net/${redirected}`;
+                })
+                }else{
+                    buildManagerPage()
+                }
+            } else {
+                notSignedInPage();
+              console.log('No data found or data is not an array.');
+            }
+        })
+        
+    });
+    
 });
 
-async function postAlert() {
-    const alertCollection = collection(db, 'alert');
-    const data = {
-        details: "EMERGENCY",
-        alert_no: 1,
-        surname: currentUserSurname,
-        name: currentUserName,
-        alert_date: new Date().toISOString(),
-    };
-    await addDoc(alertCollection, data)
-        .then((docRef) => {
-            console.log('Document written with ID: ', docRef.id);
-            alert(`${currentUserName} ${currentUserSurname} needs help urgently!!!!`);
-        })
-        .catch((error) => {
-            console.error('Error adding document:', error);
+//DONT FORGET TO RETRIEVE THE USER DATA FROM THE DATABASE FIRST< AS WELL AS GET THE USER LOCATION
+
+async function postAlert(userUID, data) {
+    try {
+        const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/alert/${userUID}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         });
+    } catch (error) {
+        
+    }
+}
+
+function buildUserPage(){
+    document.querySelector(".dashboard-container").innerHTML = "";
+    let header = document.createElement("div");
+    header.classList.add("dashboard-header");
+    header.innerHTML = "<h1>Welcome to the dashboard.</h1><p>Manage your safety and stay informed.</p>"
+    document.querySelector(".dashboard-container").appendChild(header);
+    
+    //Emergency button
+    const anchor = document.createElement('a');
+    anchor.href = '#';
+    anchor.id = 'emergency';
+    anchor.className = 'dashboard_header';
+    anchor.style.textDecoration = 'none';
+    anchor.style.color = 'yellow';
+
+    const div = document.createElement('div');
+    div.className = 'dashboard-alert';
+
+    const h3 = document.createElement('h3');
+    h3.textContent = 'EMERGENCY!!';
+
+    const p = document.createElement('p');
+    p.textContent = 'Trigger immediate alerts for emergencies requiring attention.';
+
+    div.appendChild(h3);
+    div.appendChild(p);
+
+    anchor.appendChild(div);
+
+    document.querySelector(".dashboard-container").appendChild(anchor);
+
+    //dashboard content
+    const content = document.createElement("div");
+    content.className = "dashboard-content";
+
+    content.appendChild(addCard("Emergency Alerts", "Stay updated on campus alerts", "View Alerts","summary.html"));
+    content.appendChild(addCard("Report an Incident", "Quickly report any safety issues", "Report Now", "reports.html"));
+    content.appendChild(addCard("Safety Resources", "Access emergency contacts and tips.", "View Resources", "ai-page.html"));
+    content.appendChild(addCard("Emergency Contacts", "Get in touch with security personnel", "View Contacts", "unavailable.html"));
+
+    document.querySelector(".dashboard-container").appendChild(content);
+}
+
+function notSignedInPage(){
+    document.querySelector(".dashboard-container").innerHTML = "";
+    let header = document.createElement("div");
+    header.classList.add("dashboard-header");
+    header.innerHTML = "<h1>You are not signed in .</h1><p>If you want to use Campus Safety, <a href=\"register.html\">sign in</a>.</p>"
+    document.querySelector(".dashboard-container").appendChild(header);
+    
+}
+
+function buildManagerPage(){
+    
+    document.querySelector(".dashboard-container").innerHTML = "";
+    let header = document.createElement("div");
+    header.classList.add("dashboard-header");
+    header.innerHTML = "<h1>Manager's dashboard.</h1><p>Manage the web app.</p>"
+    document.querySelector(".dashboard-container").appendChild(header);
+    
+    const content = document.createElement("div");
+    content.className = "dashboard-content";
+
+    content.appendChild(addCard("Alert and report review", "Review alerts and reports", "View Alerts","current.html"));
+    content.appendChild(addCard("Update Articles", "Approve and delete articles that are to appear on the user article page", "Approve articles", "request.html"));
+    content.appendChild(addCard("FAQs", "Answer frequently asked questions.", "View FAQs", "managerFAQ.html"));
+
+    document.querySelector(".dashboard-container").appendChild(content);
+}
+
+function addCard(cardTitle, cardBrief, cardAnchor, anchorLink){
+    let content = document.querySelector(".dashboard-content");
+    let card = document.createElement("div");
+    card.className = "dashboard-card";
+
+    let header = document.createElement("h3");
+    header.textContent = cardTitle;
+    card.appendChild(header);
+
+    let brief = document.createElement("p");
+    brief.textContent = cardBrief;
+    card.appendChild(brief);
+
+    let anchor = document.createElement("a");
+    anchor.href = anchorLink;
+    anchor.textContent = cardAnchor;
+    card.appendChild(anchor);
+
+    return card;
 }
