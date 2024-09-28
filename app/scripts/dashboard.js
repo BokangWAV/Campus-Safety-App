@@ -55,6 +55,14 @@ document.addEventListener("DOMContentLoaded", function() {
         userDetails.then(data => {
             if (Array.isArray(data) && data.length > 0) {
                 let user = data[0];
+                console.log(user);
+                //console.log('Processed user data:', user);
+                window.localStorage.setItem('userFirstName', user.firstName)
+                window.localStorage.setItem('userLastName', user.lastName)
+                window.localStorage.setItem('userAge', user.age)
+                window.localStorage.setItem('userRace', user.race)
+                window.localStorage.setItem('userGender', user.gender)
+                window.localStorage.setItem('userPhoneNumber', user.phoneNumber)
                 if(user.role == "user"){
                     buildUserPage();
                     document.getElementById("emergency").addEventListener("click", ()=>{
