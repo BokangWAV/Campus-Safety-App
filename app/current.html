@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Summary Page</title>
+
+    <!-- Favicons -->
+    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Link to Leaflet CSS for map styling -->
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.awesome-markers/2.0.4/leaflet.awesome-markers.css" />
+    <link href="./styles/current.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.awesome-markers/2.0.4/leaflet.awesome-markers.js"></script>
+
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="./scripts/ShowIncidents.js" defer type="module"></script>
+</head>
+<body>
+    <!-- Header for Web and Mobile -->
+    <div class="header">
+        <h2>Campus Safety</h2>
+        <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+        </div>
+        <ul id="headerMenu">
+            <li><a class="active">Dashboard</a></li>
+            <li><a href="profile.html">Profile Page</a></li>
+            <li><a href="alerts.html">Emergency Alerts</a></li>
+            <li><a href="reports.html">Report an Incident</a></li>
+            <li><a href="summary.html">Reports Summary</a></li>
+            <li><a href="article.html">Articles</a></li>
+            <li><a href="request.html">Requests</a></li>
+            <li><a href="ai-page.html">ChatBot</a></li>
+
+            <!-- <li><a href="resources.html">Safety Resources</a></li> -->
+            <li><a href="unavailable.html">Contact Security</a></li>
+        </ul>
+
+        <!-- Dropdown Menu -->
+        <div class="dropdown-menu" id="dropdownMenu">
+        <ul>
+            <li><a href="item1.html">Item 1</a></li>
+            <li><a href="item2.html">Item 2</a></li>
+            <li><a href="item3.html">Item 3</a></li>
+        </ul>
+        </div>
+    </div>
+    <!---When the manager clicks on the report to view it-->
+    <div id="backgroundDiv" class="backgroundDiv" style="display: none;">
+
+    </div>
+    <div id="PopUp-report-View" class="PopUp-report-View" style="display: none;">
+        <div id="PopUp-report-Details" class="PopUp-report-Details">
+            <div id="PopUp-details" class="PopUp-details">
+                <div id="closeButtonDiv" class="closeButtonDiv" >
+                    <img src="./assets/Undraw/closeBtn.svg">
+                </div>
+                <div id="PopUp-Date" class="PopUp-Date">
+                    <h2>Report at MSB</h2>
+                    
+                </div>
+
+                <div id="PopUp-Description" class="PopUp-Description">
+                    <h3>Description</h3>
+                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                         Aperiam harum aliquam asperiores iusto, repudiandae, voluptas tempore ipsa,
+                          reprehenderit eius voluptatibus voluptatum? Fugiat placeat, odio incidunt error 
+                          nisi possimus voluptas neque.
+                    </p>
+                </div>
+                
+                <div id="PopUp-Extra" class="PopUp-Extra">
+                    <p><strong>geoLocation:</strong>&nbsp   -25.7565723, 28.1913815</p>
+                    <p><strong>time:</strong>&nbsp  29 October 2024</p>
+                    <p><strong>status:</strong>&nbsp  Open</p>
+                </div>
+                
+                
+            </div>
+
+            <div id="ButtonDeleteDiv" class="ButtonDeleteDiv">
+                <button type="button" id="deletePopup" class="deletePopup">Remove</button>
+            </div>
+            <div id="mediaDiv" class="mediaDiv">
+                <div id="videoDiv" class="videoDiv imageOnly">
+                    <video autoplay controls>
+                        <source src="https://firebasestorage.googleapis.com/v0/b/tdkus-fcf53.appspot.com/o/incident_videos%2Fexample.mp4?alt=media&token=f3569856-2d96-4dbd-a168-7ff245cc0042">
+                    </video>
+                </div>
+                <div id="imageDiv" class="imageDiv videoOnly">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/tdkus-fcf53.appspot.com/o/incident_images%2Fmagnus.jpeg?alt=media&token=45e4063a-5f4e-40b6-aed0-76eedfab84ef">
+                </div>
+
+                <div id="noMedia" class="noMedia">
+                    <img src="./assets/Undraw/noMedia.svg">
+                    <p>No Media was Uploaded</p>
+                </div>
+            </div>
+            
+           
+            
+            
+        </div>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container" style="overflow-y: hidden;">
+        <!-- Div element where the Leaflet map will be displayed -->
+        <div id="map"></div>
+
+        <!---This is the Navigation part for the alerts-->
+        <aside id="aside-bar" class="aside-bar" style="overflow-y:scroll;">
+            <p id="heading" class="heading">Summary</p>
+            <div id="Select-Section" class="Select-Section">
+                <select name="Type-Dropdown" id="Type-Dropdown" class="dropDownOptions">
+                    <option value="Reports">Reports</option>
+                    <option value="Alerts"> Emergency Alerts</option>
+                </select>
+                <select name="Location-DropDown" id="Location-DropDown" class="dropDownOptions">
+                    
+                </select>
+            </div>
+
+            <!------------This is when we have ALERTS-->
+            <!--
+            <div id="Summary-Section" class="Summary-Section">
+                <div id="alert-Summary" class="alert-Summary">
+                    <div id="information" class="information">
+                        <div id="details" class="details">
+                            <p id="firstName" class="firstName"> Njabulo</p>
+                            <p id="lastName" class="lastName">Mahlangu</p>
+                        </div>
+
+                        <div id="locationDiv" class="locationDiv">
+                            <p id="alertDate" class="alertDate">2024-09-09T16:19:18.531Z</p>
+                            <p id="location" class="location"><strong>Location:</strong> -25.7565723, 28.1913815</p>
+                        </div>
+
+                        <div class="extra" id="extra">
+                            <p id="race" class="race">Indian</p>
+                            <p id="age" class="age">21 years</p>
+                            <p id="phoneNumber" class="phoneNumber">0729546348</p>
+                            
+                        </div>
+                        
+                        <div id="seperator" class="seperator">
+                            <div id="btns" class="btns">
+                                <button type="button" id="btn-call" class="btn-call" ><img src="../images/call-Icon.svg" height="13px" width="13px"> Call</button>
+                                <button type="button" id="btn-rescued" class="btn-rescued" > Rescued</button>
+                                <button type="button" id="btn-zoom" class="btn-zoom" > zoom</button>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            -->
+
+            
+        </aside>
+    </div>
+    
+
+    
+    
+
+    <!--- Include the Leaflet JavaScript library -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/@turf/turf"></script>
+
+
+</body>
+</html>
