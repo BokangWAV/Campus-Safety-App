@@ -85,11 +85,11 @@ async function addAlert(uid, alert){
 
 async function deleteReport(reportID){
     let deleted = true;
-    const usersRef = await db.collection('alert').where("alertID", "==", reportID).get();
+    const usersRef = await db.collection('alert').where("alertID", "==", Number(reportID)).get();
 
     const doc = usersRef.docs[0];
 
-    const articlesRef2 = db.collection('FAQ')
+    const articlesRef2 = db.collection('alert')
 
     await articlesRef2.doc(doc.id).delete()
     .then(() => {
@@ -107,7 +107,7 @@ async function deleteReport(reportID){
 async function updateViewAlert(reportID){
 
     let added = true;
-    const articlesRef = await db.collection('alert').where("alertID", "==", reportID).get();
+    const articlesRef = await db.collection('alert').where("alertID", "==", Number(reportID)).get();
 
     const doc = articlesRef.docs[0];
 
