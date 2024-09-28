@@ -101,11 +101,14 @@ async function getUserReport(uid){
 
 async function removeReport(reportID){
     let removal = false;
-    const usersRef = await db.collection('reports').where("reportID", "==", reportID).get();    // Get a reference to the articles collection
+    console.log(reportID);
+    const usersRef = await db.collection('reports').where("reportID", "==", Number(reportID)).get();    // Get a reference to the articles collection
 
     const doc = usersRef.docs[0];
+    console.log(usersRef.docs[0].id)
+    console.log(doc)
 
-    const articlesRef2 = db.collection('articles')
+    const articlesRef2 = db.collection('reports')
 
     await articlesRef2.doc(doc.id).update({
         removed: true
@@ -115,6 +118,7 @@ async function removeReport(reportID){
        // console.log("Document successfully updated!");
     })
     .catch((error) => {
+        console.error(error)
         // The document probably doesn't exist.
         //console.error("Error updating document: ", error);
     });
