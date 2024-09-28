@@ -23,6 +23,9 @@ async function  loadData() {
       document.getElementById('race').innerText = `Race: ${user.race || 'Unknown'}`;
       document.getElementById('phone').innerText = `Phone: ${user.phoneNumber || 'Not Provided'}`;
       document.getElementById('email').innerText = `Email: ${user.email || 'Not Provided'}`;
+      if(!user.gender == ''){
+        document.getElementById('gender').innerText = `Gender: ${user.gender}`;
+      }
       document.getElementById('studentId').innerText = `Age: ${user.age || 'Not Provided'}`;
     } catch (error) {
       console.error('Error fetching or parsing user data:', error);
