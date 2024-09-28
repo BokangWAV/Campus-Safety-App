@@ -15,7 +15,7 @@ const {getAllUsers, getUser, addUser, updateProfile, updateProfilePicture, setRo
 const { addReport, getAllReports, getUserReport, removeReport } = require('./modules/report.js');
 
 //Get all the functions to use for Alerts
-const { getAllAlerts, addAlert, deleteReport, updateViewAlert } = require('./modules/alert.js');
+const { getAllAlerts, addAlert, deleteReport, updateViewAlert, managerViewAlert } = require('./modules/alert.js');
 
 //Get all the functions to use for Notifications
 const { getAllNotifications, getAllReadNotifications, getAllUnreadNotifications, updateNotificationStatus } = require('./modules/notification.js');
@@ -283,6 +283,20 @@ app.put('/alert/:uid', async (req, res)=>{
     }
 });
 
+
+
+//Update the alert status
+app.put('/alert/manager/:uid', async (req, res)=>{
+    const reportID = req.params['uid'];    //Get the report ID from which to update status
+
+    //If the action is successful we return a response code of 200
+    //Else we return an error code
+    if(await managerViewAlert(reportID)){
+        res.status(200).send('Updated alert successfully');
+    }else{
+        res.status(404).send('Unable to update alert');
+    }
+})
 
 
 //Get all the alerts of a user in the database
