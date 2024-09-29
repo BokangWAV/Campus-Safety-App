@@ -7,8 +7,13 @@ async function addReport(uid, report){
 
     const userRef = db.collection("reports");    //Stores a reference to the user
 
-    const reportsDatabase = await getAllReports();
-    let count = reportsDatabase.length + 1;
+    const response = await userRef.orderBy("reportID", "desc").get();
+    var count = 0;
+    if( response.docs.length > 0){
+        count = Number(response.docs[0].data().alertID)
+    }
+    
+    count = count + 1
 
     await userRef.add({
         geoLocation: report.geoLocation,
