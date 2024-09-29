@@ -62,7 +62,13 @@ document.addEventListener("DOMContentLoaded",async function () {
   
       const profilePic = document.createElement("img");
       profilePic.className = "profile-pic";
-      profilePic.src = notification.profile_pic || "default-profile.png"; // Default image if missing
+      console.log(notification)
+      if(notification.profile_pic == ""){
+        profilePic.src ="./assets/Undraw/defaultpic.jpg"; // Default image if missing
+      }else{
+        profilePic.src = notification.profile_pic
+      }
+      
       profilePic.alt = `${notification.posted_by_name}'s profile picture`;
   
       profileLink.appendChild(profilePic);
@@ -86,21 +92,33 @@ document.addEventListener("DOMContentLoaded",async function () {
       // Notification message and timestamp
       const messageDiv = document.createElement("div");
       messageDiv.className = "notification-message";
-      messageDiv.textContent = notification.message;
+      if(notification.type == "alert"){
+        messageDiv.textContent = "Emergency Alert:" + "  " +notification.message
+      }else{
+        messageDiv.textContent = notification.message
+      }
+      
   
       const timestampDiv = document.createElement("div");
       timestampDiv.className = "notification-timestamp";
-      timestampDiv.textContent = notification.timestamp;
+      const date = new Date(notification.timestamp._seconds * 1000);
+      const dateOptions = { year: 'numeric', month: 'long', day: '2-digit' };
+      const formattedDate = date.toLocaleDateString(undefined, dateOptions);  // Date in a human-readable format
+      const formattedTime = date.toLocaleTimeString();
+      timestampDiv.textContent = formattedDate + " at " + formattedTime;
   
       // Incident image (hidden by default)
-      const incidentImage = document.createElement("img");
-      incidentImage.className = "incident-pic";
-      if (notification.incident_image) {
-        incidentImage.src = notification.incident_image;
-        incidentImage.alt = "Incident Image";
-      } else {
-        incidentImage.style.display = "none"; // Hide if there's no image
+      if(notification.type == "report"){
+        const incidentImage = document.createElement("img");
+        incidentImage.className = "incident-pic";
+        if (notification.incident_image) {
+          incidentImage.src = notification.incident_image;
+          incidentImage.alt = "Incident Image";
+        } else {
+          incidentImage.style.display = "none"; // Hide if there's no image
+        }
       }
+      
   
       // Initially hide additional info
       profilePic.style.display = "none";
@@ -111,7 +129,7 @@ document.addEventListener("DOMContentLoaded",async function () {
       listItem.appendChild(headerDiv);
       listItem.appendChild(messageDiv);
       listItem.appendChild(timestampDiv);
-      listItem.appendChild(incidentImage);
+      if(notification.type == "report") listItem.appendChild(incidentImage);
   
       // Toggle the display of additional info and the incident image on click
       listItem.addEventListener("click", async function () {
@@ -120,14 +138,14 @@ document.addEventListener("DOMContentLoaded",async function () {
           profilePic.style.display = "none";
           posterName.style.display = "none";
           timestampDiv.style.display = "none";
-          incidentImage.style.display = "none";
+          if(notification.type == "report") incidentImage.style.display = "none";
         } else {
           listItem.classList.add("expanded");
           profilePic.style.display = "block";
           posterName.style.display = "block";
           timestampDiv.style.display = "block";
           if (notification.incident_image) {
-            incidentImage.style.display = "block"; // Show the image if available
+            if(notification.type == "report") incidentImage.style.display = "block"; // Show the image if available
           }
           // Mark notification as read and update unread count
           if (notification.status === "unread") {
