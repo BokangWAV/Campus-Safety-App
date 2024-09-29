@@ -55,10 +55,24 @@ document.addEventListener("DOMContentLoaded", function() {
         userDetails.then(data => {
             if (Array.isArray(data) && data.length > 0) {
                 let user = data[0];
+                console.log(user);
+                //console.log('Processed user data:', user);
+                window.localStorage.setItem('userFirstName', user.firstName)
+                window.localStorage.setItem('userLastName', user.lastName)
+                window.localStorage.setItem('userAge', user.age)
+                window.localStorage.setItem('userRace', user.race)
+                window.localStorage.setItem('userGender', user.gender)
+                window.localStorage.setItem('userPhoneNumber', user.phoneNumber)
+                window.localStorage.setItem('userProfile', user.profilePicture)
+
+                if(user.profilePicture != ""){
+                    document.getElementById('profileDisplay').src = user.profilePicture;
+                }
+
                 if(user.role == "user"){
                     buildUserPage();
                     document.getElementById("emergency").addEventListener("click", ()=>{
-                        let redirected = "current.html";
+                        let redirected = "AlertProcess.html";
                         document.location.href = `https://agreeable-forest-0b968ac03.5.azurestaticapps.net/${redirected}`;
                 })
                 }else{
@@ -91,7 +105,6 @@ async function postAlert(userUID, data) {
 }
 
 function buildUserPage(){
-    document.querySelector(".dashboard-container").innerHTML = "";
     let header = document.createElement("div");
     header.classList.add("dashboard-header");
     header.innerHTML = "<h1>Welcome to the dashboard.</h1><p>Manage your safety and stay informed.</p>"
@@ -131,6 +144,32 @@ function buildUserPage(){
     content.appendChild(addCard("Emergency Contacts", "Get in touch with security personnel", "View Contacts", "unavailable.html"));
 
     document.querySelector(".dashboard-container").appendChild(content);
+
+    const circleDiv2 = document.createElement('div');
+    circleDiv2.id = 'circleDiv2';
+    circleDiv2.className = 'circleDiv2';
+    circleDiv2.addEventListener('click', ()=>{
+        window.location.href = 'announcement.html'
+    });
+
+    const circleDivImg2 = document.createElement('img');
+    circleDivImg2.src = './assets/Undraw/announcement (1).png'
+
+    const circleDiv1 = document.createElement('div');
+    circleDiv1.id = 'circleDiv1';
+    circleDiv1.className = 'circleDiv1';
+    circleDiv1.addEventListener('click', ()=>{
+        window.location.href = 'ai-page.html'
+    });
+
+    const circleDivImg1 = document.createElement('img');
+    circleDivImg1.src = './assets/Undraw/Chatbot.png'
+
+    circleDiv1.appendChild(circleDivImg1);
+    circleDiv2.appendChild(circleDivImg2);
+
+    document.querySelector(".dashboard-container").appendChild(circleDiv1);
+    document.querySelector(".dashboard-container").appendChild(circleDiv2);
 }
 
 function notSignedInPage(){
@@ -143,12 +182,13 @@ function notSignedInPage(){
 }
 
 function buildManagerPage(){
-    
-    document.querySelector(".dashboard-container").innerHTML = "";
     let header = document.createElement("div");
     header.classList.add("dashboard-header");
     header.innerHTML = "<h1>Manager's dashboard.</h1><p>Manage the web app.</p>"
     document.querySelector(".dashboard-container").appendChild(header);
+
+    document.getElementById('managerAlert').style.display = 'flex'
+    document.getElementById('managerRequests').style.display = 'flex'
     
     const content = document.createElement("div");
     content.className = "dashboard-content";
@@ -158,6 +198,32 @@ function buildManagerPage(){
     content.appendChild(addCard("FAQs", "Answer frequently asked questions.", "View FAQs", "managerFAQ.html"));
 
     document.querySelector(".dashboard-container").appendChild(content);
+
+    const circleDiv2 = document.createElement('div');
+    circleDiv2.id = 'circleDiv2';
+    circleDiv2.className = 'circleDiv2';
+    circleDiv2.addEventListener('click', ()=>{
+        window.location.href = 'announcement.html'
+    });
+
+    const circleDivImg2 = document.createElement('img');
+    circleDivImg2.src = './assets/Undraw/announcement (1).png'
+
+    const circleDiv1 = document.createElement('div');
+    circleDiv1.id = 'circleDiv1';
+    circleDiv1.className = 'circleDiv1';
+    circleDiv1.addEventListener('click', ()=>{
+        window.location.href = 'ai-page.html'
+    });
+
+    const circleDivImg1 = document.createElement('img');
+    circleDivImg1.src = './assets/Undraw/Chatbot.png'
+
+    circleDiv1.appendChild(circleDivImg1);
+    circleDiv2.appendChild(circleDivImg2);
+
+    document.querySelector(".dashboard-container").appendChild(circleDiv1);
+    document.querySelector(".dashboard-container").appendChild(circleDiv2);
 }
 
 function addCard(cardTitle, cardBrief, cardAnchor, anchorLink){
