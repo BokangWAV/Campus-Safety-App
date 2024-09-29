@@ -99,7 +99,6 @@ async function postAlert(userUID, data) {
 }
 
 function buildUserPage(){
-    document.querySelector(".dashboard-container").innerHTML = "";
     let header = document.createElement("div");
     header.classList.add("dashboard-header");
     header.innerHTML = "<h1>Welcome to the dashboard.</h1><p>Manage your safety and stay informed.</p>"
@@ -151,8 +150,6 @@ function notSignedInPage(){
 }
 
 function buildManagerPage(){
-    
-    document.querySelector(".dashboard-container").innerHTML = "";
     let header = document.createElement("div");
     header.classList.add("dashboard-header");
     header.innerHTML = "<h1>Manager's dashboard.</h1><p>Manage the web app.</p>"
