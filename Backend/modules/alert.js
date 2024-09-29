@@ -24,8 +24,14 @@ async function addAlert(uid, alert){
     const reportsRef = db.collection('alert')
     // Add a new document with a generated id.
 
-    var count = await getAllAlerts()
-    count = count.length + 1
+    const response = await reportsRef.orderBy("alertID", "desc").get();
+    var count = 0;
+    if( response.docs.length > 0){
+        count = Number(response.docs[0].data().alertID)
+    }
+    
+    count = count + 1
+    //console.log(count)
 
     await reportsRef.add({
         alertDate: FieldValue.serverTimestamp(),
@@ -43,6 +49,7 @@ async function addAlert(uid, alert){
         uid: uid
     })
     .then(async (docRef) => {
+        console.log("Alert sent")
         var user = {};
 
         const q = db.collection('users').doc(uid);

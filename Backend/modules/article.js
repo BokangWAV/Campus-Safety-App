@@ -58,8 +58,13 @@ async function addArticle(uid, article){
     let added = true;
     const usersRef = db.collection('articles')
 
-    var count = await getAllArticles();
-    count = count.length + 1
+    const response = await usersRef.orderBy("articleID", "desc").get();
+    var count = 0;
+    if( response.docs.length > 0){
+        count = Number(response.docs[0].data().alertID)
+    }
+    
+    count = count + 1
     // Add a new document with a generated id.
     await usersRef.add({
         articleID: count,
