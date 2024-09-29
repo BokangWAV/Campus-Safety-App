@@ -18,6 +18,7 @@ async function  loadData() {
       window.localStorage.setItem('userRace', user.race)
       window.localStorage.setItem('userGender', user.gender)
       window.localStorage.setItem('userPhoneNumber', user.phoneNumber)
+      window.localStorage.setItem('userProfile', user.profilePicture)
   
       // Update the profile picture
       document.getElementById('profilePic').src = `${user.profilePicture}`; //|| 'assets/img/default.jpg'
