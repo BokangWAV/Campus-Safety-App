@@ -24,8 +24,14 @@ async function addAlert(uid, alert){
     const reportsRef = db.collection('alert')
     // Add a new document with a generated id.
 
-    var count = await getAllAlerts()
-    count = count.length + 1
+    const response = await reportsRef.orderBy("alertID", "desc").get();
+    var count = 0;
+    if( response.docs.length > 0){
+        count = Number(response.docs[0].data().alertID)
+    }
+    
+    count = count + 1
+    //console.log(count)
 
     await reportsRef.add({
         alertDate: FieldValue.serverTimestamp(),
@@ -36,12 +42,14 @@ async function addAlert(uid, alert){
         lat: alert.lat,
         lon: alert.lon,
         age: alert.age,
-        race: alert.age,
+        race: alert.race,
+        gender: alert.gender,
         phoneNumber: alert.phoneNumber,
         alertID: count,
         uid: uid
     })
     .then(async (docRef) => {
+        console.log("Alert sent")
         var user = {};
 
         const q = db.collection('users').doc(uid);
@@ -85,11 +93,11 @@ async function addAlert(uid, alert){
 
 async function deleteReport(reportID){
     let deleted = true;
-    const usersRef = await db.collection('alert').where("alertID", "==", reportID).get();
+    const usersRef = await db.collection('alert').where("alertID", "==", Number(reportID)).get();
 
     const doc = usersRef.docs[0];
 
-    const articlesRef2 = db.collection('FAQ')
+    const articlesRef2 = db.collection('alert')
 
     await articlesRef2.doc(doc.id).delete()
     .then(() => {
@@ -107,7 +115,7 @@ async function deleteReport(reportID){
 async function updateViewAlert(reportID){
 
     let added = true;
-    const articlesRef = await db.collection('alert').where("alertID", "==", reportID).get();
+    const articlesRef = await db.collection('alert').where("uid", "==", reportID).get();
 
     const doc = articlesRef.docs[0];
 
@@ -127,6 +135,32 @@ async function updateViewAlert(reportID){
 
     return added;
 }
+
+
+async function managerViewAlert(reportID){
+
+    let added = true;
+    const articlesRef = await db.collection('alert').where("alertID", "==", Number(reportID)).get();
+
+    const doc = articlesRef.docs[0];
+
+    const articlesRef2 = db.collection('alert')
+
+    await articlesRef2.doc(doc.id).update({
+        status: "ASSISTED"
+    })
+    .then(() => {
+        //console.log("Document successfully updated!");
+    })
+    .catch((error) => {
+        // The document probably doesn't exist.
+        //console.error("Error updating document: ", error);
+        added = false;
+    });
+
+    return added;
+}
+
 
 async function getUserAlerts(uid){
     const usersRef = db.collection('alert').where("uid", "==", uid);    // Get a reference to the articles collection
@@ -153,4 +187,4 @@ async function getUserAlerts(uid){
 
 
 
-module.exports = { getAllAlerts, addAlert, deleteReport, updateViewAlert, getUserAlerts }
+module.exports = { getAllAlerts, addAlert, deleteReport, updateViewAlert, getUserAlerts, managerViewAlert }

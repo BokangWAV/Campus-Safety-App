@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 if(user.profilePicture != ""){
                     document.getElementById('profileDisplay').src = user.profilePicture;
                 }
-
+              
                 if(user.role == "user"){
                     buildUserPage();
                     document.getElementById("emergency").addEventListener("click", ()=>{
