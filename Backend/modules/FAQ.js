@@ -110,8 +110,13 @@ async function addFAQ(uid, FAQ){
     var user = await getUser(uid);
     user = user[0]
 
-    var count = await getAllFAQ()
-    var count = count.length + 1
+    const response = await verifyRef.orderBy("FAQID", "desc").get();
+    var count = 0;
+    if( response.docs.length > 0){
+        count = Number(response.docs[0].data().alertID)
+    }
+    
+    count = count + 1
 
     await verifyRef.add({
         question: FAQ.question,
