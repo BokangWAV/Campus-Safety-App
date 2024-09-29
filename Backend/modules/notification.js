@@ -20,10 +20,19 @@ async function getAllNotifications(uid){
 
 
 async function appendNotifications(array, message, user, type, location, incident_image){
-    var count = 0;
+    
 
     //Get the last number of the appended notification
     const q = db.collection('notifications'); // Limit to only the most recent document
+
+    const response = await q.orderBy("notificationID", "desc").get();
+    var count = 0;
+    if( response.docs.length > 0){
+        count = Number(response.docs[0].data().alertID)
+    }
+    
+    count = count + 1
+
     await q.get()
     .then((querySnapshot) => {
         if (!querySnapshot.empty) {
@@ -108,16 +117,20 @@ async function updateNotificationStatus(uid, notificationID){
     const articlesRef = await db.collection('notifications').where("uid", "==", uid).where("notificationID", "==", notificationID).get();
 
 
+    console.log("Got user details:  ", articlesRef)
     const doc = articlesRef.docs[0];
         
         // Step 3: Update the document using the document ID
-    const articlesRef2 = db.collection('articles')
+    const articlesRef2 = db.collection('notifications')
+
+    console.log(doc.id)
 
     await articlesRef2.doc(doc.id).update({
         status: "read"
     })
     .then(async () => {
         //Do nothing
+        console.log("Updated read status")
     })
     .catch((error) => {
         // The document probably doesn't exist.
