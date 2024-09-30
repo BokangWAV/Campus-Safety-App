@@ -2,81 +2,238 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>User Dashboard - Campus Safety App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wits University Safety Contacts</title>
+    
 
-  <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <!-- Include dashboard.css for navbar styles -->
+    <link href="styles/dashboard.css" rel="stylesheet">
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            padding: 20px;
+        }
 
-  <link href="/styles/dashboard.css" rel="stylesheet">
+        h1 {
+            text-align: center;
+            color: #0057a7;
+            margin-top: 100px; /* Adjust this so that the title is not covered by the nav bar */
+        }
 
+        .contact-card, .safety-tips {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        .contact-info {
+            font-weight: bold;
+        }
+
+        .helpline {
+            color: #ff4c4c;
+        }
+
+        .emergency {
+            background-color: #0057a7;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .emergency h2 {
+            color: white;
+        }
+
+        .emergency p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        .safety-tips ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        a {
+            color: #0057a7;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Form and Button styles for consistency */
+        button[type="submit"] {
+            background-color: #1a3e57;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #214a61;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        form div {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+    </style>
 </head>
 
 <body>
 
-  <div class="header">
-    <h2>Campus Safety</h2>
-    <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
+    <!-- Navbar from the reports page -->
+    <div class="header">
+        <h2>Campus Safety</h2>
+        <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul id="headerMenu">
+            <li><a href="dashboardtest.html">Dashboard</a></li>
+            <li><a href="profile.html">Profile Page</a></li>
+            <li><a href="alerts.html">Emergency Alerts</a></li>
+            <li><a href="reports.html">Report an Incident</a></li>
+            <li><a href="article.html">Articles</a></li>
+            <li><a href="request.html">Requests</a></li>
+            <li><a href="ai-page.html">ChatBot</a></li>
+            <li><a href="unavailable.html">Contact Security</a></li>
+        </ul>
     </div>
-    <ul id="headerMenu">
-      <li><a href="dashboardtest.html">Dashboard</a></li>
-      <li><a href="profile.html">Profile Page</a></li>
-      <li><a href="alerts.html">Emergency Alerts</a></li>
-      <li><a href="reports.html">Report an Incident</a></li>
-      <li><a href="article.html">Articles</a></li>
-      <li><a href="request.html">Requests</a></li>
-      <li><a href="ai-page.html">ChatBot</a></li>
-      <li><a href="unavailable.html">Contact Security</a></li>
-      <!-- <li><a href="resources.html">Safety Resources</a></li> -->
-    </ul>
 
-    <div class="dropdown-menu" id="dropdownMenu">
-      <ul>
-        <li><a href="item1.html">Item 1</a></li>
-        <li><a href="item2.html">Item 2</a></li>
-        <li><a href="item3.html">Item 3</a></li>
-      </ul>
+    <!-- Main content -->
+    <div class="dashboard-container">
+        <h1>Wits University Campus Safety</h1>
+
+        <div class="contact-card">
+            <h2>Campus Protection Services (CPS)</h2>
+            <p>Wits University Campus Protection Services (CPS)</p>
+            <p>Phone: <span class="contact-info">+27 11 717 4444 / 6666 (East Campus)</span></p>
+            <p>Phone: <span class="contact-info">+27 11 717 1842 (West Campus)</span></p>
+            <p>Phone: <span class="contact-info">+27 11 717 2222 / 2232 (Health Sciences Campus)</span></p>
+            <p>Phone: <span class="contact-info">+27 11 717 3340 (Education Campus)</span></p>
+            <p>Phone: <span class="contact-info">+27 11 717 3589 (Business School)</span></p>
+        </div>
+
+        <div class="contact-card">
+            <h2>Security Locations</h2>
+            <p>Security personnel are available 24/7 at the following locations:</p>
+            <ul>
+                <li>East Campus: Room 1, Robert Sobukwe Block</li>
+                <li>Health Sciences Campus: Main Foyer, Ground Floor, Faculty of Health Sciences</li>
+                <li>Management Campus</li>
+                <li>West Campus: FNB Building</li>
+                <li>Education Campus: Administration Block</li>
+            </ul>
+        </div>
+
+        <div class="safety-tips">
+            <h2>Be Aware. Stay Alert.</h2>
+            <ul>
+                <li>Never leave your room or office unlocked or hand your room/office key or student/staff card to any unauthorized person.</li>
+                <li>Keep your money and other valuables locked up or out of sight.</li>
+                <li>When moving around campus at night, keep to well-lit walkways or use the security escort services.</li>
+                <li>Do not leave personal belongings such as bags, purses, books, clothing, or other items unattended in public places.</li>
+                <li>Do not leave valuables visible in motor vehicles.</li>
+                <li>Keep your motor vehicle locked and make sure your vehicle has an alarm/immobiliser. Physically check vehicle doors are locked.</li>
+                <li>When off campus, be aware of your surroundings and be on the lookout for opportunistic thieves who may snatch wallets, bracelets, cell phones, and bags. Avoid narrow, quiet walkways and avoid wearing headphones.</li>
+                <li>Avoid displaying valuables when in public, where criminals can see them, such as when waiting at bus stops.</li>
+                <li>There is safety in numbers. Travel and walk in groups of two or more.</li>
+                <li>Know all emergency numbers. These are on the back of your student/staff card.</li>
+                <li>Download the WITS mySOS app.</li>
+                <li>Report any suspicious behaviour in and around campus buildings and in parking areas to Protection Services, and help us keep campus crime-free.</li>
+            </ul>
+        </div>
+
+        <div class="contact-card">
+            <h2>South African Police Service (SAPS)</h2>
+            <p>Parkview Police Station (nearest to Wits University)</p>
+            <p>Phone: <span class="contact-info">+27 11 486 5000</span></p>
+            <p>Emergency Number: <span class="contact-info">10111</span></p>
+        </div>
+
+        <div class="contact-card">
+            <h2>Emergency Fire Department</h2>
+            <p>Johannesburg Emergency Services</p>
+            <p>Phone: <span class="contact-info">10177</span></p>
+            <p>24/7 Emergency Call Center</p>
+        </div>
+
+        <div class="contact-card">
+            <h2>Gender-Based Violence (GBV) Helpline</h2>
+            <p>GBV Helpline (24/7 National)</p>
+            <p>Phone: <span class="contact-info helpline">0800 428 428</span></p>
+            <p>SMS 'Help' to: <span class="contact-info helpline">31531</span></p>
+        </div>
+
+        <div class="contact-card">
+            <h2>Suicide and Emotional Helpline</h2>
+            <p>South African Depression and Anxiety Group (SADAG)</p>
+            <p>Phone: <span class="contact-info">0800 567 567</span></p>
+            <p>SMS: <span class="contact-info">31393</span></p>
+        </div>
+
+        <div class="contact-card emergency">
+            <h2>Emergency Numbers</h2>
+            <p>General Emergency: <span class="contact-info">112 (mobile)</span></p>
+            <p>National Ambulance: <span class="contact-info">10177</span></p>
+        </div>
     </div>
-  </div>
 
-   <div class="main-container">
-  <div class="dashboard-container">
-    <div class="dashboard-header">
-      <h1>This page is currently unavailable.</h1>
-      <p>Come back near in the near future...</p>
-    </div>     
-  </div>
-
-  <div class="dashboard-content">
-  
-  </div>
-
-  </div>
-
-  <script>
-    function toggleMobileMenu() {
-        const menu = document.getElementById('headerMenu');
-        menu.classList.toggle('active');
-    }
-
-    function toggleDropdown() {
-        const dropdownMenu = document.getElementById('dropdownMenu');
-        dropdownMenu.classList.toggle('active');
-    }
-
-    function triggerAlert(type) {
-        alert(type + " Alert triggered!");
-    }
-  </script>
+    <footer>
+        <p>Stay safe! For more information, visit the <a href="https://www.wits.ac.za">Wits University</a> website or contact your local safety authorities.</p>
+    </footer>
 
 </body>
 
