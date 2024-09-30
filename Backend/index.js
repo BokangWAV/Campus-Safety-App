@@ -15,7 +15,7 @@ const {getAllUsers, getUser, addUser, updateProfile, updateProfilePicture, setRo
 const { addReport, getAllReports, getUserReport, removeReport } = require('./modules/report.js');
 
 //Get all the functions to use for Alerts
-const { getAllAlerts, addAlert, deleteReport, updateViewAlert } = require('./modules/alert.js');
+const { getAllAlerts, addAlert, deleteReport, updateViewAlert, managerViewAlert } = require('./modules/alert.js');
 
 //Get all the functions to use for Notifications
 const { getAllNotifications, getAllReadNotifications, getAllUnreadNotifications, updateNotificationStatus } = require('./modules/notification.js');
@@ -23,6 +23,8 @@ const { getAllNotifications, getAllReadNotifications, getAllUnreadNotifications,
 //Get all the functions to use for FAQs
 const {getAllFAQ, getUserFAQ, respondFAQ, displayFAQ, deleteFAQ,  addFAQ} = require('./modules/FAQ.js');
 
+//Get all fuctions to use for Announcements
+const { sendAnnouncement} = require('./modules/announcement.js');
 
 app.use(cors());
 app.use(express.json())
@@ -285,6 +287,20 @@ app.put('/alert/:uid', async (req, res)=>{
 
 
 
+//Update the alert status
+app.put('/alert/manager/:uid', async (req, res)=>{
+    const reportID = req.params['uid'];    //Get the report ID from which to update status
+
+    //If the action is successful we return a response code of 200
+    //Else we return an error code
+    if(await managerViewAlert(reportID)){
+        res.status(200).send('Updated alert successfully');
+    }else{
+        res.status(404).send('Unable to update alert');
+    }
+})
+
+
 //Get all the alerts of a user in the database
 app.get('/alert/:uid', async (req, res)=>{
     const uid = req.params['uid']
@@ -395,15 +411,30 @@ app.delete('/FAQ/:FAQID', async (req, res)=>{
 
 
 //Add a FAQ
-app.post('/FAQ/:uid', async (req, res)=>{
-    const uid = req.params['uid'];
+app.post('/FAQ', async (req, res)=>{
+    const FAQ = req.body;
 
-    if( await addFAQ(uid)){
+    if( await addFAQ(FAQ)){
         res.status(200).send("Added FAQ");
     }else{
         res.status(404).send("Unable to add FAQ");
     }
 })
+
+
+
+//============================================= Announcement Section =================================================//
+app.post('/announcement/:uid', async (req, res)=>{
+    const uid = req.params['uid']
+    const announcement = req.body
+
+    if(await sendAnnouncement(uid, announcement)){
+        res.status(200).send("Announcement Sent")
+    }else{
+        res.status(404).send("Failed to send Announcement")
+    }
+    
+});
 
 
 

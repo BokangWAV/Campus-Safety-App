@@ -98,6 +98,10 @@
       transform: none !important;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
     }
+
+    
+
+    
   </style>
 </head>
 
@@ -185,6 +189,13 @@
             <label for="videoUpload">Upload Videos (optional):</label>
             <input type="file" id="videoUpload" accept="video/*" multiple>
           </div>
+          
+          <!-- Success Message (Initially Hidden) -->
+          <div class="dashboard-card" id="successMessage" style="display: none;">
+            <h2>Report Submitted Successfully!</h2>
+            <p>Your incident report has been submitted. Thank you for helping keep the campus safe!</p>
+            <a href="dashboardtest.html" class="submit">Back to Dashboard</a>
+          </div>
 
           <button type="submit" id="submit" class="submit Submitting">Submit Report</button>
         </form>
@@ -209,19 +220,28 @@
     const storage = firebase.storage();
 
     async function uploadFiles(files, folderName) {
-      const uploadPromises = Array.from(files).map(file => {
-        const storageRef = storage.ref(`${folderName}/${file.name}`);
-        return storageRef.put(file).then(snapshot => snapshot.ref.getDownloadURL());
+  const uploadPromises = Array.from(files).map(file => {
+    console.log('Uploading file:', file.name); 
+    const storageRef = storage.ref(`${folderName}/${file.name}`);
+    return storageRef.put(file)
+      .then(snapshot => {
+        console.log('Uploaded file:', file.name); 
+        return snapshot.ref.getDownloadURL();
+      })
+      .catch(error => {
+        console.error('Error uploading file:', file.name, error); 
       });
-      return Promise.all(uploadPromises);
-    }
+  });
+  return Promise.all(uploadPromises);
+}
+
 
     async function submitReport() {
       const reportBtn = document.getElementById("submit");
       reportBtn.disabled = true;
       reportBtn.innerText = "Submitting"
       reportBtn.style.backgroundColor = "#316183"
-      
+
       const geoLocation = document.getElementById("geoLocation").value;
       const description = document.getElementById("description").value;
       const location = document.getElementById("buildings").value;
@@ -246,13 +266,15 @@
           location: location,
           urgencyLevel: urgencyLevel,
           status: "Open",
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           imageUrls: imageUrls,
           videoUrls: videoUrls
         };
 
+        console.log(reportData);
+
         try {
             const uid = window.localStorage.getItem('uid');
+            console.log(uid)
             const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/reports/${uid}`, {
                 method: 'POST',
                 headers: {
@@ -267,7 +289,7 @@
                 //window.location.href = '/profile.html'; // Redirect after successful submission
                 document.getElementById("reportForm").reset();
             } else {
-                console.error("Error submitting report:", error);
+                //console.error("Error submitting report:", error);
                 alert("Error submitting report. Please try again.");
             }
         } catch (error) {
@@ -276,6 +298,7 @@
 
         //await db.collection('reports').add(reportData);
         //alert("Report submitted successfully!");
+
         reportBtn.innerText = "Submit Report"
         reportBtn.style.backgroundColor = "#1a3e57"
         reportBtn.disabled = false;
