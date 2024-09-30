@@ -299,7 +299,7 @@ body {
     bottom: 30px;
     left: 30px;
     background-color: #142f41;
-    z-index: 1000;
+    z-index: 10000000000;
     width: 55px;
     height: 55px;
     display: flex;
@@ -639,105 +639,7 @@ body {
 }
 
 
-.AreUSureMain{
-    position: absolute;
-    top:0px;
-    left: 0px;
-    background-color: transparent;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000000;
-    backdrop-filter: blur(4px);
-}
 
-.AreUSureMain .AreUSureInner{
-    display: flex;
-    background-color: #f4f6f9;
-    flex-direction: column;
-    width: 40%;
-    height: 40%;
-    border-radius: 15px;
-    box-shadow: 0px 5px 5px rgba(51, 51, 51, 0.5);
-    padding: 10px;
-    padding-left: 18px;
-    padding-right: 18px;
-}
-
-.AreUSureMain .AreUSureInner .AreUSureHeader{
-    padding: 0;
-    font-size: 35px;
-    margin-top: 10px;
-    color: #1a3e57;
-}
-
-.AreUSureMain .AreUSureInner .AreUSureHeader h3{
-    margin: 0;
-}
-
-.AreUSureMain .AreUSureInner .AreUSureContent{
-    margin-left: 8px;
-    width: 85%;
-    font-size: 20px;
-}
-
-
-.AreUSureMain .AreUSureInner .AreUSureBtns{
-    height: 30%;
-    display: flex;
-    justify-content: center;
-    align-items: center ;
-}
-
-
-
-.AreUSureMain .AreUSureInner .AreUSureBtns .AreUSureCancel{
-    padding: 10px;
-    padding-left: 14px;
-    padding-right: 14px;
-    font-size: 17px;
-    margin-right: 30px;
-    border-radius: 8px;
-    background-color: #dd1717;
-    color: #f4f6f9;
-    border: 1px solid #f4f6f9;
-}
-
-
-.AreUSureMain .AreUSureInner .AreUSureBtns .AreUSureCancel:hover{
-    font-size: 20px;
-    padding: 9px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border: 1px solid #dd1717;
-    box-shadow: 2px 2px 2px rgba(51, 51, 51, 0.5);
-}
-
-
-.AreUSureMain .AreUSureInner .AreUSureBtns .AreUSureConfirm{
-    padding: 10px;
-    padding-left: 14px;
-    padding-right: 14px;
-    font-size: 17px;
-    margin-right: 30px;
-    border-radius: 8px;
-    background-color: #1ecf1e;
-    color: #f4f6f9;
-    border: 1px solid #f4f6f9;
-    margin-left: 5px;
-}
-
-
-.AreUSureMain .AreUSureInner .AreUSureBtns .AreUSureConfirm:hover{
-    font-size: 20px;
-    padding: 9px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border: 1px solid #1ecf1e;
-    box-shadow: 2px 2px 2px rgba(51, 51, 51, 0.5);
-}
 
 
 

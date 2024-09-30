@@ -8,7 +8,6 @@ const PopUpBackgroundDiv = document.getElementById('backgroundDiv');
 const PopUpMessageDiv = document.getElementById('PopUp-report-View');
 const PopUpCloseButton = document.getElementById('closeButtonDiv');
 const PopUpRemoveButton = document.getElementById('ButtonDeleteDiv');
-const areUSureDiv = document.getElementById('AreUSureMain');
 
 
 let map;
@@ -517,7 +516,7 @@ summaryDiv.addEventListener('click', async(event) => {
   }
   else if (event.target.classList.contains('btn-rescued')) {
     const index = event.target.dataset.index;
-    await areUSure(index);
+    await rescuedUser(index);
   }
   else if (event.target.classList.contains('btn-zoom')) {
     const index = event.target.dataset.index;
@@ -532,7 +531,7 @@ summaryDiv.addEventListener('click', async(event) => {
 async function rescuedUser(index){
   console.log(alerts[index].alertID)
   try {
-    await fetch(`https://sdp-campus-safety.azurewebsites.net/alert/${alerts[index].alertID}`,{
+    await fetch(`http://localhost:8080/alert/${alerts[index].alertID}`,{
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -623,18 +622,6 @@ PopUpRemoveButton.addEventListener('click', async ()=>{
 });
 
 
-async function areUSure(index){
-  areUSureDiv.style.display = 'flex'
-  document.getElementById('AreUSureCancel').addEventListener('click', ()=>{
-    areUSureDiv.click()
-  })
-  document.getElementById('AreUSureConfirm').addEventListener('click', async ()=>{
-    await rescuedUser(index);
-    areUSureDiv.click();
-  })
-}
-
-
 
 
 console.log(window.localStorage.getItem('uid'))
@@ -646,11 +633,6 @@ const unsubscribe = onSnapshot(q, (querySnapshot) => {
   
   displayAlerts();
 });
-
-
-areUSureDiv.addEventListener('click', ()=>{
-  areUSureDiv.style.display = 'none';
-})
 
 
 

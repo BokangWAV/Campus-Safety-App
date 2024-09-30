@@ -64,7 +64,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 window.localStorage.setItem('userGender', user.gender)
                 window.localStorage.setItem('userPhoneNumber', user.phoneNumber)
                 window.localStorage.setItem('userProfile', user.profilePicture)
-                window.localStorage.setItem('userRole', user.role)
 
                 if(user.profilePicture != ""){
                     document.getElementById('profileDisplay').src = user.profilePicture;
