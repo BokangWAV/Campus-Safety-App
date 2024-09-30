@@ -74,12 +74,14 @@ async function addAlert(uid, alert){
         await usersRef.get().then(snapshot => {
             if (!snapshot.empty) {
                 snapshot.forEach(doc =>{
-                    idArray.push(doc.id);
+                    if(doc.id != uid)idArray.push(doc.id);
                 })
             }
         });
+      
+      appendNotifications(idArray, `${user2.firstName} ${user2.lastName} requires immediate attention`, user2, 'report', report.location,report.imageUrls );
 
-        appendNotifications(idArray, 'requires immediate attention', user, "alert", `${alert.lat} ${alert.lon}`, user.profilePicture);
+
     })
     .catch((error) => {
         //console.error("Error adding document: ", error);
@@ -115,7 +117,7 @@ async function deleteReport(reportID){
 async function updateViewAlert(reportID){
 
     let added = true;
-    const articlesRef = await db.collection('alert').where("uid", "==", reportID).get();
+    const articlesRef = await db.collection('alert').where("alertID", "==", Number(reportID)).get();
 
     const doc = articlesRef.docs[0];
 

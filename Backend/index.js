@@ -23,6 +23,8 @@ const { getAllNotifications, getAllReadNotifications, getAllUnreadNotifications,
 //Get all the functions to use for FAQs
 const {getAllFAQ, getUserFAQ, respondFAQ, displayFAQ, deleteFAQ,  addFAQ} = require('./modules/FAQ.js');
 
+//Get all fuctions to use for Announcements
+const { sendAnnouncement} = require('./modules/announcement.js');
 
 app.use(cors());
 app.use(express.json())
@@ -409,15 +411,30 @@ app.delete('/FAQ/:FAQID', async (req, res)=>{
 
 
 //Add a FAQ
-app.post('/FAQ/:uid', async (req, res)=>{
-    const uid = req.params['uid'];
+app.post('/FAQ', async (req, res)=>{
+    const FAQ = req.body;
 
-    if( await addFAQ(uid)){
+    if( await addFAQ(FAQ)){
         res.status(200).send("Added FAQ");
     }else{
         res.status(404).send("Unable to add FAQ");
     }
 })
+
+
+
+//============================================= Announcement Section =================================================//
+app.post('/announcement/:uid', async (req, res)=>{
+    const uid = req.params['uid']
+    const announcement = req.body
+
+    if(await sendAnnouncement(uid, announcement)){
+        res.status(200).send("Announcement Sent")
+    }else{
+        res.status(404).send("Failed to send Announcement")
+    }
+    
+});
 
 
 
