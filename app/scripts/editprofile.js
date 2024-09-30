@@ -14,6 +14,13 @@ window.onload = async function () {
       const user = Array.isArray(result) ? result[0] : result; // Assuming user is at index 0, if it's in an array
   
       //console.log('Processed user data:', user);
+      window.localStorage.setItem('userFirstName', user.firstName)
+      window.localStorage.setItem('userLastName', user.lastName)
+      window.localStorage.setItem('userAge', user.age)
+      window.localStorage.setItem('userRace', user.race)
+      window.localStorage.setItem('userGender', user.gender)
+      window.localStorage.setItem('userPhoneNumber', user.phoneNumber)
+      window.localStorage.setItem('userProfile', user.profilePicture)
   
       // Update form fields with user data
       document.getElementById('firstname').value = user.firstName || '';

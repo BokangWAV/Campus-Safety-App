@@ -15,7 +15,7 @@ const {getAllUsers, getUser, addUser, updateProfile, updateProfilePicture, setRo
 const { addReport, getAllReports, getUserReport, removeReport } = require('./modules/report.js');
 
 //Get all the functions to use for Alerts
-const { getAllAlerts, addAlert, deleteReport, updateViewAlert } = require('./modules/alert.js');
+const { getAllAlerts, addAlert, deleteReport, updateViewAlert, managerViewAlert } = require('./modules/alert.js');
 
 //Get all the functions to use for Notifications
 const { getAllNotifications, getAllReadNotifications, getAllUnreadNotifications, updateNotificationStatus } = require('./modules/notification.js');
@@ -23,6 +23,8 @@ const { getAllNotifications, getAllReadNotifications, getAllUnreadNotifications,
 //Get all the functions to use for FAQs
 const {getAllFAQ, getUserFAQ, respondFAQ, displayFAQ, deleteFAQ,  addFAQ} = require('./modules/FAQ.js');
 
+//Get all fuctions to use for Announcements
+const { sendAnnouncement} = require('./modules/announcement.js');
 
 app.use(cors());
 app.use(express.json())
@@ -148,13 +150,12 @@ app.post('/articles/:uid', async (req, res) =>{
 });
 
 //Delete a article in the database
-app.delete('/articles/:uid/:title', async (req, res)=>{
-    const uid = req.params['uid'];    //The uid of the user who posted the article
-    const title = req.params['title'];  //Title of the article to be deletedfrom the database
+app.delete('/articles/:articleID', async (req, res)=>{
+    const uid = req.params['articleID'];    //The uid of the user who posted the article
 
     //If we deleted then it is fine 
     //Else we must return an error
-    if(await deleteArticle(uid, title)){
+    if(await deleteArticle(uid)){
         res.status(200).send('Deleted article successfully');
     }else{
         res.status(404).send('Unable to delete article');
@@ -162,13 +163,13 @@ app.delete('/articles/:uid/:title', async (req, res)=>{
 });
 
 //Update the number of likes on a post
-app.put('/articles/like/:name/:title', async (req, res)=>{
-    const name = req.params['name'];    //Get the name of the article we want ot update the likes from
-    const title = req.params['title'];  //Get the title of the article we want to add to the database
+app.put('/articles/like/:articleID', async (req, res)=>{
+    const uid = req.params['articleID'];    //Get the name of the article we want ot update the likes from
+
 
     //If the action is successful we return a response code of 200
     //Else we return an error code
-    if(await addLike(name, title)){
+    if(await addLike(uid)){
         res.status(200).send('Updated Likes successfully');
     }else{
         res.status(404).send('Unable to update Likes');
@@ -177,13 +178,12 @@ app.put('/articles/like/:name/:title', async (req, res)=>{
 
 
 //Approve a pending article
-app.put('/articles/approve/:name/:title', async (req, res)=>{
-    const name = req.params['name'];    //Get the name of the article we want ot update the likes from
-    const title = req.params['title'];  //Get the title of the article we want to add to the database
+app.put('/articles/approve/:articleID', async (req, res)=>{
+    const uid = req.params['articleID'];    //Get the name of the article we want ot update the likes from
 
     //If the action is successful we return a response code of 200
     //Else we return an error code
-    if(await approveArticle(name, title)){
+    if(await approveArticle(uid)){
         res.status(200).send('Updated Likes successfully');
     }else{
         res.status(404).send('Unable to update Likes');
@@ -285,6 +285,20 @@ app.put('/alert/:uid', async (req, res)=>{
     }
 });
 
+
+
+//Update the alert status
+app.put('/alert/manager/:uid', async (req, res)=>{
+    const reportID = req.params['uid'];    //Get the report ID from which to update status
+
+    //If the action is successful we return a response code of 200
+    //Else we return an error code
+    if(await managerViewAlert(reportID)){
+        res.status(200).send('Updated alert successfully');
+    }else{
+        res.status(404).send('Unable to update alert');
+    }
+})
 
 
 //Get all the alerts of a user in the database
@@ -397,15 +411,30 @@ app.delete('/FAQ/:FAQID', async (req, res)=>{
 
 
 //Add a FAQ
-app.post('/FAQ/:uid', async (req, res)=>{
-    const uid = req.params['uid'];
+app.post('/FAQ', async (req, res)=>{
+    const FAQ = req.body;
 
-    if( await addFAQ(uid)){
+    if( await addFAQ(FAQ)){
         res.status(200).send("Added FAQ");
     }else{
         res.status(404).send("Unable to add FAQ");
     }
 })
+
+
+
+//============================================= Announcement Section =================================================//
+app.post('/announcement/:uid', async (req, res)=>{
+    const uid = req.params['uid']
+    const announcement = req.body
+
+    if(await sendAnnouncement(uid, announcement)){
+        res.status(200).send("Announcement Sent")
+    }else{
+        res.status(404).send("Failed to send Announcement")
+    }
+    
+});
 
 
 

@@ -38,7 +38,7 @@ async function getUserFAQ(uid){
 async function respondFAQ(FAQID, answer){
 
     let responded = false;
-    const usersRef = await db.collection('FAQ').where("FAQID", "==", FAQID).get();    // Get a reference to the articles collection
+    const usersRef = await db.collection('FAQ').where("FAQID", "==", Number(FAQID)).get();    // Get a reference to the articles collection
 
     const doc = usersRef.docs[0];
 
@@ -62,7 +62,7 @@ async function respondFAQ(FAQID, answer){
 async function  displayFAQ(FAQID){
 
     let displayable = false;
-    const usersRef = await db.collection('FAQ').where("FAQID", "==", FAQID).get();    // Get a reference to the articles collection
+    const usersRef = await db.collection('FAQ').where("FAQID", "==", Number(FAQID)).get();    // Get a reference to the articles collection
 
     const doc = usersRef.docs[0];
 
@@ -85,7 +85,7 @@ async function  displayFAQ(FAQID){
 
 async function deleteFAQ(FAQID){
     let deleted = true;
-    const usersRef = await db.collection('FAQ').where("FAQID", "==", FAQID).get();
+    const usersRef = await db.collection('FAQ').where("FAQID", "==", Number(FAQID)).get();
 
     const doc = usersRef.docs[0];
 
@@ -102,25 +102,21 @@ async function deleteFAQ(FAQID){
     return deleted;
 }
 
-async function addFAQ(uid, FAQ){
+async function addFAQ(FAQ){
     let added = true;   //Shows whether we added a user or we failed
 
-    const verifyRef = db.collection("FAQ").doc(uid);
-
-    var user = await getUser(uid);
-    user = user[0]
-
-    var count = await getAllFAQ()
-    var count = count.length + 1
+    const response = await verifyRef.orderBy("FAQID", "desc").get();
+    var count = 0;
+    if( response.docs.length > 0){
+        count = Number(response.docs[0].data().alertID)
+    }
+    
+    count = count + 1
 
     await verifyRef.add({
         question: FAQ.question,
         answer: "",
-        uid: uid,
-        firstName: user.firstName,
-        lastName: user.lastName,
         FAQID: count,
-        profilePicture: user.profilePicture,
         status: "pending"
     })
     .then(() => {

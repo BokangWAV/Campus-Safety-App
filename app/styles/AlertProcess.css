@@ -1,0 +1,253 @@
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+
+/*  Leave Space for the Navigation styling if possible  */
+.header{
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 60px;
+    background-color: #1a3e57;
+    width: 100%;
+    z-index: 1000;
+}
+
+.Alert{
+    margin-top: 60px;
+    width: 100%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    
+}
+
+.Alert .TextAlert{
+    display: flex;
+    padding: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    height: 20%;
+}
+
+.Alert .TextAlert h2{
+    margin: 0;
+    font-size: 30px;
+    color: #1a3e57;
+}
+
+.Alert .TextAlert p{
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: #333;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+
+.Alert .ActionPanel{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+}
+
+
+.Alert .ActionPanel .sendNow-btn{
+    cursor: pointer;
+    background-color: #1a3e57;
+    border: 1px solid #1a3e57;
+    border-radius: 20px;
+    color: #f4f6f9;
+    height: 40px;
+    width: 180px;
+    transition: ease-in 0.1s;
+}
+
+.Alert .ActionPanel .Sending{
+    cursor: pointer;
+    background-color: #4D6882;
+    border: 1px solid #4D6882;
+    border-radius: 20px;
+    color: #f4f6f9;
+    height: 40px;
+    width: 180px;
+    transition: ease-in 0.1s;
+}
+
+.Alert .ActionPanel .sendNow-btn:hover{
+    border: 1px solid #1a3e57;
+    font-size: 16px;
+    height: 40px;
+    width: 180px;
+    box-shadow: 5px 5px 5px rgba(51, 51, 51, 0.6);
+}
+
+.Alert .ActionPanel .Sending:hover{
+    cursor:auto;
+    background-color: #4D6882;
+    border: 1px solid #4D6882;
+    color: #f4f6f9;
+    box-shadow: none;
+}
+
+@keyframes Bounce1{
+    0%, 50%, 100%{
+        border: 2px solid #1a3e57;
+        box-shadow: none;
+        
+        padding: 2px;
+    }
+    25%, 75%{
+        border: 2px solid #f4f6f9;
+        padding: 4px;
+        box-shadow: 0px 0px 2px 2px rgba(51, 51, 51, 0.1);
+    }
+}
+
+
+.Alert .ActionPanel .Container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    width: 164px;
+    height: 180px;
+}
+
+
+.Alert .ActionPanel .Outer-Ring{
+    
+    background-color: #f4f6f9;
+    border-radius: 50%;
+    border: 2px solid #1a3e57;
+    animation: Bounce1 2s infinite;
+}
+
+
+.Alert .ActionPanel .Outer-InnerRing{
+    background-color: #f4f6f9;
+    border-radius: 50%;
+    border: 2px solid #1a3e57;
+    animation: Bounce1 2s infinite;
+}
+
+
+
+.Alert .ActionPanel .Inner-Ring{
+    background-color: #f4f6f9;
+    border-radius: 50%;
+    border: 2px solid #1a3e57;
+    animation: Bounce1 2s infinite;
+}
+
+.Alert .ActionPanel .DisplayTimeout{
+    cursor: auto;
+    background-color: #1a3e57;
+    width: 140px;
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: #f4f6f9;
+    animation: Bounce 2s infinite;
+}
+
+.Alert .ActionPanel .Inner-Ring .innerSent{
+    color: #4CBB17;
+}
+
+
+
+
+
+.Alert .ActionPanel .cancel-btn{
+    cursor: pointer;
+    background-color: #FF2400;
+    border: 1px solid #FF2400;
+    border-radius: 20px;
+    color: #f4f6f9;
+    height: 40px;
+    width: 180px
+}
+
+.Alert .ActionPanel .Canceling{
+    cursor: pointer;
+    background-color: #FF6F6F;
+    border: 1px solid #FF6F6F;
+    border-radius: 20px;
+    color: #f4f6f9;
+    height: 40px;
+    width: 180px
+}
+
+.Alert .ActionPanel .cancel-btn:hover{
+    border: 1px solid #FF2400;
+    font-size: 16px;
+    height: 40px;
+    width: 180px;
+    box-shadow: 5px 5px 5px rgba(165, 47, 29, 0.6);
+}
+
+.Alert .ActionPanel .Canceling:hover{
+    cursor: auto;
+    background-color: #FF6F6F;
+    border: 1px solid #FF6F6F;
+    color: #f4f6f9;
+    box-shadow: none;
+}
+
+.Alert .ActionPanel .safe-btn{
+    cursor: pointer;
+    margin-top: 20px;
+    background-color: rgb(77, 156, 40);
+    border: 1px solid #4CBB17;
+    border-radius: 20px;
+    color: #f4f6f9;
+    height: 40px;
+    width: 180px
+}
+.Alert .ActionPanel .safe-btn:hover{
+    border: 1px solid #4CBB17;
+    font-size: 16px;
+    height: 40px;
+    width: 180px;
+    box-shadow: 5px 5px 5px rgba(76, 187, 23, 0.6);
+}
+
+.Alert .ActionPanel .safe{
+    cursor: auto;
+    background-color: #87d165;
+    border: 1px solid #87d165;
+    color: #f4f6f9;
+    height: 40px;
+    width: 180px;
+}
+
+.Alert .ActionPanel .safe:hover{
+    cursor: auto;
+    background-color: #87d165;
+    border: 1px solid #87d165;
+    color: #f4f6f9;
+    height: 40px;
+    width: 180px;
+    box-shadow: none;
+}
