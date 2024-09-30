@@ -1,3 +1,6 @@
+import { collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+import { db } from "../modules/init.js";
+
 const typeDropdown = document.getElementById('Type-Dropdown');
 const locationDropdown = document.getElementById('Location-DropDown');
 const summaryDiv = document.getElementById('aside-bar');
@@ -17,9 +20,19 @@ var buildingMap = {};
 var TempReports = [];
 var TempAlerts = [];
 var currentReport;
+var reportIndex;
 
 
 async function displayPoints() {
+
+  if(window.localStorage.getItem('userProfile') != ""){
+      document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
+  }
+
+  document.getElementById('managerAlert').style.display = 'flex'
+  document.getElementById('managerRequests').style.display = 'flex'
+  locationDropdown.disabled = true;
+  typeDropdown.disabled = true;
     showPosition();
     await getBuildingLocations();
     await showDropDownOptions();
@@ -37,9 +50,17 @@ async function displayPoints() {
                 temp['image'] = elem.imageUrls[0] || "";
                 temp['video'] = elem.videoUrls[0] || "";
                 temp['description'] = elem.description;
-                temp['time'] = elem.timestamp;
+                console.log(elem)
+                const date = new Date(elem.timestamp._seconds * 1000);
+                const dateOptions = { year: 'numeric', month: 'long', day: '2-digit' };
+                const formattedDate = date.toLocaleDateString(undefined, dateOptions);  // Date in a human-readable format
+                temp['time'] = formattedDate;
                 incidents.push(temp);
                 if(!elem.removed){
+                  const date = new Date(elem.timestamp._seconds * 1000);
+                  const dateOptions = { year: 'numeric', month: 'long', day: '2-digit' };
+                  const formattedDate = date.toLocaleDateString(undefined, dateOptions);
+                  elem['time'] = formattedDate
                   TempReports.push(elem)
                   console.log(temp)
                 }
@@ -69,7 +90,7 @@ async function displayPoints() {
       .then(data=>{
           data.forEach(elem=>{
             console.log(elem);
-            if(elem.details == "EMERGENCY"){
+            if(elem.status == "processing"){
               alerts.push(elem);
             }
           }); 
@@ -98,6 +119,8 @@ async function displayPoints() {
     displayReports();
     plotAlerts();
     showPosition();
+    locationDropdown.disabled = false;
+  typeDropdown.disabled = false;
 };
 
 function showPosition() {
@@ -268,6 +291,16 @@ async function displayAlerts(){
         <p id="lastName" class="lastName">${elem.lastName}</p>
       `;
 
+      console.log(elem)
+      const alertGender = document.createElement('div');
+      if(elem.gender !== ""){
+        alertGender.id = "details";
+        alertGender.className = "details";
+        alertGender.innerHTML = `
+          <p id="genderDiv" class="locationDiv"> ${elem.gender}</p>
+        `;
+      }
+
       const alertLocationDiv = document.createElement('div');
       alertInformationDiv.id = "locationDiv";
       alertLocationDiv.className = "locationDiv";
@@ -297,6 +330,7 @@ async function displayAlerts(){
 
       
       alertInformationDiv.appendChild(alertDetailsDiv);
+      if(elem.gender!= "") alertInformationDiv.appendChild(alertGender)
       alertInformationDiv.appendChild(alertLocationDiv);
       alertInformationDiv.appendChild(extraAlertDiv);
       alertInformationDiv.appendChild(alertbtnDiv);
@@ -369,8 +403,10 @@ async function displayReports(){
       reportDivSeperator.id = "seperator";
       reportDivSeperator.className = "seperator";
 
+      console.log(elem)
+      console.log(elem.time)
       reportDivSeperator.innerHTML = `
-          <p>21 September 2024</p>
+          <p>${elem.time}</p>
           <div id="btns" class="btns">
               <button type="button" data-index="${index}" id="btn-View" class="btn-View" >View</button>
               <button type="button" data-index="${index}" id="btn-delete"  class="btn-delete" >Remove</button>
@@ -420,6 +456,7 @@ async function getBuildingLocations(){
 async function removeAlertIndex(index){
   //Send a delete request to the API
   currentReport = buildingMap[currentBuilding][index]
+  reportIndex = index;
   await removeAlert();
 }
 
@@ -443,8 +480,14 @@ async function removeAlert(){
       console.error(error)
     });
   } catch (error) {
-    
+    console.error(error)
   }
+
+  buildingMap[currentBuilding].splice(reportIndex, 1);
+  displayReports();
+  APIBuildings.forEach(elem=>{
+   if(elem.building_name == currentBuilding) plotBuildings(elem.latitude, elem.longitude, elem.building_name);
+});
 }
 
 
@@ -459,6 +502,7 @@ summaryDiv.addEventListener('click', async(event) => {
   }
   else if (event.target.classList.contains('btn-View')) {
     const index = event.target.dataset.index;
+    reportIndex = index;
     displayPopUp(index);
   }
   else if (event.target.classList.contains('btn-call')) {
@@ -467,7 +511,7 @@ summaryDiv.addEventListener('click', async(event) => {
   }
   else if (event.target.classList.contains('btn-rescued')) {
     const index = event.target.dataset.index;
-    console.log("Rescuing at ", index);
+    await rescuedUser(index);
   }
   else if (event.target.classList.contains('btn-zoom')) {
     const index = event.target.dataset.index;
@@ -478,6 +522,27 @@ summaryDiv.addEventListener('click', async(event) => {
   }
 
 });
+
+async function rescuedUser(index){
+  console.log(alerts[index].alertID)
+  try {
+    await fetch(`http://localhost:8080/alert/${alerts[index].alertID}`,{
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }).then(()=>{
+      console.log("rescued")
+    }).catch(e=>{
+      console.error(e)
+    })
+  } catch (error) {
+    console.error(error);
+  }
+
+  alerts.splice(index, 1);
+  displayAlerts();
+}
 
 
 function displayPopUp(index){
@@ -548,9 +613,21 @@ PopUpCloseButton.addEventListener('click', ()=>{
 PopUpRemoveButton.addEventListener('click', async ()=>{
   PopUpRemoveButton.disabled = true;
   await removeAlert();
-  
+  PopUpCloseButton.click();
 });
 
+
+
+
+console.log(window.localStorage.getItem('uid'))
+const q = query(collection(db, "alert"), where("status", "==", "processing"));
+const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  querySnapshot.forEach((doc) => {
+      alert.push(doc.data());
+  });
+  
+  displayAlerts();
+});
 
 
 
