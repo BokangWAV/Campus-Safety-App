@@ -51,12 +51,12 @@ async function addReport(uid, report){
         await usersRef.get().then(snapshot => {
             if (!snapshot.empty) {
                 snapshot.forEach(doc =>{
-                    idArray.push(doc.id);
+                    if(doc.id != uid)idArray.push(doc.id);
                 })
             }
         });
 
-        appendNotifications(idArray, 'added a new report', user2, 'report', report.location,report.imageUrls );
+        appendNotifications(idArray, `${user2.firstName} ${user2.lastName} added a new report`, user2, 'report', report.location,report.imageUrls );
     })
     .catch((error) => {
         console.error("Error writing document: ", error);
