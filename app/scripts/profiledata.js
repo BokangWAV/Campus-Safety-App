@@ -10,15 +10,6 @@ async function  loadData() {
       console.log('User data fetched:', result); // Debugging line
   
       const user = Array.isArray(result) ? result[0] : result;  // Assuming user is at index 0, if it's in an array
-
-      if(user.profilePicture != ""){
-        document.getElementById('profileDisplay').src = user.profilePicture;
-    }
-
-    if(user.role == "manager"){
-      document.getElementById('managerAlert').style.display = 'flex'
-      document.getElementById('managerRequests').style.display = 'flex'
-    }
       
       //console.log('Processed user data:', user);
       window.localStorage.setItem('userFirstName', user.firstName)
@@ -28,6 +19,15 @@ async function  loadData() {
       window.localStorage.setItem('userGender', user.gender)
       window.localStorage.setItem('userPhoneNumber', user.phoneNumber)
       window.localStorage.setItem('userProfile', user.profilePicture)
+      window.localStorage.setItem('userRole', user.role)
+
+      if(window.localStorage.getItem('userProfile') != ""){
+        document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
+    }
+    if(window.localStorage.getItem('userRole') == "manager"){
+      document.getElementById('managerAlert').style.display = 'flex'
+      document.getElementById('managerRequests').style.display = 'flex'
+    }
   
       // Update the profile picture
       document.getElementById('profilePic').src = `${user.profilePicture}`; //|| 'assets/img/default.jpg'
