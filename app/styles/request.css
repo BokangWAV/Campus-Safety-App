@@ -230,17 +230,16 @@ body {
     }
 }
 
-/* Preloader Styles */
 #preloader {
     position: fixed;
     inset: 0;
     z-index: 999999;
     overflow: hidden;
-    background: var(--background-color);
-    transition: all 0.6s ease-out;
-}
-
-#preloader:before {
+    color: #bbbbbb;
+    /* animation: loader 3s infinite linear; */
+  }
+  
+  #preloader:before {
     content: "";
     position: fixed;
     top: calc(50% - 30px);
@@ -251,14 +250,45 @@ body {
     width: 60px;
     height: 60px;
     animation: animate-preloader 1.5s linear infinite;
+  }
+
+  .dashboard-card button {
+    transition: background-color 0.3s ease; /* Smooth transition */
 }
 
-@keyframes animate-preloader {
+.dashboard-card button:hover {
+    background-color: darkred; /* Change to a darker shade */
+}
+
+
+
+  @keyframes animate-preloader {
     0% {
-        transform: rotate(0deg);
+      transform: rotate(0deg);
+      transform: rotateZ(0deg);
+      width: 60px;
+      height: 60px;
+      color: #888888;
+      top: 45%;
+      left: 40%;
+    }
+  
+    50%{
+      width: 30px;
+      height: 30px;
+      color: #fff;
+      top: 45%;
+      left: 55%;
     }
   
     100% {
-        transform: rotate(360deg);
+      transform: rotate(360deg);
+      transform: rotateZ(360deg);
+      width: 60px;
+      height: 60px;
+      color: #888888;
+      top: 45%;
+      left: 40%;
     }
-}
+  }
+  
