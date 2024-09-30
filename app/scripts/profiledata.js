@@ -73,46 +73,57 @@ const db = firebase.firestore();
 const storage = firebase.storage();
 
 async function uploadFiles(files, folderName) {
-  console.log("sending requests")
+  console.log("Sending requests to upload files...");
   const uploadPromises = Array.from(files).map(file => {
     const storageRef = storage.ref(`${folderName}/${file.name}`);
-    return storageRef.put(file).then(snapshot => snapshot.ref.getDownloadURL());
+    return storageRef.put(file)
+      .then(snapshot => {
+        console.log(`Uploaded file: ${file.name}`);
+        return snapshot.ref.getDownloadURL();
+      })
+      .catch(error => {
+        console.error(`Error uploading file ${file.name}:`, error);
+        throw error;
+      });
   });
   return Promise.all(uploadPromises);
 }
 
-const imageUploader = document.getElementById('imageUpload')
+// Handle image upload
+const imageUploader = document.getElementById('imageUpload');
 
-imageUploader.addEventListener('change',async ()=>{
+imageUploader.addEventListener('change', async () => {
   const imageFiles = document.getElementById("imageUpload").files;
-
   let imageUrls = [];
 
   if (imageFiles.length > 0) {
-    console.log("uploading...");
-    console.log(imageFiles)
-    imageUrls = await uploadFiles(imageFiles, 'profilePicture');
+    console.log("Uploading image files:", imageFiles);
+    try {
+      imageUrls = await uploadFiles(imageFiles, 'profilePicture');
+    } catch (error) {
+      console.error("Error during image upload:", error);
+      return; // Stop further execution if image upload fails
+    }
   }
 
   try {
-    console.log("uploaded and updating user details....")
-    const bodyElement = { url: imageUrls[0]}
-    const uid = window.localStorage.getItem('uid');
-    await fetch(`https://sdp-campus-safety.azurewebsites.net/user/profilePicture/${uid}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(bodyElement),
-    })
-    .then(() => {
-      //Show user profile
-      loadData()
-    }).catch((error)=>{
-      console.error(error)
-    });
+    if (imageUrls.length > 0) {
+      console.log("Images uploaded, updating user profile...");
+      const bodyElement = { url: imageUrls[0] };
+      const uid = window.localStorage.getItem('uid');
+      
+      await fetch(`https://sdp-campus-safety.azurewebsites.net/user/profilePicture/${uid}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bodyElement),
+      });
+      
+      console.log("User profile updated successfully.");
+      loadData(); // Reload the updated profile data
+    }
   } catch (error) {
-    
+    console.error("Error updating user profile:", error);
   }
-})
-  
+});
