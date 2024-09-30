@@ -15,6 +15,15 @@ document.addEventListener("DOMContentLoaded",async function () {
       console.error(error)
     }
 
+
+    if(window.localStorage.getItem('userProfile') != ""){
+        document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
+    }
+    if(window.localStorage.getItem('userRole') == "manager"){
+      document.getElementById('managerAlert').style.display = 'flex'
+      document.getElementById('managerRequests').style.display = 'flex'
+    }
+
     // Example notifications array
     /*
     const notifications = [
@@ -44,6 +53,7 @@ document.addEventListener("DOMContentLoaded",async function () {
   
     let unreadCount = notifications.filter(notification => notification.status === "unread").length;
   
+    console.log(unreadCount);
     // Update unread count display
     unreadCountElement.textContent = unreadCount;
   
@@ -108,11 +118,13 @@ document.addEventListener("DOMContentLoaded",async function () {
       timestampDiv.textContent = formattedDate + " at " + formattedTime;
   
       // Incident image (hidden by default)
-      if(notification.type == "report"){
-        const incidentImage = document.createElement("img");
+      const incidentImage = document.createElement("img");
+      if(notification.type === "report"){
+        
         incidentImage.className = "incident-pic";
-        if (notification.incident_image) {
-          incidentImage.src = notification.incident_image;
+        console.log(notification.incident_image)
+        if ( notification.incident_image.length>0) {
+          incidentImage.src = notification.incident_image[0];
           incidentImage.alt = "Incident Image";
         } else {
           incidentImage.style.display = "none"; // Hide if there's no image
@@ -129,7 +141,7 @@ document.addEventListener("DOMContentLoaded",async function () {
       listItem.appendChild(headerDiv);
       listItem.appendChild(messageDiv);
       listItem.appendChild(timestampDiv);
-      if(notification.type == "report") listItem.appendChild(incidentImage);
+      if(notification.type === "report" && notification.incident_image.length>0)listItem.appendChild(incidentImage);
   
       // Toggle the display of additional info and the incident image on click
       listItem.addEventListener("click", async function () {
