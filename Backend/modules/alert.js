@@ -55,7 +55,9 @@ async function addReport(uid, report){
                 })
             }
         });
-        appendNotifications(idArray, `${user2.firstName} ${user2.lastName} requires immediate attention`, user2, 'report', report.location,report.imageUrls );
+      
+      appendNotifications(idArray, `${user2.firstName} ${user2.lastName} requires immediate attention`, user2, 'report', report.location,report.imageUrls );
+
     })
     .catch((error) => {
         console.error("Error writing document: ", error);
