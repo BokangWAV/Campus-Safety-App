@@ -23,6 +23,11 @@ var currentReport;
 var reportIndex;
 
 
+document.getElementById('target').addEventListener('click', ()=>{
+  showPosition();
+})
+
+
 async function displayPoints() {
 
   if(window.localStorage.getItem('userProfile') != ""){
