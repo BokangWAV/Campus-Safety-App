@@ -36,17 +36,20 @@
         <span></span>
         </div>
         <ul id="headerMenu">
-            <li><a class="active">Dashboard</a></li>
-            <li><a href="profile.html">Profile Page</a></li>
-            <li><a href="alerts.html">Emergency Alerts</a></li>
-            <li><a href="reports.html">Report an Incident</a></li>
-            <li><a href="summary.html">Reports Summary</a></li>
+      
+            <li><a href="alerts.html" id="managerAlert" style="display: none;">Emergency Alerts</a></li>
+            <li><a href="reports.html">Incident Report</a></li>
+            <li><a href="summary.html">Summary</a></li>
             <li><a href="article.html">Articles</a></li>
-            <li><a href="request.html">Requests</a></li>
-            <li><a href="ai-page.html">ChatBot</a></li>
-
-            <!-- <li><a href="resources.html">Safety Resources</a></li> -->
+            <li><a href="request.html" id="managerRequests" style="display: none;">Requests</a></li>
             <li><a href="unavailable.html">Contact Security</a></li>
+            <li class="notifationer"><a href="notification.html"><img src="./assets/Undraw/notification.png" style="height: 24px; width: 24px; cursor: pointer;"></a></li>
+            <li class="profileDisplay"><a href="profile.html" ><img id="profileDisplay" src="./assets/Undraw/defaultpic.jpg" style="width: 33px; height: 33px; border-radius: 50%; border:3px solid #FFFFFF; margin-right: 22px;"></a></li>
+            <li><a href="notification.html" class="mobileNotification" style="display: none;">Notifications</a></li>
+            <li><a href="profile.html" class="MobileProfile" style="display: none;" >Profile</a></li>
+      
+            <!-- <li><a href="resources.html">Safety Resources</a></li> -->
+            
         </ul>
 
         <!-- Dropdown Menu -->
@@ -125,11 +128,11 @@
         <aside id="aside-bar" class="aside-bar" style="overflow-y:scroll;">
             <p id="heading" class="heading">Summary</p>
             <div id="Select-Section" class="Select-Section">
-                <select name="Type-Dropdown" id="Type-Dropdown" class="dropDownOptions">
+                <select name="Type-Dropdown" disabled="true" id="Type-Dropdown" class="dropDownOptions">
                     <option value="Reports">Reports</option>
                     <option value="Alerts"> Emergency Alerts</option>
                 </select>
-                <select name="Location-DropDown" id="Location-DropDown" class="dropDownOptions">
+                <select name="Location-DropDown" disabled="true" id="Location-DropDown" class="dropDownOptions">
                     
                 </select>
             </div>
