@@ -294,7 +294,21 @@ body {
 }
 
 
-
+.dashboard-container .target{
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    background-color: #142f41;
+    z-index: 10000000000;
+    width: 55px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+}
 
 
 .aside-bar .Summary-Section .alert-Summary .information .details{
