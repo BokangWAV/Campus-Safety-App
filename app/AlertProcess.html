@@ -10,9 +10,40 @@
     <script src="./scripts/AlertProcess.js" defer type="module"></script>
 </head>
 <body>
-    <div class="header">
-
+    !-- Header for Web and Mobile -->
+  <div class="header">
+    <h2 style="cursor: pointer;" id="logo" >Campus Safety</h2>
+    <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
+    <ul id="headerMenu">
+      
+      <li><a href="current.html" id="managerAlert" style="display: none;">Emergency Alerts</a></li>
+      <li><a href="reports.html">Incident Report</a></li>
+      <li><a href="summary.html">Summary</a></li>
+      <li><a href="article.html">Articles</a></li>
+      <li><a href="request.html" id="managerRequests" style="display: none;">Requests</a></li>
+      <li><a href="unavailable.html">Contact Security</a></li>
+      <li class="notifationer"><a href="notification.html"><img src="./assets/Undraw/notification.png" style="height: 24px; width: 24px; cursor: pointer;"></a></li>
+      <li class="profileDisplay"><a href="profile.html" ><img id="profileDisplay" src="./assets/Undraw/defaultpic.jpg" style="width: 33px; height: 33px; border-radius: 50%; border:3px solid #FFFFFF; margin-right: 22px;"></a></li>
+      <li><a href="notification.html" class="mobileNotification" style="display: none;">Notifications</a></li>
+      <li><a href="profile.html" class="MobileProfile" style="display: none;" >Profile</a></li>
+
+      <!-- <li><a href="resources.html">Safety Resources</a></li> -->
+      
+    </ul>
+
+    <!-- Dropdown Menu -->
+    <div class="dropdown-menu" id="dropdownMenu">
+      <ul>
+        <li><a href="item1.html">Item 1</a></li>
+        <li><a href="item2.html">Item 2</a></li>
+        <li><a href="item3.html">Item 3</a></li>
+      </ul>
+    </div>
+  </div>
     <section id="Alert" class="Alert">
         <div id="TextAlert" class="TextAlert">
             <h2>Processing Alert!</h2>
