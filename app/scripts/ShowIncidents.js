@@ -8,6 +8,7 @@ const PopUpBackgroundDiv = document.getElementById('backgroundDiv');
 const PopUpMessageDiv = document.getElementById('PopUp-report-View');
 const PopUpCloseButton = document.getElementById('closeButtonDiv');
 const PopUpRemoveButton = document.getElementById('ButtonDeleteDiv');
+const FullAreYouSure = document.getElementById('FullAreYouSure');
 
 
 let map;
@@ -96,6 +97,7 @@ async function displayPoints() {
           data.forEach(elem=>{
             console.log(elem);
             if(elem.status == "processing"){
+              elem.location = `${nearestBuilding(Number(elem.lat), Number(elem.lon))}`
               alerts.push(elem);
             }
           }); 
@@ -310,7 +312,7 @@ async function displayAlerts(){
       alertInformationDiv.id = "locationDiv";
       alertLocationDiv.className = "locationDiv";
       alertLocationDiv.innerHTML = `
-        <p id="location" class="location"><strong>Location:</strong> ${elem.lat}  ${elem.lon}</p>
+        <p id="location" class="location"><strong>Location:</strong> ${elem.location}</p>
       `;
 
       const extraAlertDiv = document.createElement('div');
@@ -516,7 +518,7 @@ summaryDiv.addEventListener('click', async(event) => {
   }
   else if (event.target.classList.contains('btn-rescued')) {
     const index = event.target.dataset.index;
-    await rescuedUser(index);
+    await areYouSure(index);
   }
   else if (event.target.classList.contains('btn-zoom')) {
     const index = event.target.dataset.index;
@@ -622,6 +624,60 @@ PopUpRemoveButton.addEventListener('click', async ()=>{
 });
 
 
+function nearestBuilding( lat, lon) {
+  let point = []
+  let tempPoint = []
+  tempPoint.push(lat);
+  tempPoint.push(lon)
+
+  point.push(tempPoint);
+
+  let buildingNear = ""
+  let maxDistance = 100000000000000;
+
+
+  
+  APIBuildings.forEach((building)=>{
+    const toRad = (value) => (value * Math.PI) / 180;
+
+    const R = 6371; // Radius of Earth in kilometers
+    const dLat = toRad(lat - Number(building.latitude));
+    const dLon = toRad(lon - Number(building.longitude));
+  
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat)) * Math.cos(toRad(lat)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  
+    const distance = R * c;
+
+    if(distance< maxDistance && distance < 3){
+      maxDistance = distance;
+      buildingNear = `near ${building.building_name}`
+    }
+  //console.log(withinDistance);
+  })
+  if( buildingNear == ""){
+    buildingNear = `${lat} ${lon}`
+  }
+
+  return buildingNear
+}
+
+
+async function areYouSure(index){
+  FullAreYouSure.style.display = 'flex'
+  document.getElementById('AreUSureCancel').addEventListener('click', ()=>{
+    FullAreYouSure.style.display = 'none'
+  })
+  document.getElementById('AreUSureChande').addEventListener('click', async ()=>{
+    await rescuedUser(index);
+  })
+}
+
+
 
 
 console.log(window.localStorage.getItem('uid'))
@@ -633,6 +689,10 @@ const unsubscribe = onSnapshot(q, (querySnapshot) => {
   
   displayAlerts();
 });
+
+FullAreYouSure.addEventListener('click', ()=>{
+  FullAreYouSure.style.display = 'none'
+})
 
 
 
