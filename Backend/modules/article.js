@@ -57,8 +57,17 @@ async function getApprovedArticles(){
 async function addArticle(uid, article){
     let added = true;
     const usersRef = db.collection('articles')
+
+    const response = await usersRef.orderBy("articleID", "desc").get();
+    var count = 0;
+    if( response.docs.length > 0){
+        count = Number(response.docs[0].data().alertID)
+    }
+    
+    count = count + 1
     // Add a new document with a generated id.
     await usersRef.add({
+        articleID: count,
         likes: 0,
         content: article.content,
         surname: article.surname,
@@ -107,12 +116,12 @@ async function addArticle(uid, article){
 }
 
 
-async function deleteArticle(uid, title){
+async function deleteArticle(uid){
     let deleted = true;
-    const usersRef = await db.collection('articles').where("userID", "==", uid).where("title", "==", title).get();
+    const usersRef = await db.collection('articles').where("articleID", "==", Number(uid)).get();
     const doc = usersRef.docs[0];
 
-    const articlesRef2 = db.collection('article')
+    const articlesRef2 = db.collection('articles')
 
     await articlesRef2.doc(doc.id).delete()
     .then(() => {
@@ -127,9 +136,9 @@ async function deleteArticle(uid, title){
 }
 
 
-async function getArticle(name, title){
+async function getArticle(uid){
     let response = {}
-    const usersRef = db.collection('articles').where("name", "==", name).where("title", "==", title);
+    const usersRef = db.collection('articles').where("articleID", "==", Number(uid));
 
     await usersRef.get()
     .then((snapshot) => {
@@ -147,11 +156,11 @@ async function getArticle(name, title){
 
 
 
-async function addLike(name, title){
+async function addLike(uid){
 
     let added = true;
-    const articlesRef =  await db.collection('articles').where("name", "==", name).where("title", "==", title).get();
-    const article = await getArticle(name, title);
+    const articlesRef =  await db.collection('articles').where("articleID", "==", Number(uid)).get();
+    const article = await getArticle(uid);
     const numLikes = Number(article.likes) + 1;
 
     const doc = articlesRef.docs[0];
@@ -175,10 +184,10 @@ async function addLike(name, title){
 }
 
 
-async function approveArticle(name, title){
+async function approveArticle(uid){
 
     let added = true;
-    const articlesRef = await db.collection('articles').where("name", "==", name).where("title", "==", title).get();
+    const articlesRef = await db.collection('articles').where("articleID", "==", Number(uid)).get();
 
     const doc = articlesRef.docs[0];
 

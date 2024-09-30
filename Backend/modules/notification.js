@@ -20,10 +20,19 @@ async function getAllNotifications(uid){
 
 
 async function appendNotifications(array, message, user, type, location, incident_image){
-    var count = 0;
+    
 
     //Get the last number of the appended notification
     const q = db.collection('notifications'); // Limit to only the most recent document
+
+    const response = await q.orderBy("notificationID", "desc").get();
+    var count = 0;
+    if( response.docs.length > 0){
+        count = Number(response.docs[0].data().alertID)
+    }
+    
+    count = count + 1
+
     await q.get()
     .then((querySnapshot) => {
         if (!querySnapshot.empty) {
