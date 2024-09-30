@@ -411,10 +411,10 @@ app.delete('/FAQ/:FAQID', async (req, res)=>{
 
 
 //Add a FAQ
-app.post('/FAQ/:uid', async (req, res)=>{
-    const uid = req.params['uid'];
+app.post('/FAQ', async (req, res)=>{
+    const FAQ = req.body;
 
-    if( await addFAQ(uid)){
+    if( await addFAQ(FAQ)){
         res.status(200).send("Added FAQ");
     }else{
         res.status(404).send("Unable to add FAQ");
