@@ -35,7 +35,7 @@ async function sendAnnouncement(){
 
     try {
         const uid = window.localStorage.getItem('uid')
-        const response = await fetch(`http://localhost:8080/announcement/${uid}`, {
+        const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/announcement/${uid}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

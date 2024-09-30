@@ -45,7 +45,7 @@ cancelBtn.addEventListener('click', async()=>{
     clearInterval(intervalID);
     cancelBtn.disabled = true;
     sendBtn.disabled = true;
-    //window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/dashboardtest.html";
+    window.location.href = "./dashboardtest.html";
 });
 
 safeBtn.addEventListener('click', async ()=>{

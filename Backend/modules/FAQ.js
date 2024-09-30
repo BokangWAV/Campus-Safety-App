@@ -108,7 +108,7 @@ async function addFAQ(FAQ){
     const response = await verifyRef.orderBy("FAQID", "desc").get();
     var count = 0;
     if( response.docs.length > 0){
-        count = Number(response.docs[0].data().alertID)
+        count = Number(response.docs[0].data().FAQID)
     }
     
     count = count + 1
