@@ -37,72 +37,48 @@
       <li><a href="request.html">Requests</a></li>
       <li><a href="ai-page.html">ChatBot</a></li>
       <li><a href="unavailable.html">Contact Security</a></li>
-      <!-- <li><a href="resources.html">Safety Resources</a></li> -->
+      
     </ul>
   </div>
-
-  <!-- Requests Container -->
+<div class="main-container" style="opacity: 0.4;">
   <div class="dashboard-container">
 
-    <!-- Header -->
     <div class="dashboard-header">
-      <h1>User Requests</h1>
-      <p>View and manage all user requests.</p>
+      <h1>Requests</h1>
+      <p>View, manage and review all user articles.</p>
     </div>
 
-    <!-- Pending Requests Section -->
-    <div class="requests-section">
-      <h2>Pending Requests</h2>
+    <div class="pending-section">
+      <h2>Pending articles</h2>
+      <p>Review and approve articles to be posted in the site.</p>
       
-      <!-- Request Item -->
-      <div class="dashboard-card pending-request">
-        <h3>Alert Request</h3>
-        <p>User: John Doe</p>
-        <p>Requested On: August 25, 2024</p>
-        <p>Details: Request to issue a campus-wide alert for a suspicious individual sighted near the library.</p>
-        <a href="#">Review Request</a>
-      </div>
-
-      <!-- Request Item -->
-      <div class="dashboard-card pending-request">
-        <h3>Article Publication Request</h3>
-        <p>User: Jane Smith</p>
-        <p>Requested On: August 24, 2024</p>
-        <p>Details: Request to publish an article on fire safety measures for campus residents.</p>
-        <a href="#">Review Request</a>
-      </div>
-
-      <!-- Add more pending request items as needed -->
-
     </div>
 
-    <!-- Accepted Requests Section -->
-    <div class="requests-section">
-      <h2>Accepted Requests</h2>
+    <div class="approved-section">
+      <h2>Approved articles</h2>
       
-      <!-- Request Item -->
-      <div class="dashboard-card accepted-request">
-        <h3>Alert Request</h3>
-        <p>User: Alex Johnson</p>
-        <p>Requested On: August 23, 2024</p>
-        <p>Details: Request to issue a campus-wide alert for a weather warning.</p>
-        <a href="#">View Details</a>
-      </div>
-
-      <!-- Add more accepted request items as needed -->
-
     </div>
-
+  </div>
   </div>
 
-  <script src="/scripts/dashboard.js"></script>
+  <div id="preloader"></div>
+
+  <script src="/scripts/request.js" type="module"></script>
   <script>
     function toggleMobileMenu() {
         const menu = document.getElementById('headerMenu');
         menu.classList.toggle('active');
     }
-  </script>
-
+    
+    function toggleDropdown() {
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        dropdownMenu.classList.toggle('active');
+    }
+    
+    function triggerAlert(type) {
+        alert(type + " Alert triggered!");
+    }
+      </script>
 </body>
 
 </html>
