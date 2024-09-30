@@ -100,7 +100,7 @@ async function addArticle(uid, article){
         await usersRef.get().then(snapshot => {
             if (!snapshot.empty) {
                 snapshot.forEach(doc =>{
-                    idArray.push(doc.id);
+                    if(doc.id != uid)idArray.push(doc.id);
                 })
             }
         });

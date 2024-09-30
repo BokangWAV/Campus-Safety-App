@@ -6,12 +6,19 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('Form submit event fired'); // Debugging line
   
       const updatedUser = {
-        firstName: document.getElementById('race').value,
-        lastName: document.getElementById('race').value,
+        firstName: document.getElementById('firstname').value,
+        lastName: document.getElementById('lastname').value,
         race: document.getElementById('race').value,
         phoneNumber: document.getElementById('phoneNumber').value,
         age: document.getElementById('age').value
       };
+
+      //console.log('Processed user data:', user);
+      window.localStorage.setItem('userFirstName', document.getElementById('firstname').value)
+      window.localStorage.setItem('userLastName', document.getElementById('lastname').value)
+      window.localStorage.setItem('userAge', document.getElementById('age').value)
+      window.localStorage.setItem('userRace', document.getElementById('race').value)
+      window.localStorage.setItem('userPhoneNumber', document.getElementById('phoneNumber').value)
   
       try {
         const uid = window.localStorage.getItem('uid');

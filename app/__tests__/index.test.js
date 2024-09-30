@@ -12,6 +12,27 @@ process.env.BASE64_ENCODED_SERVICE_ACCOUNT = Buffer.from(JSON.stringify({
     "client_x509_cert_url": "https://mock-cert-url"
 })).toString('base64');
 
+jest.mock('firebase-admin', () => {
+    const mFirestore = {
+        collection: jest.fn(() => ({
+            doc: jest.fn(() => ({
+                set: jest.fn(),
+                get: jest.fn(),
+                update: jest.fn(),
+                delete: jest.fn(),
+            })),
+        })),
+    };
+    return {
+        initializeApp: jest.fn(),
+        credential: {
+            cert: jest.fn(),
+        },
+        firestore: jest.fn(() => mFirestore),
+    };
+});
+
+
 // app/__tests__/index.test.js
 const request = require('supertest');
 const app = require('../../Backend/index'); // Adjust the path if necessary

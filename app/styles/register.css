@@ -119,5 +119,31 @@ body{
     margin-right: 30px;
 }
 
+.GenderSelect{
+  width: 100%;
+  height: 43px;
+  background-color: #f2f2f2;
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  color: #808080;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 100;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  appearance: none;
+  outline: none;
+}
 
+.GenderSelect:focus{
+  background-color: #f2f2f2;
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
 
+.GenderSelect option{
+  color: #000000;
+  font-weight: 100;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}

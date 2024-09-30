@@ -14,8 +14,14 @@ module.exports = {
         '!app/scripts/main.js',
         '!app/scripts/profiledata.js',
         '!app/scripts/script.js',
+        '!app/scripts/ai.js',
+        '!app/scripts/form-submit.js',
+        '!app/scripts/summary.js',
+        '!Backend/index.js',
         '!Backend/modules/notification.js',
-        '!Backend/index.js',// Exclude 'index.js' from 'Backend'
+        '!Backend/modules/article.js',
+        '!Backend/modules/users.js',
+        '!Backend/modules/report.js',
         '!**/node_modules/**', // Exclude node_modules
         '!**/test/**', // Exclude test files if you want
         '!**/coverage/**', // Exclude coverage folder
@@ -29,5 +35,7 @@ module.exports = {
         '^https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js$': '<rootDir>/app/__mocks__/firebase-firestore.js',
         '^https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js$': '<rootDir>/app/__mocks__/firebase-auth.js',
         '^https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js$': '<rootDir>/app/__mocks__/firebase-storage.js',
+        '^https://www.gstatic.com/firebasejs/10.13.0/firebase-vertexai-preview.js$': '<rootDir>/app/__mocks__/firebase.js',
+
     }
   };  
