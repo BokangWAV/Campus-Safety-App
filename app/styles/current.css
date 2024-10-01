@@ -688,10 +688,13 @@ body {
 
 
 .FullAreYouSure .AreUSureDive .AreUSureBtns{
-    position: relative;
-    top: 20px;
-    left:450px;
-    width: fit-content;
+    height:35%;
+    background-color: #f4f6f9;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .FullAreYouSure .AreUSureDive .AreUSureBtns .AreUSureCancel{
@@ -704,11 +707,12 @@ body {
     color: #f4f6f9;
     font-size: 15px;
     margin-left: 4px;
+    margin-right: 10px;
 }
 
 
 .FullAreYouSure .AreUSureDive .AreUSureBtns .AreUSureChande{
-    background-color: #142f41;
+    background-color: #2EFF2E;
     padding: 10px;
     padding-left: 15px;
     padding-right: 15px;
