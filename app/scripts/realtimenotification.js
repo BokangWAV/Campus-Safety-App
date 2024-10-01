@@ -1,44 +1,67 @@
 
 
-let notification
+let sendNotificationVar
 
-function showNotifications(heading, body){
+function showNotifications(heading, body, id){
+  if (Notification.permission === "granted") {
+    sendNotificationVar = new Notification(`${heading}`, {
+        body: `${body}`,
+        icon: "./assets/Undraw/send.png",
+        vibrate: [200, 100, 200],
+        tag: `${id}`
+    });
+  }else{
     Notification.requestPermission()
     .then(perm=>{
+      console.log("sending Notification1")
+      console.log(perm)
         if(perm === "granted"){
-            notification = new Notification(`${heading}`, {
+          console.log("sending Notification")
+            sendNotificationVar = new Notification(`${heading}`, {
                 body: `${body}`,
                 icon: "./assets/Undraw/send.png",
                 vibrate: [200, 100, 200], // Vibration pattern (mobile devices)
+                tag: `${id}`
             })
         }
         
     })
+  }
 }
 
 async function sendNotification(){
 
     try {
+      //console.log("Getting")
         const uid = window.localStorage.getItem('uid');
-        await fetch(`http://localhost:8080/notifications/Unseen/${uid}`, {
+        await fetch(`https://sdp-campus-safety.azurewebsites.net/notifications/Unseen/${uid}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(alert),
           })
         .then((reponse) => {return reponse.json() })
         .then((data)=>{
+          console.log("Found new notification")
            data.forEach((elem)=>{
+                console.log(elem)
                 const heading = `New ${elem.type}`;
                 var body;
                 if( elem.type == "announcement"){
-                    body = elem.message.split(',')[0]
+                  var tempBody = elem.message.split(',')[1];
+                  if(tempBody.length > 30){
+                    body = tempBody.slice(0, 25) + "...";
+                  }else{
+                    body = tempBody;
+                  }
                 }else{
                     body = elem.message
                 }
-
-                showNotifications(heading, body);
+                console.log(heading)
+                console.log(body)
+                
+                showNotifications(heading, body, elem.notificationID);
+                console.log("Notification sent")
            })
         }).catch((error)=>{
             console.error(error)

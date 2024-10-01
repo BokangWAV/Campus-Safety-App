@@ -234,6 +234,7 @@
 
 
     async function submitReport() {
+      
       const reportBtn = document.getElementById("submit");
       reportBtn.disabled = true;
       reportBtn.innerText = "Submitting"
@@ -296,9 +297,11 @@
         //await db.collection('reports').add(reportData);
         //alert("Report submitted successfully!");
 
+
         reportBtn.innerText = "Submit Report"
         reportBtn.style.backgroundColor = "#1a3e57"
         reportBtn.disabled = false;
+
     }
 
     async function getLocation() {
@@ -547,3 +550,12 @@
 </body>
 
 </html>
+
+
+
+
+      
+
+
+
+      
