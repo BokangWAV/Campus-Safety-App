@@ -19,6 +19,14 @@ document.addEventListener('DOMContentLoaded', function() {
       window.localStorage.setItem('userAge', document.getElementById('age').value)
       window.localStorage.setItem('userRace', document.getElementById('race').value)
       window.localStorage.setItem('userPhoneNumber', document.getElementById('phoneNumber').value)
+
+      if(window.localStorage.getItem('userProfile') != ""){
+        document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
+    }
+    if(window.localStorage.getItem('userRole') == "manager"){
+      document.getElementById('managerAlert').style.display = 'flex'
+      document.getElementById('managerRequests').style.display = 'flex'
+    }
   
       try {
         const uid = window.localStorage.getItem('uid');

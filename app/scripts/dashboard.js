@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 window.localStorage.setItem('userGender', user.gender)
                 window.localStorage.setItem('userPhoneNumber', user.phoneNumber)
                 window.localStorage.setItem('userProfile', user.profilePicture)
+                window.localStorage.setItem('userRole', user.role)
 
                 if(user.profilePicture != ""){
                     document.getElementById('profileDisplay').src = user.profilePicture;
@@ -145,15 +146,6 @@ function buildUserPage(){
 
     document.querySelector(".dashboard-container").appendChild(content);
 
-    const circleDiv2 = document.createElement('div');
-    circleDiv2.id = 'circleDiv2';
-    circleDiv2.className = 'circleDiv2';
-    circleDiv2.addEventListener('click', ()=>{
-        window.location.href = 'announcement.html'
-    });
-
-    const circleDivImg2 = document.createElement('img');
-    circleDivImg2.src = './assets/Undraw/announcement (1).png'
 
     const circleDiv1 = document.createElement('div');
     circleDiv1.id = 'circleDiv1';
@@ -166,10 +158,8 @@ function buildUserPage(){
     circleDivImg1.src = './assets/Undraw/Chatbot.png'
 
     circleDiv1.appendChild(circleDivImg1);
-    circleDiv2.appendChild(circleDivImg2);
 
     document.querySelector(".dashboard-container").appendChild(circleDiv1);
-    document.querySelector(".dashboard-container").appendChild(circleDiv2);
 }
 
 function notSignedInPage(){

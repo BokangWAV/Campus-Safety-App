@@ -1,5 +1,5 @@
 const { appendNotifications } = require('./notification.js');
-const { db } = require('./init.js');
+const {db, FieldValue} = require('./init.js');
 
 
 async function addReport(uid, report){
@@ -10,7 +10,7 @@ async function addReport(uid, report){
     const response = await userRef.orderBy("reportID", "desc").get();
     var count = 0;
     if( response.docs.length > 0){
-        count = Number(response.docs[0].data().alertID)
+        count = Number(response.docs[0].data().reportID)
     }
     
     count = count + 1
@@ -21,7 +21,7 @@ async function addReport(uid, report){
         location: report.location,
         urgencyLevel: report.urgencyLevel,
         status: report.status,
-        timestamp: report.timestamp,
+        timestamp: FieldValue.serverTimestamp(),
         imageUrls: report.imageUrls,
         videoUrls: report.videoUrls,
         uid: uid,

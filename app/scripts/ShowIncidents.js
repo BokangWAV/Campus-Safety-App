@@ -533,7 +533,7 @@ summaryDiv.addEventListener('click', async(event) => {
 async function rescuedUser(index){
   console.log(alerts[index].alertID)
   try {
-    await fetch(`http://localhost:8080/alert/${alerts[index].alertID}`,{
+    await fetch(`https://sdp-campus-safety.azurewebsites.net/alert/${alerts[index].alertID}`,{
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -624,6 +624,7 @@ PopUpRemoveButton.addEventListener('click', async ()=>{
 });
 
 
+
 function nearestBuilding( lat, lon) {
   let point = []
   let tempPoint = []
@@ -674,6 +675,7 @@ async function areYouSure(index){
   })
   document.getElementById('AreUSureChande').addEventListener('click', async ()=>{
     await rescuedUser(index);
+    FullAreYouSure.click();
   })
 }
 
@@ -692,6 +694,11 @@ const unsubscribe = onSnapshot(q, (querySnapshot) => {
 
 FullAreYouSure.addEventListener('click', ()=>{
   FullAreYouSure.style.display = 'none'
+})
+
+
+areUSureDiv.addEventListener('click', ()=>{
+  areUSureDiv.style.display = 'none';
 })
 
 

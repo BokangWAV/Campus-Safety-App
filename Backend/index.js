@@ -18,7 +18,7 @@ const { addReport, getAllReports, getUserReport, removeReport } = require('./mod
 const { getAllAlerts, addAlert, deleteReport, updateViewAlert, managerViewAlert } = require('./modules/alert.js');
 
 //Get all the functions to use for Notifications
-const { getAllNotifications, getAllReadNotifications, getAllUnreadNotifications, updateNotificationStatus } = require('./modules/notification.js');
+const { getAllNotifications, getAllReadNotifications, getAllUnreadNotifications, updateNotificationStatus, getUnSeenNotifications } = require('./modules/notification.js');
 
 //Get all the functions to use for FAQs
 const {getAllFAQ, getUserFAQ, respondFAQ, displayFAQ, deleteFAQ,  addFAQ} = require('./modules/FAQ.js');
@@ -351,6 +351,15 @@ app.put('/notifications/status/:uid', async (req, res)=>{
     }
 });
 
+//Get the notifications that have not been read
+app.get('/notifications/Unseen/:uid', async (req, res)=>{
+    const uid = req.params['uid']
+
+    const response = await getUnSeenNotifications(uid)
+
+    res.json(response);
+})
+
 
 
 
@@ -411,10 +420,10 @@ app.delete('/FAQ/:FAQID', async (req, res)=>{
 
 
 //Add a FAQ
-app.post('/FAQ/:uid', async (req, res)=>{
-    const uid = req.params['uid'];
+app.post('/FAQ', async (req, res)=>{
+    const FAQ = req.body;
 
-    if( await addFAQ(uid)){
+    if( await addFAQ(FAQ)){
         res.status(200).send("Added FAQ");
     }else{
         res.status(404).send("Unable to add FAQ");
@@ -435,6 +444,8 @@ app.post('/announcement/:uid', async (req, res)=>{
     }
     
 });
+
+
 
 
 

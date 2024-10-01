@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-
 
 const firebaseConfig = {
     apiKey: "AIzaSyCLDopG2959mh9Wtl3nDM0FAWZBNc3GGLo",
@@ -19,6 +18,7 @@ const auth = getAuth(app);
 
 let currentUserName = "";
 let currentUserSurname = "";
+let userUID = 0;
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -30,6 +30,7 @@ onAuthStateChanged(auth, (user) => {
             const separateDetails = user.displayName.split(" ");
             currentUserName = separateDetails[0] || "Unknown";
             currentUserSurname = separateDetails[1] || "Unknown";
+            userUID = user.uid;
         }
         console.log("First Name:", currentUserName);
         console.log("Surname:", currentUserSurname);
@@ -41,34 +42,78 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-document.addEventListener("DOMContentLoaded", ()=>{
-    
+document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('articleForm').addEventListener('submit', function(event) {
         event.preventDefault();
+        
+        if (!currentUserName) {
+            alert("You must be logged in to post an article.");
+            return;
+        }
+
         const title = document.getElementById('articleTitle').value;
         const content = document.getElementById('articleContent').value;
-    
+
         const data = {
             content: content,
             title: title,
-            likes: 0,
-            name: currentUserName,
-            surname: currentUserSurname
+            surname: currentUserSurname,
+            name: currentUserName
         }
-        
-        postArticles(data);
-        alert("Article posted!");
+
+        console.log(JSON.stringify(data));
+
+        // if(userUID == 0){
+        //     alert("You cannot post if you are not logged in");
+        // }else{
+        disableButton();
+        postArticles(data, userUID)
+            .then(() => {
+                document.getElementById('articleTitle').value = '';
+                document.getElementById('articleContent').value = '';
+            })
+            .catch(error => {
+                console.error("Error posting article:", error);
+                alert("Failed to post article. Please try again.");
+            })
+            .finally(() => {
+                enableButton();
+            });
+        // }
   });
 
 })
 
-async function postArticles(data) {
-    const articlesCollection = collection(db, 'articles');
+function disableButton() {
+    const button = document.querySelector("#post");
+    button.disabled = true;  
+    button.innerHTML = "Posted!";  
+}
 
+function enableButton() {
+    const button = document.querySelector("#post");
+    button.disabled = false;
+    button.innerHTML = "Submit Article";
+}
+
+async function postArticles(data, uid) {
     try {
-        const docRef = await addDoc(articlesCollection, data);
-        console.log('Document written with ID: ', docRef.id);
+        const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/articles/${uid}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'applidcation/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            alert("Article posted!");
+        } else {
+            // console.error("Error submitting report:", error);
+            alert("Error posting articles. Please try again.");
+        }
     } catch (error) {
-        console.error('Error adding document:', error);
+        console.error(error);
     }
+
 }

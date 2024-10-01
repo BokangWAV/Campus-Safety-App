@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Manager FAQ - Campus Safety App</title>
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link href="/styles/dashboard.css" rel="stylesheet">
+  <style>
+    #approve:hover{
+      opacity: 0.7;
+    }
+
+    #delete:hover{
+      opacity: 0.7;
+    }
+
+    .btnApproved{
+      padding: 20px;
+      background-color: #81cdf0;
+      color: cadetblue;
+      border: 2px black;
+      border-radius: 5px;
+      justify-content: center;
+    }
+
+    .btnApproved:hover{
+      color: black;
+      opacity: 0.1;
+      background-color: red;
+    }
+
+    .approvedFAQ{
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <h2>Campus Safety</h2>
+    <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="headerMenu">
+      <li><a href="/dashboardtest.html" class="active">Dashboard</a></li>
+      <li><a href="alerts.html">Emergency Alerts</a></li>
+      <li><a href="report.html">Report an Incident</a></li>
+      <li><a>Articles</a></li>
+      <!-- <li><a href="resources.html">Safety Resources</a></li> -->
+      <li><a href="contact.html">Contact Security</a></li>
+    </ul>
+
+    <div class="dropdown-menu" id="dropdownMenu">
+      <ul>
+        <li><a href="item1.html">Item 1</a></li>
+        <li><a href="item2.html">Item 2</a></li>
+        <li><a href="item3.html">Item 3</a></li>
+      </ul>
+    </div>
+  </div>
+
+   <div class="main-container" style="opacity: 0.4;">
+  <div class="dashboard-container">
+    <div class="dashboard-header">
+      <h1>FAQ</h1>
+      <p>Answer any asked questions.</p>
+    </div>      
+  </div>
+
+  <div class="dashboard-content">
+    <div class="pendingFAQ">
+      <h2>Pending FAQ</h2>
+    </div>
+    <div class="approvedFAQ">
+      <h2>Approved FAQ</h2>
+        <div class="approvedCards" style="display: inline-block;"></div>
+    </div>
+  </div>
+
+  </div>
+
+  <div id="preloader"></div>
+
+  <script src="/scripts/faqManager.js" type="module"></script>
+  <!-- <script src="/scripts/main.js"></script> -->
+  <script>
+    
+function toggleMobileMenu() {
+    const menu = document.getElementById('headerMenu');
+    menu.classList.toggle('active');
+}
+
+function toggleDropdown() {
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    dropdownMenu.classList.toggle('active');
+}
+
+function triggerAlert(type) {
+    alert(type + " Alert triggered!");
+}
+  </script>
+
+</body>
+
+</html>

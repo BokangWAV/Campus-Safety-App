@@ -45,7 +45,7 @@ cancelBtn.addEventListener('click', async()=>{
     clearInterval(intervalID);
     cancelBtn.disabled = true;
     sendBtn.disabled = true;
-    //window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/dashboardtest.html";
+    window.location.href = "./dashboardtest.html";
 });
 
 safeBtn.addEventListener('click', async ()=>{
@@ -139,3 +139,12 @@ function getLocation() {
 
 
 window.onload = getLocation()
+
+
+if(window.localStorage.getItem('userProfile') != ""){
+  document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
+}
+if(window.localStorage.getItem('userRole') == "manager"){
+  document.getElementById('managerAlert').style.display = 'flex'
+  document.getElementById('managerRequests').style.display = 'flex'
+}
