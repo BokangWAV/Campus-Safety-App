@@ -18,6 +18,7 @@ var currentType = typeDropdown.value;
 var currentBuilding = locationDropdown.value;
 var APIBuildings;
 var buildingMap = {};
+var maintanenceMap = {}
 var TempReports = [];
 var TempAlerts = [];
 var currentReport;
@@ -56,7 +57,7 @@ async function displayPoints() {
                 temp['image'] = elem.imageUrls[0] || "";
                 temp['video'] = elem.videoUrls[0] || "";
                 temp['description'] = elem.description;
-                console.log(elem)
+                //console.log(elem)
                 const date = new Date(elem.timestamp._seconds * 1000);
                 const dateOptions = { year: 'numeric', month: 'long', day: '2-digit' };
                 const formattedDate = date.toLocaleDateString(undefined, dateOptions);  // Date in a human-readable format
@@ -68,15 +69,16 @@ async function displayPoints() {
                   const formattedDate = date.toLocaleDateString(undefined, dateOptions);
                   elem['time'] = formattedDate
                   TempReports.push(elem)
-                  console.log(temp)
+                  //console.log(temp)
                 }
                 
             });
 
             TempReports.forEach(elem=>{
-              console.log(elem)
+              //console.log(elem)
                 //Add the incident to the buildingMap. To ensure we have a counter of the incidents
                 buildingMap[elem.location].push(elem);
+                maintanenceMap[elem.location] = [];
                 
             });   
         })
@@ -95,7 +97,7 @@ async function displayPoints() {
       .then(response=>{return response.json()})
       .then(data=>{
           data.forEach(elem=>{
-            console.log(elem);
+            //console.log(elem);
             if(elem.status == "processing"){
               elem.location = `${nearestBuilding(Number(elem.lat), Number(elem.lon))}`
               alerts.push(elem);
@@ -122,7 +124,7 @@ async function displayPoints() {
     });
     
     
-    
+    getMaintanence();
     displayReports();
     plotAlerts();
     showPosition();
@@ -194,7 +196,11 @@ async function plotAlerts(){
       alerts.forEach((elem)=>{
         const lat = Number(elem.lat);
         const lon = Number(elem.lon);
-        plotLocation(lat, lon, ` ${elem.name} ${elem.surname} `, L.icon({
+        const date = new Date(elem.alertDate._seconds * 1000);
+        const dateOptions = { year: 'numeric', month: 'long', day: '2-digit' };
+        const formattedDate = date.toLocaleDateString(undefined, dateOptions);  // Date in a human-readable format
+        const formattedTime = date.toLocaleTimeString();
+        plotLocation(lat, lon, ` <strong>${elem.firstName} ${elem.lastName}</strong> <br> ${formattedDate} ${formattedTime} `, L.icon({
           iconUrl: './assets/Undraw/alert2.png',
           iconSize: [25, 25],
           iconColor: 'blue',
@@ -318,9 +324,13 @@ async function displayAlerts(){
       const extraAlertDiv = document.createElement('div');
       extraAlertDiv.id = "extra";
       extraAlertDiv.className = "extra";
+      var temp = "";
+      if(elem.age>0){
+        temp = elem.age +" years";
+      }
       extraAlertDiv.innerHTML = `
         <p id="race" class="race">${elem.race}</p>
-        <p id="age" class="age"> ${elem.age +" years"}</p>
+        <p id="age" class="age"> ${temp}</p>
         <p id="phoneNumber" class="phoneNumber">${elem.phoneNumber}</p>
       `;
 
@@ -356,6 +366,13 @@ async function displayAlerts(){
 async function displayReports(){
   currentType = typeDropdown.value;
   currentBuilding = locationDropdown.value;
+
+  buildingMap[currentBuilding].sort((a, b) => {
+    if (b.timestamp._seconds !== a.timestamp._seconds) {
+        return b.timestamp._seconds - a.timestamp._seconds;
+    }
+
+    return b.timestamp._nanoseconds - a.timestamp._nanoseconds;});
 
   //First remove Anything that is on the summary
   if(summaryDiv.querySelector('div[id="Summary-Section"]')){
@@ -568,8 +585,8 @@ function displayPopUp(index){
 
   const PopUpExtra = document.getElementById('PopUp-Extra');
   PopUpExtra.innerHTML = `
-    <p><strong>geoLocation:</strong>&nbsp   ${currentReport.geoLocation}</p>
-    <p><strong>time:</strong>&nbsp  21 September</p>
+    <p><strong>Location:</strong>&nbsp   ${currentReport.location}</p>
+    <p><strong>Date:</strong>&nbsp  ${currentReport.time}</p>
     <p><strong>status:</strong>&nbsp  ${currentReport.status}</p>
     <p><strong>Urgency Level:</strong>&nbsp  ${currentReport.urgencyLevel}</p>
   `;
@@ -696,10 +713,6 @@ FullAreYouSure.addEventListener('click', ()=>{
   FullAreYouSure.style.display = 'none'
 })
 
-
-areUSureDiv.addEventListener('click', ()=>{
-  areUSureDiv.style.display = 'none';
-})
 
 
 
@@ -1570,3 +1583,63 @@ TempAlerts = [
     "alert_no": 1
   }
 ]
+
+
+
+setInterval(async ()=>{
+  //Then fetch all the alerts
+  try {
+    await fetch('https://sdp-campus-safety.azurewebsites.net/alert')
+    .then(response=>{return response.json()})
+    .then(data=>{
+      var tempData = [];
+      data.forEach((elem)=>{
+        if(elem.status == "processing"){
+          tempData.push(elem)
+        }
+      })
+      
+      console.log(tempData.length);
+      console.log(alerts.length)
+        if(tempData.length > alerts.length && currentType == 'Alerts'){
+          alerts = []
+          tempData.forEach(elem=>{
+            console.log(elem);
+            if(elem.status == "processing"){
+              console.log("pushing element");
+              elem.location = `${nearestBuilding(Number(elem.lat), Number(elem.lon))}`
+              alerts.push(elem);
+            }
+          });
+
+          plotAlerts();
+          showPosition();
+          displayAlerts();
+        }
+    })
+    .catch(error=>{
+        console.error("Error getting reports, API return with status: ", error);
+    })
+    
+    
+  } catch (error) {
+      console.error(error);
+  }
+}, 30000)
+
+
+async function getMaintanence(){
+  const url = 'https://wiman.azurewebsites.net/api/maintenance/issue-reports'; 
+  const token = '_Th1$154v3ry$tr0ng@P!k3y';  
+
+  fetch(url, {
+      method: 'GET',
+      headers: {
+          'Authorization': `Bearer ${token}`,  
+          'Content-Type': 'application/json'
+      }
+  })
+      .then(response => response.json())  // Convert response to JSON
+      .then(data => console.log(data))     // Handle the data
+      .catch(error => console.error('Error:', error));  // Handle errors
+}
