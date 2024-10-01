@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded",async function () {
       document.getElementById('managerRequests').style.display = 'flex'
     }
 
+
     displayNotifications();
 
     // Example notifications array
@@ -207,6 +208,7 @@ async function displayNotifications(){
               //Show user profile
               //loadData()
               console.log("uploaded and updating user details....")
+
               
             }).catch((error)=>{
               console.error(error)

@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 
         let btn = document.createElement("button");
         btn.id = "submission";
-        btn.type = "button"; // Change to button type to prevent form submission
+        btn.type = "button";
         btn.textContent = "Submit FAQ";
         
         const faqQuestionContainer = document.querySelector(".faq-question");
@@ -104,14 +104,14 @@ document.addEventListener("DOMContentLoaded", async function() {
             let value = textArea.value;
 
             const data = {
-                question: value,
-                uid: userUID
+                question: value
             }
             
             disableButton();
             postFAQ(data, userUID)
                 .then(() => {
                     textArea.value = "";
+                    disableButton();
                 })
                 .catch(error => {
                     console.error("Error posting FAQ:", error);

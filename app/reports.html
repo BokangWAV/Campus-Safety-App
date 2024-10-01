@@ -14,6 +14,15 @@
   <link href="styles/dashboard.css" rel="stylesheet">
 
   <style>
+    .Submitting{
+      background-color: #668597;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
 
     form div {
       margin-bottom: 1.5rem;
@@ -40,7 +49,17 @@
       resize: vertical;
     }
 
+    
 
+    .Submitting:hover{
+      background-color: #668597;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
 
     .submit {
       background-color: #1a3e57;
@@ -87,6 +106,8 @@
 </head>
 
 <body>
+  
+
   <div class="header">
     <h2 style="cursor: pointer;" id="logo" >Campus Safety</h2>
     <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
@@ -218,7 +239,7 @@
       reportBtn.disabled = true;
       reportBtn.innerText = "Submitting"
       reportBtn.style.backgroundColor = "#316183"
-      console.log("Submiting");
+
       const geoLocation = document.getElementById("geoLocation").value;
       const description = document.getElementById("description").value;
       const location = document.getElementById("buildings").value;
@@ -275,12 +296,22 @@
 
         //await db.collection('reports').add(reportData);
         //alert("Report submitted successfully!");
+
+
         reportBtn.innerText = "Submit Report"
-      reportBtn.style.backgroundColor = "#1a3e57"
-      reportBtn.disabled = false;
+        reportBtn.style.backgroundColor = "#1a3e57"
+        reportBtn.disabled = false;
+
     }
 
     async function getLocation() {
+      if(window.localStorage.getItem('userProfile') != ""){
+        document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
+      }
+      if(window.localStorage.getItem('userRole') == "manager"){
+        document.getElementById('managerAlert').style.display = 'flex'
+        document.getElementById('managerRequests').style.display = 'flex'
+      }
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
           document.getElementById('geoLocation').value = position.coords.latitude + ", " + position.coords.longitude;

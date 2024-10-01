@@ -57,10 +57,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = {
             content: content,
             title: title,
-            likes: 0,
-            name: currentUserName,
             surname: currentUserSurname,
-            userID: userUID
+            name: currentUserName
         }
 
         console.log(JSON.stringify(data));

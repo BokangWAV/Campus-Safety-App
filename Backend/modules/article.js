@@ -61,7 +61,7 @@ async function addArticle(uid, article){
     const response = await usersRef.orderBy("articleID", "desc").get();
     var count = 0;
     if( response.docs.length > 0){
-        count = Number(response.docs[0].data().alertID)
+        count = Number(response.docs[0].data().articleID)
     }
     
     count = count + 1

@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async function(){
             
         sortList(articleList);
         console.log(articleList);
-        document.querySelector("#preloader").style.opacity = "0";
+        document.querySelector("#preloader").remove();
         document.querySelector(".main-container").style.opacity = "1";
         
         onAuthStateChanged(auth, (user) => {
@@ -73,9 +73,11 @@ document.addEventListener("DOMContentLoaded", async function(){
                             `${article.title} <sub><small><i>${article.likes} likes</i></small></sub>`,
                             author,
                             holder,
-                            hold
+                            hold,
+                            article.articleID
                         );
                     }
+
 
             } else {
                 // No user is signed in
@@ -83,7 +85,8 @@ document.addEventListener("DOMContentLoaded", async function(){
                     `<b>Ahh, there seems to be no articles.</b>`,
                     "If you have something in my mind, hit us up!",
                     "",
-                    ""
+                    "",
+                    0
                 );
                 console.log("No user is signed in");
                 currentUserName = "Unknown";
@@ -105,7 +108,7 @@ function sortList(list) {
     return list.sort((a, b) => b.likes - a.likes);
 }
 
-function createArticles(title, author, subtext, fullText){
+function createArticles(title, author, subtext, fullText, articleId){
     const dashboardContent = document.createElement("div");
     dashboardContent.classList.add("dashboard-content");    
 
@@ -122,31 +125,47 @@ function createArticles(title, author, subtext, fullText){
 
     const readDiv = document.createElement("div");
     readDiv.setAttribute("id", "read");
-    readDiv.textContent = subtext;
-
-    const likeBtn = document.createElement("button");
-    likeBtn.id = "like";
-    likeBtn.style.backgroundColor = "blue";    
+    readDiv.textContent = subtext + "... Read More";
 
     dashboardCard.addEventListener("mouseover", function() {
         readDiv.textContent = fullText;
     });
 
     dashboardCard.addEventListener("mouseout", function() {
-        if(subtext.length > 0){
-            readDiv.textContent = subtext + "... Read More";
-        }else{
-            readDiv.textContent = subtext;
-        }
+        readDiv.textContent = subtext + "... Read More";
     });
 
-    likeBtn.addEventListener("click", ()=>{
-        fetch(`https://sdp-campus-safety.azurewebsites.net/articles/like/${thisID}`, {
+    const likeBtn = document.createElement("button");
+    likeBtn.id = "like";
+    likeBtn.dataset.articleId = articleId;
+    likeBtn.type = "button";
+    likeBtn.style.backgroundColor = "blue"; 
+    likeBtn.style.padding = "1em";
+    likeBtn.textContent = "LIKE";
+    likeBtn.style.color = "whitesmoke";  
+    likeBtn.style.textDecoration = "none"
+
+    let buttonsContainer = document.createElement("div");
+    buttonsContainer.style.padding = "2em";
+    buttonsContainer.style.margin = "1em";
+    buttonsContainer.appendChild(likeBtn);
+
+    dashboardCard.appendChild(readDiv);
+    dashboardCard.appendChild(buttonsContainer);
+    dashboardContent.appendChild(dashboardCard);
+
+    document.body.appendChild(dashboardContent);
+
+    likeBtn.addEventListener("click", (event)=>{
+        fetch(`https://sdp-campus-safety.azurewebsites.net/articles/like/${event.target.dataset.articleId}`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'}
         }).then(response => {
             if(response.ok){
-                console.log("This article has been liked.");
+                event.target.disabled = true;
+                event.target.textContent = "LIKED";
+                event.target.style.backgroundColor = "#eef100"
+                
                 alert("This article has been liked.");
             }else{
                 console.error("Error", response.statusText);
@@ -156,10 +175,4 @@ function createArticles(title, author, subtext, fullText){
             console.error("Error:", error);
         })
     })
-
-    dashboardCard.appendChild(readDiv);
-    dashboardContent.appendChild(dashboardCard);
-    dashboardContent.appendChild(likeBtn);
-
-    document.body.appendChild(dashboardContent);
 }
