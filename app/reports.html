@@ -14,6 +14,15 @@
   <link href="styles/dashboard.css" rel="stylesheet">
 
   <style>
+    .Submitting{
+      background-color: #668597;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
 
     form div {
       margin-bottom: 1.5rem;
@@ -40,7 +49,17 @@
       resize: vertical;
     }
 
+    
 
+    .Submitting:hover{
+      background-color: #668597;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
 
     .submit {
       background-color: #1a3e57;
@@ -68,58 +87,98 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
-    @media (max-width: 800px) {
-      .dashboard-card {
-        padding: 1rem;
-      }
-    }
-
     .dashboard-card,
     .dashboard-card:hover {
       transform: none !important;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
     }
+
+    @media (max-width: 800px) {
+      .dashboard-card {
+        width: 100%;
+        padding: 10px;
+        padding-top: 15px;
+        margin: 0;
+      }
+
+      .dashboard-container{
+       
+        padding-right: 0px;
+        margin: 0;
+        margin-top: 10dvh;
+      }
+
+      #description{
+        width: 90%;
+        height: 20dvh;
+      }
+
+      #geoLocation{
+        width: 90%;
+      }
+
+      .dashboard-header{
+        margin: 0;
+        padding: 0;
+        width: 92%;
+      }
+
+      .dashboard-header h1{
+        margin: 0;
+        margin-top: 20px;
+        font-size: 35px;
+      }
+
+      .dashboard-header p{
+        font-size: 15px;
+      }
+      
+    }
+
+    
+
+
+    
+
+    
   </style>
 </head>
 
 <body>
-  <div class="header">
-    <h2>Campus Safety</h2>
-    <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <ul id="headerMenu">
-      <li><a href="dashboardtest.html">Dashboard</a></li>
-      <li><a href="profile.html">Profile Page</a></li>
-      <li><a href="alerts.html">Emergency Alerts</a></li>
-      <li><a href="reports.html">Report an Incident</a></li>
-      <li><a href="summary.html">Reports Summary</a></li>
-      <li><a href="article.html">Articles</a></li>
-      <li><a href="request.html">Requests</a></li>
-      <li><a href="ai-page.html">ChatBot</a></li>
-      <li><a href="unavailable.html">Contact Security</a></li>
-    </ul>
-  </div>
+  
 
   <div class="header">
-    <h2>Campus Safety</h2>
-    <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
+    <h2 style="cursor: pointer;" id="logo" >Campus Safety</h2>
+    <div class="mobile-nav-toggle" id="mobile-nav-toggle">
       <span></span>
       <span></span>
       <span></span>
     </div>
     <ul id="headerMenu">
-      <li><a href="dashboardtest.html">Dashboard</a></li>
-      <li><a href="profile.html">Profile Page</a></li>
-      <li><a href="alerts.html">Emergency Alerts</a></li>
-      <li><a href="reports.html">Report an Incident</a></li>
+      
+      <li><a href="current.html" id="managerAlert" style="display: none;">Emergency Alerts</a></li>
+      <li><a href="reports.html">Incident Report</a></li>
+      <li><a href="summary.html">Summary</a></li>
       <li><a href="article.html">Articles</a></li>
-      <li><a href="request.html">Requests</a></li>
-      <li><a href="ai-page.html">ChatBot</a></li>
+      <li><a href="request.html" id="managerRequests" style="display: none;">Requests</a></li>
       <li><a href="unavailable.html">Contact Security</a></li>
+      <li class="notifationer"><a href="notification.html"><img src="./assets/Undraw/notification.png" style="height: 24px; width: 24px; cursor: pointer;"></a></li>
+      <li class="profileDisplay"><a href="profile.html" ><img id="profileDisplay" src="./assets/Undraw/defaultpic.jpg" style="width: 33px; height: 33px; border-radius: 50%; border:3px solid #FFFFFF; margin-right: 22px;"></a></li>
+      <li><a href="notification.html" class="mobileNotification" id="mobileNotification">Notifications</a></li>
+      <li><a href="profile.html" class="MobileProfile" id="MobileProfile">Profile</a></li>
+
+      <!-- <li><a href="resources.html">Safety Resources</a></li> -->
+      
     </ul>
+
+    <!-- Dropdown Menu -->
+    <div class="dropdown-menu" id="dropdownMenu">
+      <ul>
+        <li><a href="item1.html">Item 1</a></li>
+        <li><a href="item2.html">Item 2</a></li>
+        <li><a href="item3.html">Item 3</a></li>
+      </ul>
+    </div>
   </div>
 
   <div class="dashboard-container">
@@ -166,6 +225,13 @@
             <label for="videoUpload">Upload Videos (optional):</label>
             <input type="file" id="videoUpload" accept="video/*" multiple>
           </div>
+          
+          <!-- Success Message (Initially Hidden) -->
+          <div class="dashboard-card" id="successMessage" style="display: none;">
+            <h2>Report Submitted Successfully!</h2>
+            <p>Your incident report has been submitted. Thank you for helping keep the campus safe!</p>
+            <a href="dashboardtest.html" class="submit">Back to Dashboard</a>
+          </div>
 
           <button type="submit" id="submit" class="submit Submitting">Submit Report</button>
         </form>
@@ -190,18 +256,29 @@
     const storage = firebase.storage();
 
     async function uploadFiles(files, folderName) {
-      const uploadPromises = Array.from(files).map(file => {
-        const storageRef = storage.ref(`${folderName}/${file.name}`);
-        return storageRef.put(file).then(snapshot => snapshot.ref.getDownloadURL());
+  const uploadPromises = Array.from(files).map(file => {
+    console.log('Uploading file:', file.name); 
+    const storageRef = storage.ref(`${folderName}/${file.name}`);
+    return storageRef.put(file)
+      .then(snapshot => {
+        console.log('Uploaded file:', file.name); 
+        return snapshot.ref.getDownloadURL();
+      })
+      .catch(error => {
+        console.error('Error uploading file:', file.name, error); 
       });
-      return Promise.all(uploadPromises);
-    }
+  });
+  return Promise.all(uploadPromises);
+}
+
 
     async function submitReport() {
+      
       const reportBtn = document.getElementById("submit");
       reportBtn.disabled = true;
       reportBtn.innerText = "Submitting"
-      console.log("Submiting");
+      reportBtn.style.backgroundColor = "#316183"
+
       const geoLocation = document.getElementById("geoLocation").value;
       const description = document.getElementById("description").value;
       const location = document.getElementById("buildings").value;
@@ -258,11 +335,22 @@
 
         //await db.collection('reports').add(reportData);
         //alert("Report submitted successfully!");
-      reportBtn.innerText = "Submit Report"
+
+
+        reportBtn.innerText = "Submit Report"
+        reportBtn.style.backgroundColor = "#1a3e57"
         reportBtn.disabled = false;
+
     }
 
     async function getLocation() {
+      if(window.localStorage.getItem('userProfile') != ""){
+        document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
+      }
+      if(window.localStorage.getItem('userRole') == "manager"){
+        document.getElementById('managerAlert').style.display = 'flex'
+        document.getElementById('managerRequests').style.display = 'flex'
+      }
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
           document.getElementById('geoLocation').value = position.coords.latitude + ", " + position.coords.longitude;
@@ -409,7 +497,7 @@
           "building_name": "North West Engineering Building",
         },
         {
-          "building_name": "chool of Mechanical, Industrial and Aeronautical Engineering"
+          "building_name": "School of Mechanical, Industrial and Aeronautical Engineering"
         },
         {
           "building_name": "Solomon Mahlangu House"
@@ -496,8 +584,41 @@
     window.onload = function () {
       getLocation();
     };
+
+    document.getElementById('mobile-nav-toggle').addEventListener('click',() =>{
+        const menu = document.getElementById('headerMenu');
+        menu.classList.toggle('active');
+    });
+
+    function toggleDropdown() {
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        dropdownMenu.classList.toggle('active');
+    }
+
+    if(window.localStorage.getItem('userProfile') != ""){
+        document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
+    }
+    if(window.localStorage.getItem('userRole') == "manager"){
+        document.getElementById('managerAlert').style.display = 'flex'
+        document.getElementById('managerRequests').style.display = 'flex'
+    }
+
+    document.getElementById('logo').addEventListener('click', ()=>{
+        window.location.href = 'dashboardtest.html';
+    })
   </script>
+
+<script src="./scripts/realtimenotification.js"></script>
 
 </body>
 
 </html>
+
+
+
+
+      
+
+
+
+      
