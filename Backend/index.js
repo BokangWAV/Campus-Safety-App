@@ -1,5 +1,5 @@
 require('dotenv').config();
-//const { processEvent } = require('./modules/events'); //New
+const { processEvent } = require('./modules/events'); //New
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -459,7 +459,7 @@ app.post('/announcement/:uid', async (req, res)=>{
     
 });
 
-//=============================================Event Section=========================================================//
+//============================================= EVENT SECTION =========================================================//
 
 app.post('/events', async (req, res) => {
     const event = req.body;  // The event data coming from the client
@@ -472,6 +472,27 @@ app.post('/events', async (req, res) => {
         res.status(500).send("Failed to process event");
     }
 });
+
+
+//============================================= MAINTANENCE SECTION ===============================================//
+app.get('/maintenance', async (req, res)=>{
+    const url = 'https://wiman.azurewebsites.net/api/venues'; 
+    const token = process.env.MAINTENACE_KEY;  
+
+    var response;
+
+    await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,  
+            'Content-Type': 'application/json'
+        }
+    }).then(async (data) =>{response = await data.json()})
+
+    res.json(response);
+})
+
+
 
 app.listen(port, ()=>{
     console.log(`Server running at http://localhost:${port}/`);
