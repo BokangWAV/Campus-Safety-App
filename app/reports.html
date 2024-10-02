@@ -595,9 +595,17 @@
         dropdownMenu.classList.toggle('active');
     }
 
+    if(window.localStorage.getItem('userProfile') != ""){
+        document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
+    }
+    if(window.localStorage.getItem('userRole') == "manager"){
+        document.getElementById('managerAlert').style.display = 'flex'
+        document.getElementById('managerRequests').style.display = 'flex'
+    }
+
     document.getElementById('logo').addEventListener('click', ()=>{
-            window.location.href = 'dashboardtest.html';
-        })
+        window.location.href = 'dashboardtest.html';
+    })
   </script>
 
 <script src="./scripts/realtimenotification.js"></script>
