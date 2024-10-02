@@ -14,6 +14,7 @@ const FullAreYouSure = document.getElementById('FullAreYouSure');
 let map;
 let incidents = [];
 let alerts = [];
+var namesOfBuildings  = [];
 var currentType = typeDropdown.value;
 var currentBuilding = locationDropdown.value;
 var APIBuildings;
@@ -120,7 +121,9 @@ async function displayPoints() {
 
     //API data is declared below the code and is the building data
     APIBuildings.forEach(elem=>{
-        plotBuildings(elem.latitude, elem.longitude, elem.building_name);
+      namesOfBuildings.push(elem.building_name);
+      maintanenceMap[elem.building_name] = [];
+      plotBuildings(elem.latitude, elem.longitude, elem.building_name);
     });
     
     
@@ -1629,8 +1632,9 @@ setInterval(async ()=>{
 
 
 async function getMaintanence(){
-  const url = 'https://wiman.azurewebsites.net/api/maintenance/issue-reports'; 
-  const token = '_Th1$154v3ry$tr0ng@P!k3y';  
+  const url = 'https://wiman.azurewebsites.net/api/venues'; 
+  const token = '';  
+
 
   fetch(url, {
       method: 'GET',
@@ -1640,6 +1644,18 @@ async function getMaintanence(){
       }
   })
       .then(response => response.json())  // Convert response to JSON
-      .then(data => console.log(data))     // Handle the data
+      .then(data => {
+        console.log(namesOfBuildings)
+        console.log(data);
+        data.forEach((elem)=>{
+          
+          if(namesOfBuildings.includes(elem.buildingName)){
+            console.log(elem.buildingName)
+          }else{
+            console.log("Building not shown:", elem.buildingName)
+          }
+        })
+        
+      })     // Handle the data
       .catch(error => console.error('Error:', error));  // Handle errors
 }
