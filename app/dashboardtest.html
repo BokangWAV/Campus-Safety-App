@@ -23,14 +23,14 @@
   <!-- Header for Web and Mobile -->
   <div class="header">
     <h2 style="cursor: pointer;" id="logo" >Campus Safety</h2>
-    <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
+    <div class="mobile-nav-toggle" id="mobile-nav-toggle">
       <span></span>
       <span></span>
       <span></span>
     </div>
     <ul id="headerMenu">
       
-      <li><a href="alerts.html" id="managerAlert" style="display: none;">Emergency Alerts</a></li>
+      <li><a href="current.html" id="managerAlert" style="display: none;">Emergency Alerts</a></li>
       <li><a href="reports.html">Incident Report</a></li>
       <li><a href="summary.html">Summary</a></li>
       <li><a href="article.html">Articles</a></li>
@@ -38,8 +38,8 @@
       <li><a href="unavailable.html">Contact Security</a></li>
       <li class="notifationer"><a href="notification.html"><img src="./assets/Undraw/notification.png" style="height: 24px; width: 24px; cursor: pointer;"></a></li>
       <li class="profileDisplay"><a href="profile.html" ><img id="profileDisplay" src="./assets/Undraw/defaultpic.jpg" style="width: 33px; height: 33px; border-radius: 50%; border:3px solid #FFFFFF; margin-right: 22px;"></a></li>
-      <li><a href="notification.html" class="mobileNotification" style="display: none;">Notifications</a></li>
-      <li><a href="profile.html" class="MobileProfile" style="display: none;" >Profile</a></li>
+      <li><a href="notification.html" class="mobileNotification" id="mobileNotification">Notifications</a></li>
+      <li><a href="profile.html" class="MobileProfile" id="MobileProfile">Profile</a></li>
 
       <!-- <li><a href="resources.html">Safety Resources</a></li> -->
       
@@ -63,7 +63,7 @@
   </div>
   
   <script src="./scripts/dashboard.js" type="module"></script>
-  <script type="module">
+  <script type="module" defer>
 
     import { firebaseConfig} from "./modules/AI-init.js";
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
@@ -137,10 +137,10 @@
     //window.onload = await notifyUser();
 
 
-    function toggleMobileMenu() {
+    document.getElementById('mobile-nav-toggle').addEventListener('click',() =>{
         const menu = document.getElementById('headerMenu');
         menu.classList.toggle('active');
-    }
+    });
     
     function toggleDropdown() {
         const dropdownMenu = document.getElementById('dropdownMenu');
@@ -150,7 +150,13 @@
     function triggerAlert(type) {
         alert(type + " Alert triggered!");
     }
+
+    document.getElementById('logo').addEventListener('click', ()=>{
+        window.location.href = 'dashboardtest.html';
+    })
     </script>
+
+<script src="./scripts/realtimenotification.js"></script>
 
 </body>
 

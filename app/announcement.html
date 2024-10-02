@@ -1,16 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emergency Page</title>
+    <title>Manager Summary Page</title>
 
-    <link rel="stylesheet" href="./styles/AlertProcess.css">
+    <!-- Favicons -->
+    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-    <script src="./scripts/AlertProcess.js" defer type="module"></script>
+    <link href="./styles/announcement.css" rel="stylesheet">
+
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="./scripts/announcement.js" defer type="module"></script>
 </head>
 <body>
-    !-- Header for Web and Mobile -->
+    <!-- Header for Web and Mobile -->
+    <!-- Header for Web and Mobile -->
   <div class="header">
     <h2 style="cursor: pointer;" id="logo" >Campus Safety</h2>
     <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
@@ -44,29 +56,26 @@
       </ul>
     </div>
   </div>
-    <section id="Alert" class="Alert">
-        <div id="TextAlert" class="TextAlert">
-            <h2>Processing Alert!</h2>
-            <p>Your Alert will be sent after timeout ends</p>
-        </div>
-        <div id="ActionPanel" class="ActionPanel">
-            <button type="button" id="sendNow-btn" class="sendNow-btn">Send Alert NOW</button>
-            <div class="Container">
-                <div class="Outer-Ring sent">
-                    <div class="Outer-InnerRing sent">
-                        <div class="Inner-Ring sent">
-                            <div id="DisplayTimeout" class="DisplayTimeout">
-                                <p id="Time" class="Time">10</p>
-                                <p id="unit">seconds</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container" style="overflow-y: hidden;">
+        <div class="Inner-Dashboard">
+            <div class="announcementHeader">
+                <h2>Announcement</h2>
+                <p>Send out announcements to users</p>
             </div>
             
-            <button type="button" id="cancel-btn" class="cancel-btn">Cancel Alert</button>
-            <button type="button" id="safe-btn" class="safe-btn">I am safe now</button>
+            <div class="editor">
+                <p id="error" style="display: none;">*Fill in all Fields</p>
+                <input placeholder="Title" id="Title">
+                <textarea  id="announcement" placeholder="Type your announcement"></textarea>
+                <button type="button" id="SendBtn" class="SendBtn">Send</button>
+            </div>
         </div>
-    </section>
+    </div>
+    
+
+
 </body>
 </html>

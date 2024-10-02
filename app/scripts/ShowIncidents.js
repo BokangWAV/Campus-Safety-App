@@ -1750,7 +1750,6 @@ alertInterval = setInterval(async ()=>{
 }, 30000)
 
 
-
 async function plotBuildingMaintenance() {
   APIBuildings.forEach((elem)=>{
     const lat = Number(elem.latitude);
@@ -1791,7 +1790,7 @@ async function plotBuildingMaintenance() {
 
 
 async function getMaintanence(){
-  const url = 'http://localhost:8080/maintenance'; 
+  const url = 'https://sdp-campus-safety.azurewebsites.net/maintenance'; 
 
 
   fetch(url, {
@@ -1822,4 +1821,5 @@ async function getMaintanence(){
     plotBuildingMaintenance();
   })
   .catch(error => console.error('Error:', error));  // Handle errors
+
 }

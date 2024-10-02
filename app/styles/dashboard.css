@@ -7,7 +7,7 @@ body {
   padding: 0;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
   overflow-y: scroll;
 }
 
@@ -102,7 +102,9 @@ body {
   margin-top: 60px;
   padding: 2rem;
   flex-grow: 1;
+  overflow: hidden;
   overflow-y: auto;
+  width: 100%;
 }
 
 .dashboard-main{
@@ -225,6 +227,72 @@ body {
   background-color: #214a61;
 }
 
+#mobileNotification{
+  display: none;
+}
+#MobileProfile{
+  display: none;
+}
+
+.circleDiv1{
+  cursor: pointer;
+  position: absolute;
+  bottom: 20px;
+  right: 30px;
+  z-index: 100000;
+  background-color: #1a3e57;
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.circleDiv1:hover{
+  background-color: #214a61;
+  box-shadow: 3px 3px 3px rgba(51, 51, 51, 0.8);
+}
+
+.circleDiv2{
+  cursor: pointer;
+  position: absolute;
+  bottom: 120px;
+  right: 30px;
+  z-index: 100000;
+  background-color: #1a3e57;
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.circleDiv2:hover{
+  background-color: #214a61;
+  box-shadow: 0 3px 3px rgba(51, 51, 51, 0.8);
+}
+
+.circleDiv1 img{
+  cursor: pointer;
+  background-color: transparent;
+  width: 50px;
+  height: 50px;
+}
+
+.circleDiv2 img{
+  cursor: pointer;
+  background-color: transparent;
+  width: 40px;
+  height: 40px;
+}
+
+
+
+
 /* Mobile Styles */
 @media (max-width: 800px) {
 .header {
@@ -233,6 +301,7 @@ body {
     height: 50px;
     padding: 1rem 2rem;
     font-size: 24px;
+    width: 400px;
 }
 
 .header ul {
@@ -249,15 +318,18 @@ body {
 
 .header ul.active {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     background-color: #1a3e57;
     position: absolute;
     top: 60px;
     left: 0;
     width: 100%;
-    height: 200%;
+    height: 45dvh;
     transform: translateX(0%);
     z-index: 999;
-    padding-top: 1rem;
+    padding-top: 10px;
 }
 
 .header .mobile-nav-toggle {
@@ -285,13 +357,7 @@ body {
   display: none;
 }
 
-.mobileNotification{
-  display: flex;
-}
 
-.MobileProfile{
-  display: flex;
-}
 
 .dashboard-content {
     flex-direction: column;
@@ -300,6 +366,96 @@ body {
 .dashboard-card {
     flex: 1 1 100%;
 }
+
+.circleDiv1{
+  position: absolute;
+  bottom: 20px;
+  right: 5px;
+  z-index: 100000;
+  background-color: #1a3e57;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circleDiv1 img{
+  width:45px;
+  height: 45px;
+}
+
+.circleDiv2 img{
+  width:45px;
+  height: 45px;
+}
+
+.circleDiv2{
+  position: absolute;
+  bottom: 120px;
+  right: 5px;
+  z-index: 100000;
+  background-color: #1a3e57;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dashboard-header {
+  width: 100%;
+  margin-top: 0px;
+  margin-right: 20px;
+}
+
+}
+
+
+
+/*Smaller devices*/
+@media (max-width: 560px) {
+  body{
+    max-width: 55svh;
+  }
+
+  .header{
+    padding: 10px;
+  }
+
+  .dashboard-container{
+    padding: 10px;
+    width: 100%;
+  }
+
+  #logo{
+    margin-left: 0px;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    width: 100%;
+  }
+
+  .dashboard-card {
+      flex: 1 1 100%;
+      margin-right: 20px;
+      margin-left: 10px
+  }
+
+  #MobileProfile{
+    display: flex;
+  }
+
+  #mobileNotification{
+    display: flex;
+  }
+
 }
 
 #preloader {
@@ -324,61 +480,6 @@ body {
   animation: animate-preloader 1.5s linear infinite;
 }
 
-.circleDiv1{
-  cursor: pointer;
-  position: absolute;
-  bottom: 20px;
-  right: 30px;
-  z-index: 100000;
-  background-color: #1a3e57;
-  width: 65px;
-  height: 65px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 10px;
-}
-
-.circleDiv1:hover{
-  background-color: #214a61;
-  box-shadow: 0 3px 3px rgba(51, 51, 51, 0.8);
-}
-
-.circleDiv2{
-  cursor: pointer;
-  position: absolute;
-  bottom: 100px;
-  right: 30px;
-  z-index: 100000;
-  background-color: #1a3e57;
-  width: 65px;
-  height: 65px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 10px;
-}
-
-.circleDiv2:hover{
-  background-color: #214a61;
-  box-shadow: 0 3px 3px rgba(51, 51, 51, 0.8);
-}
-
-.circleDiv1 img{
-  cursor: pointer;
-  background-color: transparent;
-  width: 40px;
-  height: 40px;
-}
-
-.circleDiv2 img{
-  cursor: pointer;
-  background-color: transparent;
-  width: 40px;
-  height: 40px;
-}
 
 
 

@@ -61,7 +61,7 @@ async function addArticle(uid, article){
     const response = await usersRef.orderBy("articleID", "desc").get();
     var count = 0;
     if( response.docs.length > 0){
-        count = Number(response.docs[0].data().alertID)
+        count = Number(response.docs[0].data().articleID)
     }
     
     count = count + 1
@@ -79,7 +79,7 @@ async function addArticle(uid, article){
     .then(async (docRef) => {
         var user = {};
 
-        const q = db.collection('users').doc(article.uid);
+        const q = db.collection('users').doc(uid);
 
         await q.get().then((doc) => {
             if (doc.exists) {
@@ -90,9 +90,9 @@ async function addArticle(uid, article){
             }
         }).catch((error) => {
             //Do not do anything we just return an empty object
+            console.error(error)
         })
 
-        console.log(user);
 
         const usersRef = db.collection('users').where("role", "==", "manager");
 
@@ -100,12 +100,13 @@ async function addArticle(uid, article){
         await usersRef.get().then(snapshot => {
             if (!snapshot.empty) {
                 snapshot.forEach(doc =>{
-                    idArray.push(doc.id);
+                    if(doc.id != uid)idArray.push(doc.id);
                 })
             }
-        });
+        }).catch(error=>{ console.error(error)});
 
-        appendNotifications(idArray, `${title} article requires approval`, user,'article', 'Not specified', user.profilePicture );
+        console.log(`Article ${article.title} added successfully`);
+        if(idArray.length>0)appendNotifications(idArray, `${title} article requires approval`, user,'article', 'Not specified', user.profilePicture );
     })
     .catch((error) => {
         //console.error("Error adding document: ", error);
@@ -125,9 +126,9 @@ async function deleteArticle(uid){
 
     await articlesRef2.doc(doc.id).delete()
     .then(() => {
-        //console.log("Document successfully deleted!");
+        console.log(`Article ${uid} successfully deleted!`);
     }).catch((error) => {
-        //console.error("Error removing document: ", error);
+        console.error("Error removing document: ", error);
         deleted = false;
     });
 
@@ -144,12 +145,13 @@ async function getArticle(uid){
     .then((snapshot) => {
         if (!snapshot.empty) {
             snapshot.forEach(doc =>{
-                result = doc.data();
+                response = doc.data();
             })
         }
     }).catch((error) => {
-        //console.error("Error removing document: ", error);
+        console.error("Error removing document: ", error);
     });
+
 
     return response;
 }
@@ -171,11 +173,11 @@ async function addLike(uid){
         likes: numLikes
     })
     .then(() => {
-        //console.log("Document successfully updated!");
+        console.log(`Article ${uid} successfully updated to ${numLikes} Likes!`);
     })
     .catch((error) => {
         // The document probably doesn't exist.
-        //console.error("Error updating document: ", error);
+        console.error("Error updating document: ", error);
         added = false;
     });
 
@@ -197,39 +199,11 @@ async function approveArticle(uid){
         status: "approved"
     })
     .then(async () => {
-        var user = {};
-
-        const q = db.collection('users').doc(article.uid);
-
-        await q.get().then((doc) => {
-            if (doc.exists) {
-                const response = doc.data();
-                user["firstName"] = response.firstName;
-                user["lastName"] = response.lastName;
-                user["profilePicture"] = response.profilePicture;
-            }
-        }).catch((error) => {
-            //Do not do anything we just return an empty object
-        })
-
-        console.log(user);
-
-        const usersRef = db.collection('users').where("role", "==", "manager");
-
-        const idArray = []
-        await usersRef.get().then(snapshot => {
-            if (!snapshot.empty) {
-                snapshot.forEach(doc =>{
-                    idArray.push(doc.id);
-                })
-            }
-        });
-
-        await appendNotifications(idArray, `article ${title} has been approved`, user);
+        console.log(`Article ${uid} has been approved`);   
     })
     .catch((error) => {
         // The document probably doesn't exist.
-        //console.error("Error updating document: ", error);
+        console.error("Error updating document: ", error);
         added = false;
     });
 
