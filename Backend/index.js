@@ -6,7 +6,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Get all functions to operate on articles
-const { getAllArticles, getPendingArticles, getApprovedArticles, addArticle, deleteArticle, addLike } = require('./modules/article.js');
+const { getAllArticles, getPendingArticles, getApprovedArticles, addArticle, deleteArticle, addLike, approveArticle } = require('./modules/article.js');
 
 // Get all the functions to operate on users
 const {getAllUsers, getUser, addUser, updateProfile, updateProfilePicture, setRole} = require('./modules/users.js');

@@ -54,9 +54,10 @@ async function addReport(uid, report){
                     if(doc.id != uid)idArray.push(doc.id);
                 })
             }
-        });
+        }).catch(error =>{console.error(error)});
 
-        appendNotifications(idArray, `${user2.firstName} ${user2.lastName} added a new report`, user2, 'report', report.location,report.imageUrls );
+        console.log(`Report at ${report.location} has been successfully added`)
+        if(idArray.length>0)appendNotifications(idArray, `${user2.firstName} ${user2.lastName} added a new report`, user2, 'report', report.location,report.imageUrls );
     })
     .catch((error) => {
         console.error("Error writing document: ", error);
@@ -97,7 +98,7 @@ async function getUserReport(uid){
                 result.push(doc.data());
             })
         }
-    });
+    }).catch(error=>{console.error(error)});
 
     return result;
 }
@@ -120,12 +121,12 @@ async function removeReport(reportID){
     })
     .then(() => {
         removal = true
-       // console.log("Document successfully updated!");
+        console.log(`Report ${reportID} successfully updated to removed!`);
     })
     .catch((error) => {
         console.error(error)
         // The document probably doesn't exist.
-        //console.error("Error updating document: ", error);
+        console.error("Error updating document: ", error);
     });
 
     return removal;
