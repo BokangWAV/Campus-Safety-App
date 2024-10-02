@@ -1,5 +1,5 @@
 require('dotenv').config();
-
+const { processEvent } = require('./modules/events'); //New
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -81,6 +81,20 @@ app.put('/users/profile/:uid', async (req, res)=>{
     }
     
 });
+// Add a new route to handle event submissions
+app.post('/events', async (req, res) => {
+    const event = req.body;  // Event data coming from the client (API call)
+    
+    // Process the event (calculate risk, store in Firestore, and send notifications)
+    const result = await processEvent(event);
+
+    if (result.success) {
+        res.status(200).json({ message: result.message });
+    } else {
+        res.status(500).json({ message: result.message });
+    }
+}); //New
+
 
 //Update the profile picture of the user
 app.put('/user/profilePicture/:uid', async (req, res)=>{
@@ -445,10 +459,19 @@ app.post('/announcement/:uid', async (req, res)=>{
     
 });
 
+//=============================================Event Section=========================================================//
 
+app.post('/events', async (req, res) => {
+    const event = req.body;  // The event data coming from the client
 
+    const result = await processEvent(event);
 
-
+    if (result.success) {
+        res.status(200).send("Event processed and notifications sent");
+    } else {
+        res.status(500).send("Failed to process event");
+    }
+});
 
 app.listen(port, ()=>{
     console.log(`Server running at http://localhost:${port}/`);
