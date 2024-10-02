@@ -16,6 +16,7 @@
 
   <!-- Stylesheet -->
   <link href="./styles/notification.css" rel="stylesheet">
+  <link href="styles/dashboard.css" rel="stylesheet">
 </head>
 
 <body>
@@ -23,7 +24,7 @@
   <!-- Header for Web and Mobile -->
   <div class="header">
     <h2 style="cursor: pointer;" id="logo" >Campus Safety</h2>
-    <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
+    <div class="mobile-nav-toggle" id="mobile-nav-toggle">
       <span></span>
       <span></span>
       <span></span>
@@ -38,8 +39,8 @@
       <li><a href="unavailable.html">Contact Security</a></li>
       <li class="notifationer"><a href="notification.html"><img src="./assets/Undraw/notification.png" style="height: 24px; width: 24px; cursor: pointer;"></a></li>
       <li class="profileDisplay"><a href="profile.html" ><img id="profileDisplay" src="./assets/Undraw/defaultpic.jpg" style="width: 33px; height: 33px; border-radius: 50%; border:3px solid #FFFFFF; margin-right: 22px;"></a></li>
-      <li><a href="notification.html" class="mobileNotification" style="display: none;">Notifications</a></li>
-      <li><a href="profile.html" class="MobileProfile" style="display: none;" >Profile</a></li>
+      <li><a href="notification.html" class="mobileNotification" id="mobileNotification">Notifications</a></li>
+      <li><a href="profile.html" class="MobileProfile" id="MobileProfile">Profile</a></li>
 
       <!-- <li><a href="resources.html">Safety Resources</a></li> -->
       
@@ -56,7 +57,7 @@
   </div>
 
   <div class="container">
-    <section class="notifications-section">
+    <section class="notifications-section" id="notifications-section">
       <h2>Notifications (<span id="unread-count">0</span> unread)</h2> <!-- Unread count -->
       <ul id="notification-list" class="notification-list">
         <!-- Notifications will be dynamically inserted here -->
@@ -65,6 +66,30 @@
   </div>
 
   <script src="./scripts/notification.js"></script> <!-- Link to the fake notifications script -->
+  <script src="./scripts/realtimenotification.js"></script>
+  <script>
+    document.getElementById('mobile-nav-toggle').addEventListener('click',() =>{
+        const menu = document.getElementById('headerMenu');
+        menu.classList.toggle('active');
+    });
+
+    function toggleDropdown() {
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        dropdownMenu.classList.toggle('active');
+    }
+
+    if(window.localStorage.getItem('userProfile') != ""){
+        document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
+    }
+    if(window.localStorage.getItem('userRole') == "manager"){
+        document.getElementById('managerAlert').style.display = 'flex'
+        document.getElementById('managerRequests').style.display = 'flex'
+    }
+
+    document.getElementById('logo').addEventListener('click', ()=>{
+        window.location.href = 'dashboardtest.html';
+    })
+</script>
 
 </body>
 
