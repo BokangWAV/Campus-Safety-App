@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { processEvent } = require('./modules/events'); //New
+//const { processEvent } = require('./modules/events'); //New
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -15,7 +15,7 @@ const {getAllUsers, getUser, addUser, updateProfile, updateProfilePicture, setRo
 const { addReport, getAllReports, getUserReport, removeReport } = require('./modules/report.js');
 
 //Get all the functions to use for Alerts
-const { getAllAlerts, addAlert, deleteReport, updateViewAlert, managerViewAlert } = require('./modules/alert.js');
+const { getAllAlerts, addAlert, deleteReport, updateViewAlert, managerViewAlert, getUserAlerts } = require('./modules/alert.js');
 
 //Get all the functions to use for Notifications
 const { getAllNotifications, getAllReadNotifications, getAllUnreadNotifications, updateNotificationStatus, getUnSeenNotifications } = require('./modules/notification.js');
