@@ -14,6 +14,7 @@ const FullAreYouSure = document.getElementById('FullAreYouSure');
 let map;
 let incidents = [];
 let alerts = [];
+let maintenances = [];
 var namesOfBuildings  = [];
 var currentType = typeDropdown.value;
 var currentBuilding = locationDropdown.value;
@@ -235,10 +236,14 @@ typeDropdown.addEventListener('change', async ()=>{
     locationDropdown.disabled = true;
 
     displayAlerts();
-  }else{
+  }else if(typeDropdown.value == "Reports"){
     locationDropdown.className = "dropDownOptions"
     locationDropdown.disabled = false;
     displayReports();
+  }else{
+    locationDropdown.className = "dropDownOptions active";
+    locationDropdown.disabled = true;
+    displayMaintanence()
   }
 });
 
@@ -449,6 +454,73 @@ async function displayReports(){
   }
 }
 
+async function displayMaintanence(){
+  currentType = typeDropdown.value;
+  currentBuilding = locationDropdown.value;
+
+  //First remove Anything that is on the summary
+  if(summaryDiv.querySelector('div[id="Summary-Section"]')){
+    const temp = document.getElementById("Summary-Section");
+    temp.remove();
+  }
+
+  //If the reports for the current building are not there then show no results thing
+  if( maintenances.length == 0){
+    const tempDiv = document.createElement('div');
+    tempDiv.id = "Summary-Section";
+    tempDiv.className = "Summary-Section"
+    
+    const resultsDiv = document.createElement('div');
+    resultsDiv.id = 'noResults';
+    resultsDiv.className = 'noResults';
+
+    const imgTemp = document.createElement('img');
+    imgTemp.height = 150;
+    imgTemp.width = 150;
+    imgTemp.src = "./assets/Undraw/noResults.svg";
+
+    const pTag = document.createElement('p');
+    pTag.innerText = "No Maintenances Found";
+
+    resultsDiv.appendChild(imgTemp);
+    resultsDiv.appendChild(pTag);
+
+    tempDiv.appendChild(resultsDiv);
+    summaryDiv.appendChild(tempDiv);
+  }
+
+
+  else{
+    const tempDiv = document.createElement('div');
+    tempDiv.id = "Summary-Section";
+    tempDiv.className = "Summary-Section"
+
+    maintenances.forEach((elem)=>{
+      const maintenaceSummaryDiv = document.createElement('div');
+      maintenaceSummaryDiv.id ="maintenace-Summary";
+      maintenaceSummaryDiv.className = "maintenace-Summary";
+
+      const maintenacePTag = document.createElement('p');
+      maintenacePTag.id = "MaintenanceBuildingName";
+      maintenacePTag.className = "MaintenanceBuildingName";
+      maintenacePTag.innerText = elem.buildingName;
+
+      const maintenanceBuildingTag = document.createElement('p');
+      maintenanceBuildingTag.id = "MaintenanceBuilding"
+      maintenanceBuildingTag.className = "MaintenaceBuilding"
+      maintenanceBuildingTag.innerHTML = `The <strong>${elem.venueId}</strong> venue is under maintenance`
+
+
+      maintenaceSummaryDiv.appendChild(maintenacePTag);
+      maintenaceSummaryDiv.appendChild(maintenanceBuildingTag)
+      tempDiv.appendChild(maintenaceSummaryDiv);
+    });
+
+    summaryDiv.appendChild(tempDiv);
+  }
+
+}
+
 
 async function listenChanges(){
   
@@ -472,7 +544,7 @@ async function getBuildingLocations(){
   await fetch('https://witsgobackend.azurewebsites.net/v1/map/getBuildings')
     .then(response=>{return response.json()})
     .then(data=>{
-        console.log(data); 
+        APIBuildings = data.data.data;
     })
     .catch(error=>{
       setTempBuildings();
@@ -552,6 +624,7 @@ summaryDiv.addEventListener('click', async(event) => {
 
 async function rescuedUser(index){
   console.log(alerts[index].alertID)
+  clearInterval(alertInterval);
   try {
     await fetch(`https://sdp-campus-safety.azurewebsites.net/alert/${alerts[index].alertID}`,{
       method: 'PUT',
@@ -569,6 +642,48 @@ async function rescuedUser(index){
 
   alerts.splice(index, 1);
   displayAlerts();
+
+  alertInterval = setInterval(async ()=>{
+    //Then fetch all the alerts
+    try {
+      await fetch('https://sdp-campus-safety.azurewebsites.net/alert')
+      .then(response=>{return response.json()})
+      .then(data=>{
+        var tempData = [];
+        data.forEach((elem)=>{
+          if(elem.status == "processing"){
+            tempData.push(elem)
+          }
+        })
+        
+        console.log(tempData.length);
+        console.log(alerts.length)
+        console.log("Done")
+          if(tempData.length > alerts.length && currentType == 'Alerts'){
+            alerts = []
+            tempData.forEach(elem=>{
+              console.log(elem);
+              if(elem.status == "processing"){
+                console.log("pushing element");
+                elem.location = `${nearestBuilding(Number(elem.lat), Number(elem.lon))}`
+                alerts.push(elem);
+              }
+            });
+  
+            plotAlerts();
+            showPosition();
+            displayAlerts();
+          }
+      })
+      .catch(error=>{
+          console.error("Error getting reports, API return with status: ", error);
+      })
+      
+      
+    } catch (error) {
+        console.error(error);
+    }
+  }, 30000)
 }
 
 
@@ -694,8 +809,12 @@ async function areYouSure(index){
     FullAreYouSure.style.display = 'none'
   })
   document.getElementById('AreUSureChande').addEventListener('click', async ()=>{
+    document.getElementById('AreUSureChande').disabled = true;
+    document.getElementById('AreUSureCancel').disabled = true;
     await rescuedUser(index);
     FullAreYouSure.click();
+    document.getElementById('AreUSureChande').disabled = false;
+    document.getElementById('AreUSureCancel').disabled = false;
   })
 }
 
@@ -1588,8 +1707,8 @@ TempAlerts = [
 ]
 
 
-
-setInterval(async ()=>{
+let alertInterval;
+alertInterval = setInterval(async ()=>{
   //Then fetch all the alerts
   try {
     await fetch('https://sdp-campus-safety.azurewebsites.net/alert')
@@ -1631,31 +1750,76 @@ setInterval(async ()=>{
 }, 30000)
 
 
+async function plotBuildingMaintenance() {
+  APIBuildings.forEach((elem)=>{
+    const lat = Number(elem.latitude);
+    const lon = Number(elem.longitude);
+    const mapPopUp = document.createElement('div');
+    mapPopUp.innerHTML = ` <strong> ${elem.building_name} </strong><br>
+           <br><strong>${buildingMap[elem.building_name].length}</strong> reported incidents in this Building
+          `;
+    maintanenceMap[elem.building_name].forEach((m)=>{
+      if(m.isUnderMaintenance){
+        const warning = document.createElement('div');
+        warning.innerHTML = `
+        <div style="width: 100%; height:7dvh; display:flex; box-shadow: 0px 2px 2px rgba(51, 51, 51, 0.4); border-radius:8px; align-items: center; padding-left:10px; padding-right:5px margin-top:10px; margin-bottom:0px">
+          <img src="./assets/Undraw/maintenace.png" style="width:20px; height:20px; margin-right:10px;">
+          <p> <strong>${m.venueId}</strong> under maintenace</p>
+        </div>
+        `;
+        mapPopUp.innerHTML = mapPopUp.innerHTML + `<br> ${warning.innerHTML}`
+
+        try {
+          plotLocation(lat, lon,`${mapPopUp.innerHTML}` , 
+              L.icon({
+              iconUrl: './assets/Undraw/building.png',
+              iconSize: [25, 25],
+              iconColor: 'blue',
+              iconAnchor: [12, 41],
+              popupAnchor: [1, -34]
+          }));
+        } catch (error) {
+            console.error("Error fetching data from Nominatim API:", error);
+        }
+      }
+    })
+    
+  })
+  
+}
+
+
 async function getMaintanence(){
-  const url = 'https://wiman.azurewebsites.net/api/venues'; 
-  const token = '';  
+  const url = 'https://sdp-campus-safety.azurewebsites.net/maintenance'; 
 
 
   fetch(url, {
       method: 'GET',
       headers: {
-          'Authorization': `Bearer ${token}`,  
           'Content-Type': 'application/json'
       }
   })
-      .then(response => response.json())  // Convert response to JSON
-      .then(data => {
-        console.log(namesOfBuildings)
-        console.log(data);
-        data.forEach((elem)=>{
-          
-          if(namesOfBuildings.includes(elem.buildingName)){
-            console.log(elem.buildingName)
-          }else{
-            console.log("Building not shown:", elem.buildingName)
-          }
-        })
+  .then(response => response.json())  // Convert response to JSON
+  .then(data => {
+    //console.log(namesOfBuildings)
+    //console.log(data);
+    data.forEach((elem)=>{
+      
+      if(namesOfBuildings.includes(elem.buildingName)){
+        maintanenceMap[elem.buildingName].push(elem);
         
-      })     // Handle the data
-      .catch(error => console.error('Error:', error));  // Handle errors
+      }else{
+        console.log("Building not shown:", elem.buildingName)
+      }
+
+      if(elem.isUnderMaintenance){
+        maintenances.push(elem)
+      }
+    })
+    
+  }).then(()=>{
+    plotBuildingMaintenance();
+  })
+  .catch(error => console.error('Error:', error));  // Handle errors
+
 }
