@@ -79,6 +79,7 @@ async function displayPoints() {
               //console.log(elem)
                 //Add the incident to the buildingMap. To ensure we have a counter of the incidents
                 buildingMap[elem.location].push(elem);
+                maintanenceMap[elem.location] = [];
                 
             });   
         })
@@ -1632,7 +1633,8 @@ setInterval(async ()=>{
 
 async function getMaintanence(){
   const url = 'https://wiman.azurewebsites.net/api/venues'; 
-  const token = 'wiman_api_key_Th1$154v3ry$tr0ng@P!k3y';  
+  const token = '';  
+
 
   fetch(url, {
       method: 'GET',

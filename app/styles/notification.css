@@ -126,6 +126,7 @@ body {
     width: 100%;
     text-align: left;
     margin-top: 15px;
+    padding-right: 45px;
   }
   
   .notifications-section h2 {
@@ -137,6 +138,7 @@ body {
   .notification-list {
     list-style: none;
     padding: 0;
+    width: 100%;
   }
   
   /* Individual notification styling */
@@ -386,6 +388,8 @@ body {
     display: flex;
     flex-direction: column;
     cursor: pointer;
+    flex-wrap:wrap;
+    width: 100%;
   }
   
   .notification-item:hover {
@@ -408,17 +412,48 @@ body {
   /* Unread message styles */
   .notification-item.read {
     background-color: #fdfdfd; /* Default background */
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    flex-wrap:wrap;
     filter: none; /* No blur */
     font-weight: normal; /* Normal text weight */
   }
   /* Unread notification style */
   .notification-item.unread {
     background-color: #fff8b3; /* Light yellow background for unread messages */
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    flex-wrap:wrap;
+  }
+
+  .notification-item.expanded{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    flex-wrap: wrap;
+  }
+
+  .NotificationContent{
+    flex-wrap: wrap;
+    margin: 0;
+    width: fit-content;
+    overflow: hidden;
+
   }
   
-  /* Mark as read style */
-  .notification-item.read {
-    background-color: #fdfdfd;
-  }
   
   

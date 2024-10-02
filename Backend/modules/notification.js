@@ -21,7 +21,7 @@ async function getAllNotifications(uid){
 
 async function appendNotifications(array, message, user, type, location, incident_image){
     
-
+    //console.log("sending notificatiosn")
     //Get the last number of the appended notification
     const q = db.collection('notifications'); // Limit to only the most recent document
 
@@ -48,6 +48,7 @@ async function appendNotifications(array, message, user, type, location, inciden
 
     //Now for each of the stuff add the notification to the database
     array.forEach(async (uid) => {
+        console.log(`sending notification to ${uid}`)
         count = count +1;
         const userRef = db.collection("notifications");    //Stores a reference to the user
 
@@ -65,16 +66,18 @@ async function appendNotifications(array, message, user, type, location, inciden
             uid: uid,
             location: location,
             incident_image: incident_image,
-            type: type
+            type: type,
+            unseen: "true"
         })
         .then(() => {
-            //console.log("Document successfully written!");
+            console.log("Notification successfully written!");
         })
         .catch((error) => {
-            //console.error("Error writing document: ", error);
-            added = false;
+            console.error("Error writing document: ", error);
         });
     });
+
+    //console.log("Notifications sent")
 }
 
 
@@ -141,6 +144,45 @@ async function updateNotificationStatus(uid, notificationID){
     return added;
 }
 
+async function updateSeenStatus(docid) {
+        
+        // Step 3: Update the document using the document ID
+    const articlesRef2 = db.collection('notifications')
 
 
-module.exports = { appendNotifications, getAllNotifications, getAllReadNotifications, getAllUnreadNotifications, updateNotificationStatus};
+    await articlesRef2.doc(docid).update({
+        unseen: "false"
+    })
+    .then(async () => {
+        //Do nothing
+        console.log("Updated read status")
+    })
+    .catch((error) => {
+        // The document probably doesn't exist.
+        console.error("Error updating document: ", error);
+    });
+
+}
+
+
+async function getUnSeenNotifications(uid){
+    const usersRef = db.collection('notifications').where("uid", "==", uid).where("unseen", "==", "true");    // Get a reference to the users collection
+
+    var result = [];
+    // First page of results
+    await usersRef.get().then(snapshot => {
+        if (!snapshot.empty) {
+            snapshot.forEach(async (doc) =>{
+                result.push(doc.data());
+                await updateSeenStatus(doc.id);
+                
+            })
+        }
+    });
+
+    return result;
+}
+
+
+
+module.exports = { appendNotifications, getAllNotifications, getAllReadNotifications, getAllUnreadNotifications, updateNotificationStatus, getUnSeenNotifications};

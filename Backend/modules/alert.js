@@ -49,7 +49,7 @@ async function addAlert(uid, alert){
         uid: uid
     })
     .then(async (docRef) => {
-        console.log("Alert sent")
+        //console.log("Alert sent")
         var user = {};
 
         const q = db.collection('users').doc(uid);
@@ -65,6 +65,7 @@ async function addAlert(uid, alert){
                 user["phoneNumber"] = response.phoneNumber
             }
         }).catch((error) => {
+            console.error(error)
             //Do not do anything we just return an empty object
         })
 
@@ -77,14 +78,18 @@ async function addAlert(uid, alert){
                     if(doc.id != uid)idArray.push(doc.id);
                 })
             }
+        }).catch(error=>{
+            console.error(error);
         });
+
+        //console.log(idArray)
       
-      appendNotifications(idArray, `${user2.firstName} ${user2.lastName} requires immediate attention`, user2, 'report', report.location,report.imageUrls );
+        appendNotifications(idArray, `${user.firstName} ${user.lastName} requires immediate attention`, user, 'Alert', `${alert.lat} ${alert.lon}`,"" );
 
 
     })
     .catch((error) => {
-        //console.error("Error adding document: ", error);
+        console.error("Error adding document: ", error);
         added = false;
     });
 
