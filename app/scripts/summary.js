@@ -15,6 +15,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
+
+const monthName = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
 let currentUserName = "";
 let currentUserSurname = "";
 let userUID = null;
@@ -45,65 +48,69 @@ document.addEventListener("DOMContentLoaded", ()=>{
         
 async function retrieveData(){
     console.log("Fetching data...");
-        const list = await fetchData(`https://sdp-campus-safety.azurewebsites.net/alert/${userUID}`);
-        const reportList = await fetchData(`https://sdp-campus-safety.azurewebsites.net/reports/${userUID}`);
-        document.querySelector("#preloader").remove();
-        document.querySelector(".main-container").style.opacity = "1";
+    const list = await fetchData(`https://sdp-campus-safety.azurewebsites.net/alert/${userUID}`);
+    const reportList = await fetchData(`https://sdp-campus-safety.azurewebsites.net/reports/${userUID}`);
+    document.querySelector("#preloader").remove();
+    document.querySelector(".main-container").style.opacity = "1";
 
-        console.log(list);
-        console.log(reportList);
 
-        if(list !== undefined && reportList !== undefined){
-            if(list.length + reportList.length > 0){
-                if(list.length != 0){
-                    const alertContainer = document.createElement("div");
-                    alertContainer.className = "alert-container";
+    console.log(list);
+    console.log(reportList);
 
-                    list.forEach(alert => {
-                        createHistoryAlert(alertContainer, alert.alertDate, alert.details, alert.status);
-                    });
-                    document.querySelector(".dashboard-content").appendChild(alertContainer);
-                }
+    if(list !== undefined && reportList !== undefined){
+        if(list.length + reportList.length > 0){
+            if(list.length != 0){
+                const alertContainer = document.createElement("div");
+                alertContainer.className = "alert-container";
+                const alertHeader = document.createElement("h2");
+                alertHeader.textContent = "Previous Alerts";
 
-                if(reportList.length != 0){
-                    const reportContainer = document.createElement("div");
-                    reportContainer.className = "alert-container";
+                alertContainer.appendChild(alertHeader);
 
-                    reportList.forEach(report => {
-                        createHistoryReport(reportContainer, report.timestamp, report.description, report.location);
-                    });
-                    document.querySelector(".dashboard-content").appendChild(reportContainer);
-                }
-            } else {
-                displayNoAlertsMessage();
-                }
-        }else{
-            displayErrorMessage();
-        }
+                list.forEach(alert => {
+                    createHistoryAlert(alertContainer, alert.alertDate, alert.details, alert.status);
+                });
+                document.querySelector(".dashboard-content").appendChild(alertContainer);
+            }
+
+            if(reportList.length != 0){
+                const reportContainer = document.createElement("div");
+                reportContainer.className = "report-container";
+                const reportHeader = document.createElement("h2");
+                reportHeader.textContent = "Previous Reports";
+
+                alertContainer.appendChild(reportHeader);
+
+                reportList.forEach(report => {
+                    createHistoryReport(reportContainer, report.timestamp, report.description, report.location);
+                });
+                document.querySelector(".dashboard-content").appendChild(reportContainer);
+            }
+        } else {
+            displayNoAlertsMessage();
+            }
+    }else{
+        displayErrorMessage();
     }
+}
 
-function createHistoryAlert(container, alertDate, details, articleStatus) {
+function createHistoryAlert(container, alertDate, articleStatus) {
     const dashboardCard = document.createElement("div");
     dashboardCard.classList.add("dashboard-card");
 
     const heading = document.createElement("h3");
-    const timestampInMilliseconds = alertDate[0] * 1000 + alertDate[1] / 1000;
+    const timestampInMilliseconds = alertDate._seconds * 1000 + alertDate._nanoseconds / 1000;
     const date = new Date(timestampInMilliseconds);
-    heading.textContent = date.toString();
-    heading.textContent = alertDate
+    heading.textContent = `${date.getDay()} ${monthName[date.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
     dashboardCard.appendChild(heading);
 
     const p = document.createElement("p");
     p.innerHTML = `<b>Degree of alert:</b> Emergency alert`;
     dashboardCard.appendChild(p);
 
-    const readDiv = document.createElement("div");
-    readDiv.textContent = details;
-
     const status = document.createElement("p");
-    status.textContent = articleStatus;
+    status.innerHTML = `Final status:<b>${articleStatus}</b>`;
 
-    dashboardCard.appendChild(readDiv);
     dashboardCard.appendChild(status);
 
     container.appendChild(dashboardCard);
@@ -115,9 +122,9 @@ function createHistoryReport(reportContainer, reportDate, description, location)
     dashboardCard.classList.add("dashboard-card");
 
     const heading = document.createElement("h3");
-    const timestampInMilliseconds = reportDate[0] * 1000 + reportDate[1] / 1000;
+    const timestampInMilliseconds = alertDate._seconds * 1000 + alertDate._nanoseconds / 1000;
     const date = new Date(timestampInMilliseconds);
-    heading.textContent = date.toString();
+    heading.textContent = `${date.getDay()} ${monthName[date.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
     dashboardCard.appendChild(heading);
 
     const p = document.createElement("p");
@@ -129,17 +136,6 @@ function createHistoryReport(reportContainer, reportDate, description, location)
     dashboardCard.appendChild(readDiv);
 
     reportContainer.appendChild(dashboardCard);
-}
-
-function returnDate(alertDate) {
-    const date = new Date(alertDate);
-    const dateOptions = { day: '2-digit', month: '2-digit', year: '2-digit' };
-    const timeOptions = { hour: '2-digit', minute: '2-digit' };
-
-    const formattedDate = date.toLocaleDateString(undefined, dateOptions);
-    const formattedTime = date.toLocaleTimeString(undefined, timeOptions);
-
-    return `Date: ${formattedDate} Time: ${formattedTime}`;
 }
 
 async function fetchData(url) {
