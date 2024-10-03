@@ -165,3 +165,5 @@ function addCard(articleTitle ,articleContent, articleID, articleStatus){
 
     return card;
 }
+
+module.exports = { fetchData, addCard };

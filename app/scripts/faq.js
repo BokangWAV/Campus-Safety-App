@@ -162,3 +162,5 @@ async function postFAQ(data, uid) {
     }
 
 }
+
+module.exports = { fetchData, postFAQ, addCard, disableButton, enableButton };

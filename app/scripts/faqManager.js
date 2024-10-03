@@ -262,3 +262,5 @@ document.addEventListener("DOMContentLoaded", async function(){
     }
     
 })
+
+module.exports = {fetchData}

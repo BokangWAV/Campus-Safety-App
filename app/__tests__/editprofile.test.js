@@ -16,13 +16,21 @@ describe('Edit Profile', () => {
         <input id="race" type="text" />
         <input id="phoneNumber" type="text" />
         <input id="age" type="number" />
+        <img id="profileDisplay" src="" alt="Profile" />
+        <div id="managerAlert" style="display: none;">Manager Alert</div>
+        <div id="managerRequests" style="display: none;">Manager Requests</div>
       </form>
     `;
 
     // Mock localStorage
     Object.defineProperty(window, 'localStorage', {
       value: {
-        getItem: jest.fn(() => '12345'), // Return a mock UID
+        getItem: jest.fn((key) => {
+          if (key === 'uid') return '12345'; // Return a mock UID
+          if (key === 'userProfile') return 'mockProfilePicture.png'; // Mock profile picture
+          return null;
+        }),
+        setItem: jest.fn(),
       },
       writable: true,
     });
@@ -40,6 +48,8 @@ describe('Edit Profile', () => {
       race: 'Asian',
       phoneNumber: '1234567890',
       age: 25,
+      profilePicture: 'mockProfilePicture.png',
+      role: 'user', // Change to 'manager' for the next test
     };
 
     fetch.mockImplementationOnce(() =>
@@ -50,10 +60,7 @@ describe('Edit Profile', () => {
     );
 
     // Trigger the onload event
-    window.onload();
-
-    // Wait for any async tasks to complete
-    await Promise.resolve();
+    await window.onload();
 
     // Check if the form fields are populated correctly
     expect(document.getElementById('firstname').value).toBe(mockUserData.firstName);
@@ -61,6 +68,59 @@ describe('Edit Profile', () => {
     expect(document.getElementById('race').value).toBe(mockUserData.race);
     expect(document.getElementById('phoneNumber').value).toBe(mockUserData.phoneNumber);
     expect(document.getElementById('age').value).toBe(String(mockUserData.age));
+    expect(document.getElementById('profileDisplay').src).toContain(mockUserData.profilePicture);
+  });
+
+  it('should show manager alerts if user role is manager', async () => {
+    const mockUserData = {
+      firstName: 'John',
+      lastName: 'Doe',
+      race: 'Asian',
+      phoneNumber: '1234567890',
+      age: 25,
+      profilePicture: 'mockProfilePicture.png',
+      role: 'manager', // Set role to manager
+    };
+
+    fetch.mockImplementationOnce(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(mockUserData),
+      })
+    );
+
+    // Trigger the onload event
+    await window.onload();
+
+    // Check if manager elements are displayed
+    expect(document.getElementById('managerAlert').style.display).toBe('flex');
+    expect(document.getElementById('managerRequests').style.display).toBe('flex');
+  });
+
+  it('should not show manager alerts if user role is not manager', async () => {
+    const mockUserData = {
+      firstName: 'John',
+      lastName: 'Doe',
+      race: 'Asian',
+      phoneNumber: '1234567890',
+      age: 25,
+      profilePicture: 'mockProfilePicture.png',
+      role: 'user', // Set role to user
+    };
+
+    fetch.mockImplementationOnce(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(mockUserData),
+      })
+    );
+
+    // Trigger the onload event
+    await window.onload();
+
+    // Check if manager elements are hidden
+    expect(document.getElementById('managerAlert').style.display).toBe('none');
+    expect(document.getElementById('managerRequests').style.display).toBe('none');
   });
 
   it('should handle fetch error gracefully', async () => {
@@ -75,10 +135,7 @@ describe('Edit Profile', () => {
     console.error = jest.fn();
 
     // Trigger the onload event
-    window.onload();
-
-    // Wait for any async tasks to complete
-    await Promise.resolve();
+    await window.onload();
 
     expect(console.error).toHaveBeenCalledWith('Error fetching or parsing user data:', expect.any(Error));
   });
@@ -95,11 +152,33 @@ describe('Edit Profile', () => {
     console.error = jest.fn();
 
     // Trigger the onload event
-    window.onload();
-
-    // Wait for any async tasks to complete
-    await Promise.resolve();
+    await window.onload();
 
     expect(console.error).toHaveBeenCalledWith('Error fetching or parsing user data:', expect.any(Error));
+  });
+
+  it('should correctly handle the case where userProfile is empty', async () => {
+    const mockUserData = {
+      firstName: 'John',
+      lastName: 'Doe',
+      race: 'Asian',
+      phoneNumber: '1234567890',
+      age: 25,
+      profilePicture: '', // No profile picture
+      role: 'user',
+    };
+
+    fetch.mockImplementationOnce(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(mockUserData),
+      })
+    );
+
+    // Trigger the onload event
+    await window.onload();
+
+    // Check if profile display does not change
+    expect(document.getElementById('profileDisplay').src).toBe('');
   });
 });

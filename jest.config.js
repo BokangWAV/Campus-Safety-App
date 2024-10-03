@@ -17,6 +17,7 @@ module.exports = {
         '!app/scripts/ai.js',
         '!app/scripts/form-submit.js',
         '!app/scripts/summary.js',
+        '!app/scripts/ShowIncidents.js',
         '!Backend/index.js',
         '!Backend/modules/notification.js',
         '!Backend/modules/article.js',

@@ -1,5 +1,5 @@
 const { db } = require('../../Backend/modules/init'); // Adjust path as necessary
-const { getAllAlerts, addAlert, deleteReport, updateViewAlert } = require('../../Backend/modules/alert');
+const { getAllAlerts, addAlert, deleteReport, updateViewAlert, managerViewAlert } = require('../../Backend/modules/alert');
 const { appendNotifications } = require('../../Backend/modules/notification');
 
 jest.mock('../../Backend/modules/init', () => {
@@ -29,6 +29,7 @@ describe('Alert Functions', () => {
             where: jest.fn().mockReturnThis(),
             delete: jest.fn(),
             update: jest.fn(),
+            orderBy: jest.fn().mockReturnThis(),
         };
         db.collection.mockImplementation(() => mockCollection);
     });
@@ -65,7 +66,7 @@ describe('Alert Functions', () => {
     describe('addAlert', () => {
         it('should add an alert and notify managers', async () => {
             const uid = 'testUid';
-            const alert = { firstName: 'John', lastName: 'Doe', lat: 12.34, lon: 56.78 };
+            const alert = { firstName: 'John', lastName: 'Doe', lat: 12.34, lon: 56.78, age: 30, race: 'Human', gender: 'Male', phoneNumber: '1234567890' };
 
             mockCollection.add.mockResolvedValue({ id: 'mockId' });
 
@@ -92,11 +93,11 @@ describe('Alert Functions', () => {
             expect(mockCollection.add).toHaveBeenCalledTimes(1);
             expect(appendNotifications).toHaveBeenCalledWith(
                 ['manager1'],
-                'requires immediate attention',
+                `${alert.firstName} ${alert.lastName} requires immediate attention`,
                 { firstName: 'John', lastName: 'Doe', profilePicture: 'mockUrl' },
-                "alert",
+                "Alert",
                 `${alert.lat} ${alert.lon}`,
-                'mockUrl'
+                ''
             );
         });
 
@@ -111,16 +112,22 @@ describe('Alert Functions', () => {
     describe('deleteReport', () => {
         it('should delete a report successfully', async () => {
             mockCollection.where.mockReturnValue({
+                get: jest.fn().mockResolvedValueOnce({
+                    docs: [{ id: 'testId' }],
+                }),
                 delete: jest.fn().mockResolvedValueOnce(),
             });
 
             const result = await deleteReport('testReportId');
             expect(result).toBe(true);
-            expect(mockCollection.delete).toHaveBeenCalledTimes(1);
+            expect(mockCollection.doc().delete).toHaveBeenCalledTimes(1);
         });
 
         it('should return false if deleting the report fails', async () => {
             mockCollection.where.mockReturnValue({
+                get: jest.fn().mockResolvedValueOnce({
+                    docs: [{ id: 'testId' }],
+                }),
                 delete: jest.fn().mockRejectedValue(new Error('Failed to delete report')),
             });
 
@@ -130,21 +137,55 @@ describe('Alert Functions', () => {
     });
 
     describe('updateViewAlert', () => {
-        it('should update the alert status and viewer successfully', async () => {
+        it('should update the alert status to "ASSISTED" successfully', async () => {
             mockCollection.where.mockReturnValue({
+                get: jest.fn().mockResolvedValueOnce({
+                    docs: [{ id: 'testId' }],
+                }),
                 update: jest.fn().mockResolvedValueOnce(),
             });
 
-            const result = await updateViewAlert('testReportId', { viewer: 'testViewer' });
+            const result = await updateViewAlert('testReportId');
             expect(result).toBe(true);
+            expect(mockCollection.doc().update).toHaveBeenCalledWith({ status: 'ASSISTED' });
         });
 
-        it('should return false if updating the alert fails', async () => {
+        it('should return false if updating the alert status fails', async () => {
             mockCollection.where.mockReturnValue({
+                get: jest.fn().mockResolvedValueOnce({
+                    docs: [{ id: 'testId' }],
+                }),
                 update: jest.fn().mockRejectedValue(new Error('Failed to update alert')),
             });
 
-            const result = await updateViewAlert('testReportId', { viewer: 'testViewer' });
+            const result = await updateViewAlert('testReportId');
+            expect(result).toBe(false);
+        });
+    });
+
+    describe('managerViewAlert', () => {
+        it('should update the alert status for manager view successfully', async () => {
+            mockCollection.where.mockReturnValue({
+                get: jest.fn().mockResolvedValueOnce({
+                    docs: [{ id: 'testId' }],
+                }),
+                update: jest.fn().mockResolvedValueOnce(),
+            });
+
+            const result = await managerViewAlert('testReportId');
+            expect(result).toBe(true);
+            expect(mockCollection.doc().update).toHaveBeenCalledWith({ status: 'ASSISTED' });
+        });
+
+        it('should return false if updating the manager view alert fails', async () => {
+            mockCollection.where.mockReturnValue({
+                get: jest.fn().mockResolvedValueOnce({
+                    docs: [{ id: 'testId' }],
+                }),
+                update: jest.fn().mockRejectedValue(new Error('Failed to update alert')),
+            });
+
+            const result = await managerViewAlert('testReportId');
             expect(result).toBe(false);
         });
     });
