@@ -13,6 +13,18 @@ async function fetchData(url) {
 
 document.addEventListener("DOMContentLoaded", async function(){
     try {
+        if(window.localStorage.getItem('uid') === null){
+            alert("You need to sign in");
+            window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/register.html"
+        }
+        const uid = window.localStorage.getItem('uid');
+        
+        const user = await fetchData(`https://sdp-campus-safety.azurewebsites.net/users/${uid}`);
+        if(user[0].role == "user"){
+            alert("You are not authorised to be on this page");
+            window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/dashboardtest.html"
+        }
+
         const list = await fetchData('https://sdp-campus-safety.azurewebsites.net/FAQs');
         console.log(list);
 
@@ -262,5 +274,3 @@ document.addEventListener("DOMContentLoaded", async function(){
     }
     
 })
-
-module.exports = {fetchData}
