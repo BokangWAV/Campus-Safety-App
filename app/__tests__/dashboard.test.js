@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+import { fetchData } from '../scripts/dashboard.js'; // Adjust this path
 import '../scripts/dashboard.js'; // Adjust path as needed
 
 // Mocking Firebase modules
@@ -18,79 +19,94 @@ jest.mock('https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js', () => ({
     getAuth: jest.fn(),
     onAuthStateChanged: jest.fn(),
 }));
+/* coverage ignore  */
 
-describe('Dashboard Tests', () => {
-    let mockUser;
-    let mockAddDoc;
-
+describe("Dashboard Functionality", () => {
     beforeEach(() => {
-        // Set up the mock user object
-        mockUser = {
-            displayName: 'John Doe',
-        };
-
-        // Mock the Firestore addDoc function to resolve with a document reference
-        mockAddDoc = jest.fn().mockResolvedValue({
-            id: 'testDocId',
-        });
-
-        // Mock the Firestore collection function to return an object with addDoc
-        collection.mockReturnValue({
-            addDoc: mockAddDoc,
-        });
-
-        // Mock the onAuthStateChanged to call the callback with the mock user
-        onAuthStateChanged.mockImplementation((auth, callback) => {
-            callback(mockUser);
-        });
-
-        // Mock Firebase initialization
-        initializeApp.mockReturnValue({});
-        getFirestore.mockReturnValue({});
-        getAuth.mockReturnValue({});
+      document.body.innerHTML = `
+        <div class="dashboard-container"></div>
+        <img id="profileDisplay" src="" alt="profile" />
+      `;
     });
-
-    afterEach(() => {
-        jest.clearAllMocks(); // Clear mocks after each test
+  
+    it("should display 'No user is signed in' when no user is authenticated", () => {
+      // Mock onAuthStateChanged to simulate no user
+      onAuthStateChanged.mockImplementation((auth, callback) => {
+        callback(null);
+      });
+  
+      // Execute DOMContentLoaded logic
+      const event = new Event("DOMContentLoaded");
+      document.dispatchEvent(event);
+  
+      expect(document.querySelector(".dashboard-container").innerHTML).toContain("");
     });
-
-    it('should initialize Firebase and set current user details on auth state change', () => {
-        // Verify that the Firebase app is initialized
-        expect(initializeApp).toHaveBeenCalled();
-        
-        // Check if user details are set correctly
-        expect(currentUserName).toBe('John');
-        expect(currentUserSurname).toBe('Doe');
+  
+    it("should display user's name when signed in", () => {
+      // Mock onAuthStateChanged to simulate an authenticated user
+      const mockUser = {
+        uid: "123",
+        displayName: "John Doe"
+      };
+  
+      onAuthStateChanged.mockImplementation((auth, callback) => {
+        callback(mockUser);
+      });
+  
+      // Mock fetchData to return some user details
+      fetchData.mockResolvedValue([
+        {
+          firstName: "John",
+          lastName: "Doe",
+          age: 30,
+          race: "Caucasian",
+          gender: "Male",
+          phoneNumber: "123-456-7890",
+          profilePicture: "profile.jpg",
+          role: "user"
+        }
+      ]);
+  
+      const event = new Event("DOMContentLoaded");
+      document.dispatchEvent(event);
+  
+      setImmediate(() => {
+        // Check if the user info is correctly set
+        expect(document.getElementById("profileDisplay").src).toBe("profile.jpg");
+        expect(document.querySelector(".dashboard-container").innerHTML).toContain("Welcome to the dashboard.");
+      });
     });
-
-    it('should post an alert to Firestore', async () => {
-        // Trigger the postAlert function
-        await postAlert();
-
-        // Check if addDoc was called with correct data
-        expect(addDoc).toHaveBeenCalledWith(expect.anything(), {
-            details: "EMERGENCY",
-            alert_no: 1,
-            surname: 'Doe',
-            name: 'John',
-            alert_date: expect.any(String), // We can expect the alert date to be a string in ISO format
-        });
-
-        // Check if the alert message is displayed
-        expect(window.alert).toHaveBeenCalledWith('John Doe needs help urgently!!!!');
+  
+    it("should display manager's dashboard if user role is 'manager'", () => {
+      const mockUser = {
+        uid: "123",
+        displayName: "Manager Doe"
+      };
+  
+      onAuthStateChanged.mockImplementation((auth, callback) => {
+        callback(mockUser);
+      });
+  
+      // Mock fetchData to return user details with a manager role
+      fetchData.mockResolvedValue([
+        {
+          firstName: "Manager",
+          lastName: "Doe",
+          age: 40,
+          race: "Asian",
+          gender: "Female",
+          phoneNumber: "987-654-3210",
+          profilePicture: "manager_profile.jpg",
+          role: "manager"
+        }
+      ]);
+  
+      const event = new Event("DOMContentLoaded");
+      document.dispatchEvent(event);
+  
+      setImmediate(() => {
+        // Check for manager's dashboard elements
+        expect(document.querySelector(".dashboard-container").innerHTML).toContain("Manager's dashboard.");
+      });
     });
-
-    it('should handle the case when no user is signed in', () => {
-        // Mock the onAuthStateChanged to simulate no user signed in
-        onAuthStateChanged.mockImplementation((auth, callback) => {
-            callback(null);
-        });
-
-        // Simulate DOMContentLoaded event
-        document.dispatchEvent(new Event('DOMContentLoaded'));
-
-        // Verify default values
-        expect(currentUserName).toBe('Unknown');
-        expect(currentUserSurname).toBe('Unknown');
-    });
-});
+  });

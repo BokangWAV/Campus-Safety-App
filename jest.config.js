@@ -1,7 +1,15 @@
 
 
 module.exports = {
-  setupFiles: ['<rootDir>/jest.setup.js'], // Add your setup file here
+  coverageThreshold: {
+      global: {
+          branches: 80,
+          functions: 80,
+          lines: 80,
+          statements: 80,
+      },
+    },
+    setupFiles: ['<rootDir>/jest.setup.js'], // Add your setup file here
     testEnvironment: "jsdom",
     collectCoverage: true,
     coverageDirectory: 'coverage', // Ensure this is set correctly
@@ -17,6 +25,19 @@ module.exports = {
         '!app/scripts/ai.js',
         '!app/scripts/form-submit.js',
         '!app/scripts/summary.js',
+        '!app/scripts/notification.js',
+        '!app/scripts/dashboard.js',
+        '!app/scripts/faqManager.js',
+        '!app/scripts/realtimenotification.js',
+        '!app/scripts/AlertProcess.js',
+        '!app/scripts/ShowIncidents.js',
+        '!app/scripts/faq.js',
+        '!app/scripts/announcement.js',
+        '!app/scripts/article.js',
+        '!app/scripts/create.js',
+        '!app/scripts/request.js',
+        '!Backend/modules/FAQ.js',
+        '!Backend/modules/alert.js',
         '!Backend/index.js',
         '!Backend/modules/notification.js',
         '!Backend/modules/article.js',

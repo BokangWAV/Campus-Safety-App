@@ -37,7 +37,7 @@
         </div>
         <ul id="headerMenu">
       
-            <li><a href="alerts.html" id="managerAlert" style="display: none;">Emergency Alerts</a></li>
+            <li><a href="current.html" id="managerAlert" style="display: none;">Emergency Alerts</a></li>
             <li><a href="reports.html">Incident Report</a></li>
             <li><a href="summary.html">Summary</a></li>
             <li><a href="article.html">Articles</a></li>
@@ -65,6 +65,21 @@
     <div id="backgroundDiv" class="backgroundDiv" style="display: none;">
 
     </div>
+    <div class="FullAreYouSure" id="FullAreYouSure" style="display: none;">
+        <div id="AreUSureDive" class="AreUSureDive"> 
+            <div id="AreUSureHeader" class="AreUSureHeader">
+                <h3>Change user status?</h3>
+            </div>
+            <div id="AreUSureContent" class="AreUSureContent">
+                <p>Are you sure that you want to set the status of the user as rescued? Has the user been assisted during this emergency?</p>
+            </div>
+            <div id="AreUSureBtns" class="AreUSureBtns">
+                <button type="button" id="AreUSureCancel" class="AreUSureCancel">Cancel</button>
+                <button type="button" id="AreUSureChande" class="AreUSureChande">Confrim</button>
+            </div>
+        </div>
+    </div>
+    
     <div id="PopUp-report-View" class="PopUp-report-View" style="display: none;">
         <div id="PopUp-report-Details" class="PopUp-report-Details">
             <div id="PopUp-details" class="PopUp-details">
@@ -131,6 +146,7 @@
                 <select name="Type-Dropdown" disabled="true" id="Type-Dropdown" class="dropDownOptions">
                     <option value="Reports">Reports</option>
                     <option value="Alerts"> Emergency Alerts</option>
+                    <option value="Maintenances"> Maintenances</option>
                 </select>
                 <select name="Location-DropDown" disabled="true" id="Location-DropDown" class="dropDownOptions">
                     
@@ -189,6 +205,7 @@
     <!--- Include the Leaflet JavaScript library -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/@turf/turf"></script>
+    <script src="./scripts/realtimenotification.js"></script>
 
 
 </body>

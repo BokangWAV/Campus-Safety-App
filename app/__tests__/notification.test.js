@@ -1,38 +1,74 @@
 // notification.test.js
-import '../scripts/notification'; // Import your notification module
 
-describe('Notification Tests', () => {
-  let notificationList;
-  let unreadCountElement;
+const { displayNotifications } = require('../scripts/notification');
 
-  beforeEach(() => {
-    // Set up DOM elements required for the tests
-    document.body.innerHTML = `
-      <ul id="notification-list"></ul>
-      <div id="unread-count">0</div>
-    `;
+describe('Notification Module', () => {
+    let notifications;
 
-    // Initialize the DOMContentLoaded event
-    const event = new Event('DOMContentLoaded');
-    document.dispatchEvent(event);
-  });
+    beforeEach(() => {
+        // Set up the DOM elements that are manipulated in the notification module
+        document.body.innerHTML = `
+            <ul id="notification-list"></ul>
+            <span id="unread-count"></span>
+        `;
 
-  it('should display notifications and update unread count', () => {
-    // Ensure notifications are added
-    notificationList = document.getElementById('notification-list');
-    unreadCountElement = document.getElementById('unread-count');
+        notifications = [
+            {
+                notificationID: "1",
+                message: "Test notification 1",
+                posted_by_name: "Alice",
+                status: "unread",
+                timestamp: { _seconds: Math.floor(Date.now() / 1000) },
+                profile_pic: "profile1.jpg",
+                profile_link: "profile1.html",
+                type: "alert"
+            },
+            {
+                notificationID: "2",
+                message: "Test notification 2",
+                posted_by_name: "Bob",
+                status: "read",
+                timestamp: { _seconds: Math.floor(Date.now() / 1000) },
+                profile_pic: "profile2.jpg",
+                profile_link: "profile2.html",
+                type: "announcement"
+            }
+        ];
+    });
 
-    // Check if notifications are rendered correctly
-    expect(notificationList.children.length).toBeGreaterThan(0);
-    expect(unreadCountElement.textContent).toBe('1'); // Based on the initial notifications array
-  });
+    test('should display notifications correctly', () => {
+        displayNotifications(notifications);
+        
+        const notificationList = document.getElementById("notification-list");
+        const unreadCountElement = document.getElementById("unread-count");
 
-  it('should mark notification as read on click', () => {
-    const listItem = notificationList.firstChild;
-    expect(listItem.classList.contains('unread')).toBe(true);
-    // Simulate a click event
-    listItem.click();
-    expect(listItem.classList.contains('unread')).toBe(false);
-    expect(unreadCountElement.textContent).toBe('0');
-  });
+        // Check that the correct number of notifications is displayed
+        expect(notificationList.children.length).toBe(notifications.length);
+
+        // Check the unread count
+        const unreadCount = notifications.filter(notification => notification.status === "unread").length;
+        expect(unreadCountElement.textContent).toBe(String(unreadCount));
+    });
+
+    test('should mark notifications as read when clicked', async () => {
+        const listItem = displayNotifications(notifications)[0]; // Simulate clicking the first notification
+        
+        listItem.click(); // Simulate click event
+        expect(listItem.classList.contains("unread")).toBe(false); // Check that the unread class was removed
+        
+        // Simulate a fetch request to update the notification status
+        await updateNotificationStatus(notifications[0].notificationID); // Replace with your actual function
+        expect(notifications[0].status).toBe("read"); // Check if the notification status was updated
+    });
+
+    test('should handle API errors gracefully', async () => {
+        global.fetch = jest.fn(() =>
+            Promise.reject(new Error('API is down'))
+        );
+
+        console.error = jest.fn(); // Mock console.error to track error messages
+        await fetchNotifications(); // Replace with your actual function that fetches notifications
+
+        expect(console.error).toHaveBeenCalledWith(expect.any(Error)); // Check if an error was logged
+    });
 });

@@ -299,7 +299,7 @@ body {
     bottom: 30px;
     left: 30px;
     background-color: #142f41;
-    z-index: 10000000000;
+    z-index: 1000;
     width: 55px;
     height: 55px;
     display: flex;
@@ -457,7 +457,7 @@ body {
     left: 0;
     z-index: 10000;
     background-color: #1a3e57;
-    filter: blur(1px);
+    backdrop-filter: blur(2px);
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
@@ -639,7 +639,199 @@ body {
 }
 
 
+.FullAreYouSure{
+    background-color: transparent;
+    position:absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height:100%;
+    z-index: 10000000000000000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px);
+}
 
+.FullAreYouSure .AreUSureDive{
+    background-color: #f4f6f9;
+    width: 60%;
+    height: 35dvh;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px rgba(51, 51, 51, 0.5);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.FullAreYouSure .AreUSureDive .AreUSureContent{
+    display: flex;
+    width: 85%;
+}
+
+
+.FullAreYouSure .AreUSureDive h3{
+    font-size: 32px;
+    margin-bottom: 0;
+    color: #142f41;
+}
+
+
+
+.FullAreYouSure .AreUSureDive p{
+    font-size: 17px;
+    margin-left: 10px;
+}
+
+
+.FullAreYouSure .AreUSureDive .AreUSureBtns{
+    height:35%;
+    background-color: #f4f6f9;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.FullAreYouSure .AreUSureDive .AreUSureBtns .AreUSureCancel{
+    background-color: #dd1717;
+    padding: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 8px;
+    border: 1px solid #f4f6f9;
+    color: #f4f6f9;
+    font-size: 15px;
+    margin-left: 4px;
+    margin-right: 10px;
+}
+
+
+.FullAreYouSure .AreUSureDive .AreUSureBtns .AreUSureChande{
+    background-color: #2EFF2E;
+    padding: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 8px;
+    border: 1px solid #f4f6f9;
+    color: #f4f6f9;
+    font-size: 15px;
+}
+
+.FullAreYouSure .AreUSureDive .AreUSureBtns .AreUSureCancel:hover{
+    box-shadow: 0px 2px 2px rgba(51, 51, 51, 0.5);
+    padding: 9px;
+    padding-left: 14px;
+    padding-right: 14px;
+    font-size: 16px;
+}
+
+
+.FullAreYouSure .AreUSureDive .AreUSureBtns .AreUSureChande:hover{
+    box-shadow: 0px 2px 2px rgba(51, 51, 51, 0.5);
+    padding: 9px;
+    padding-left: 14px;
+    padding-right: 14px;
+    font-size: 16px;
+}
+
+.AreUSureMain .AreUSureInner .AreUSureHeader{
+    padding: 0;
+    font-size: 35px;
+    margin-top: 10px;
+    color: #1a3e57;
+}
+
+.AreUSureMain .AreUSureInner .AreUSureHeader h3{
+    margin: 0;
+}
+
+.AreUSureMain .AreUSureInner .AreUSureContent{
+    margin-left: 8px;
+    width: 85%;
+    font-size: 20px;
+}
+
+
+.AreUSureMain .AreUSureInner .AreUSureBtns{
+    height: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center ;
+}
+
+
+
+.AreUSureMain .AreUSureInner .AreUSureBtns .AreUSureCancel{
+    padding: 10px;
+    padding-left: 14px;
+    padding-right: 14px;
+    font-size: 17px;
+    margin-right: 30px;
+    border-radius: 8px;
+    background-color: #dd1717;
+    color: #f4f6f9;
+    border: 1px solid #f4f6f9;
+}
+
+
+.AreUSureMain .AreUSureInner .AreUSureBtns .AreUSureCancel:hover{
+    font-size: 20px;
+    padding: 9px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid #dd1717;
+    box-shadow: 2px 2px 2px rgba(51, 51, 51, 0.5);
+}
+
+
+.AreUSureMain .AreUSureInner .AreUSureBtns .AreUSureConfirm{
+    padding: 10px;
+    padding-left: 14px;
+    padding-right: 14px;
+    font-size: 17px;
+    margin-right: 30px;
+    border-radius: 8px;
+    background-color: #1ecf1e;
+    color: #f4f6f9;
+    border: 1px solid #f4f6f9;
+    margin-left: 5px;
+}
+
+
+.AreUSureMain .AreUSureInner .AreUSureBtns .AreUSureConfirm:hover{
+    font-size: 20px;
+    padding: 9px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid #1ecf1e;
+    box-shadow: 2px 2px 2px rgba(51, 51, 51, 0.5);
+}
+
+
+.maintenace-Summary{
+    margin-bottom: 10px;
+    border-radius: 8px;
+    width: auto;
+    padding: 10px;
+    padding-right: 10px;
+    padding-right: 10px;
+    box-shadow: 0px 2px 2px 2px rgba(51, 51, 51, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.maintenace-Summary .MaintenanceBuildingName{
+    font-size: 30px;
+    margin:0px;
+    font-weight: 550;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
 
 
 

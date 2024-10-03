@@ -54,4 +54,4 @@ async function sendAnnouncement(uid, announcement){
 }
 
 
-module.exports ={ sendAnnouncement}
+module.exports ={ sendAnnouncement }
