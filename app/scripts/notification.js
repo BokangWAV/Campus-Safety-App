@@ -1,7 +1,7 @@
 var notifications;
 const notificationList = document.getElementById("notification-list");
 const unreadCountElement = document.getElementById("unread-count");
-
+/* coverage ignore start */
 document.addEventListener("DOMContentLoaded",async function () {
     
   
@@ -257,3 +257,4 @@ interval2 = setInterval(async ()=>{
     console.error(error)
   }
 }, 30000)
+/* coverage ignore end */

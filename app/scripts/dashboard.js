@@ -236,3 +236,4 @@ function addCard(cardTitle, cardBrief, cardAnchor, anchorLink){
 
     return card;
 }
+
