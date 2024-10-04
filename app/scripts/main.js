@@ -283,7 +283,7 @@ submit_btn.addEventListener("click",async ()=>{
 });
 }
 
-f(googleBtn){
+if(googleBtn){
     googleBtn.addEventListener('click', async ()=>{
         //GooglesignInUser();
         if(await GooglesignInUser()){
