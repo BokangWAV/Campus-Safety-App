@@ -281,6 +281,7 @@ submit_btn.addEventListener("click",async ()=>{
     }
 
 });
+}
 
 if(googleBtn){
     googleBtn.addEventListener('click', async ()=>{
