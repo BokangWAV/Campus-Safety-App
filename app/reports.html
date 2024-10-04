@@ -343,247 +343,113 @@
 
     }
 
-    async function getLocation() {
-      if(window.localStorage.getItem('userProfile') != ""){
-        document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
-      }
-      if(window.localStorage.getItem('userRole') == "manager"){
-        document.getElementById('managerAlert').style.display = 'flex'
-        document.getElementById('managerRequests').style.display = 'flex'
-      }
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-          document.getElementById('geoLocation').value = position.coords.latitude + ", " + position.coords.longitude;
-        }, function (error) {
-          console.error("Error getting location: ", error);
-          document.getElementById('geoLocation').value = "Unable to retrieve location.";
-        });
-      } else {
-        document.getElementById('geoLocation').value = "Geolocation is not supported by this browser.";
-      }
-      await fetch('https://witsgobackend.azurewebsites.net/v1/map/getBuildings')
-      .then(response=>{return response.json()})
-      .then(data=>{
-          console.log(data); 
-      })
-      .catch(error=>{
-        setTempBuildings();
-    })
-      APIBuildings.sort((a, b) => a.building_name.localeCompare(b.building_name));
-      APIBuildings.forEach((data)=>{
-        console.log(data)
-        const option = document.createElement('option');
+    async function getLocationAndBuildings() {
 
-        option.value = data.building_name;
-        option.innerText = data.building_name;
-        document.getElementById('buildings').appendChild(option)
-      });
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        document.getElementById('geoLocation').value = position.coords.latitude + ", " + position.coords.longitude;
+      },
+      function (error) {
+        console.error("Error getting geolocation: ", error);
+        document.getElementById('geoLocation').value = "Unable to retrieve location.";
+      }
+    );
+  } else {
+    document.getElementById('geoLocation').value = "Geolocation is not supported by this browser.";
+  }
+
+
+  try {
+    console.log("Attempting to fetch buildings from API...");
+    const response = await fetch('https://witsgobackend.azurewebsites.net/v1/map/getBuildings');
+    const data = await response.json();
+
+  
+    if (data && data.data && data.data.data.length > 0) {
+      console.log("Buildings successfully fetched from API:", data.data.data); 
+      populateBuildings(data.data.data); 
+    } else {
+      console.warn("No buildings found in API response. Using fallback.");
+      setTempBuildings(); 
     }
+  } catch (error) {
+    console.error("Error fetching buildings from API. Using fallback.", error);
+    setTempBuildings(); 
+  }
+}
 
-    function setTempBuildings(){
-      APIBuildings = [
-        {
-          "building_name": "OLS",
-        },
-        {
-          "building_name": "Wits Science Stadium",
-        },
-        {
-          "building_name": "Faculty of Commerce, Law and Management",
-        },
-        {
-          "building_name": "WITS Entrance 9",
-        },
-        {
-          "building_name": "Commerce library",
-        },
-        {
-          "building_name": "MSL",
-        },
-        {
-          "building_name": "NCB",
-        },
-        {
-          "building_name": "MSB",
-        },
-        {
-          "building_name": "CCDU",
-        },
-        {
-          "building_name": "FNB Building",
-        },
-        {
-          "building_name": "Wits Law School",
-        },
-        {
-          "building_name": "DJ Du Plessis",
-        },
-        {
-          "building_name": "Wits Law Clinic",
-        },
-        {
-          "building_name": "Chemistry Labs",
-        },
-        {
-          "building_name": "Flower Hall",
-        },
-        {
-          "building_name": "Chamber of Mines",
-        },
-        {
-          "building_name": "ARM Building",
-        },
-        {
-          "building_name": "WITS 3rd+ Year Parking",
-        },
-        {
-          "building_name": "Vida Amic Deck",
-        },
-        {
-          "building_name": "Amic Deck",
-        },
-        {
-          "building_name": "2nd+ Year Parking",
-        },
-        {
-          "building_name": "Law Lawns",
-        },
-        {
-          "building_name": "Hall 29",
-        },
-        {
-          "building_name": "Olives and Plates Wits",
-        },
-        {
-          "building_name": "Barnato Hall",
-        },
-        {
-          "building_name": "David Webster",
-        },
-        {
-          "building_name": "Wits Anglo American Digital Dome",
-        },
-        {
-          "building_name": "Bozzoli",
-        },
-        {
-          "building_name": "Wits Musalla",
-        },
-        {
-          "building_name": "Mens Halls Of Residence",
-        },
-        {
-          "building_name": "College House",
-        },
-        {
-          "building_name": "Wits University Jubilee Hall",
-        },
-        {
-          "building_name": "Wits Rugby Stadium",
-        },
-        {
-          "building_name": "Old Mutual Sports Hall",
-        },
-        {
-          "building_name": "The Matrix",
-        },
-        {
-          "building_name": "William Cullen Library",
-        },
-        {
-          "building_name": "Wits Inter Campus Bus Service",
-        },
-        {
-          "building_name": "North West Engineering Building",
-        },
-        {
-          "building_name": "School of Mechanical, Industrial and Aeronautical Engineering"
-        },
-        {
-          "building_name": "Solomon Mahlangu House"
-        },
-        {
-          "building_name": "Main Hall"
-        },
-        {
-          "building_name": "RS Exam Hall"
-        },
-        {
-          "building_name": "Wartenweiler Library"
-        },
-        {
-          "building_name": "Physics Building"
-        },
-        {
-          "code": null,
-          "_id": "66e8a6288515e58447d791d3",
-          "building_name": "Biology Building",
-          "campus": [
-            "east_campus"
-          ],
-          "type": [
-            "building"
-          ],
-          "latitude": -26.1911103,
-          "longitude": 28.0312252,
-          "building_id": "fa145529",
-          "created_at": "2024-09-16T21:42:00.103Z",
-          "__v": 0
-        },
-        {
-          "code": null,
-          "_id": "66e8a65a8515e58447d791d5",
-          "building_name": "Wits School of Arts",
-          "campus": [
-            "east_campus"
-          ],
-          "type": [
-            "building"
-          ],
-          "latitude": -26.1921308,
-          "longitude": 28.0324523,
-          "building_id": "0de6d1b8",
-          "created_at": "2024-09-16T21:42:50.215Z",
-          "__v": 0
-        },
-        {
-          "code": null,
-          "_id": "66e8a6838515e58447d791d7",
-          "building_name": "Wits Theatre Complex",
-          "campus": [
-            "east_campus"
-          ],
-          "type": [
-            "building"
-          ],
-          "latitude": -26.1925313,
-          "longitude": 28.0307648,
-          "building_id": "0bdb22ab",
-          "created_at": "2024-09-16T21:43:31.943Z",
-          "__v": 0
-        },
-        {
-          "code": null,
-          "_id": "66e8a6ad8515e58447d791d9",
-          "building_name": "Wits Journalism Department",
-          "campus": [
-            "east_campus"
-          ],
-          "type": [
-            "building"
-          ],
-          "latitude": -26.1925313,
-          "longitude": 28.0307648,
-          "building_id": "8669ecbc",
-          "created_at": "2024-09-16T21:44:13.783Z",
-          "__v": 0
-        }
-      ]
-    }
 
-    window.onload = function () {
-      getLocation();
-    };
+function populateBuildings(buildings) {
+  const buildingsDropdown = document.getElementById('buildings');
+  buildingsDropdown.innerHTML = ""; 
+  
+  buildings.forEach(building => {
+    const option = document.createElement('option');
+    option.value = building.building_name;
+    option.innerText = building.building_name;
+    buildingsDropdown.appendChild(option);
+  });
+}
+
+
+function setTempBuildings() {
+  const emergencyBuildings = [
+    { "building_name": "OLS" },
+    { "building_name": "Wits Science Stadium" },
+    { "building_name": "Faculty of Commerce, Law and Management" },
+    { "building_name": "WITS Entrance 9" },
+    { "building_name": "Commerce library" },
+    { "building_name": "MSL" },
+    { "building_name": "NCB" },
+    { "building_name": "MSB" },
+    { "building_name": "CCDU" },
+    { "building_name": "FNB Building" },
+    { "building_name": "Wits Law School" },
+    { "building_name": "DJ Du Plessis" },
+    { "building_name": "Wits Law Clinic" },
+    { "building_name": "Chemistry Labs" },
+    { "building_name": "Flower Hall" },
+    { "building_name": "Chamber of Mines" },
+    { "building_name": "ARM Building" },
+    { "building_name": "WITS 3rd+ Year Parking" },
+    { "building_name": "Vida Amic Deck" },
+    { "building_name": "Amic Deck" },
+    { "building_name": "2nd+ Year Parking" },
+    { "building_name": "Law Lawns" },
+    { "building_name": "Hall 29" },
+    { "building_name": "Olives and Plates Wits" },
+    { "building_name": "Barnato Hall" },
+    { "building_name": "David Webster" },
+    { "building_name": "Wits Anglo American Digital Dome" },
+    { "building_name": "Bozzoli" },
+    { "building_name": "Wits Musalla" },
+    { "building_name": "Mens Halls Of Residence" },
+    { "building_name": "College House" },
+    { "building_name": "Wits University Jubilee Hall" },
+    { "building_name": "Wits Rugby Stadium" },
+    { "building_name": "Old Mutual Sports Hall" },
+    { "building_name": "The Matrix" },
+    { "building_name": "William Cullen Library" },
+    { "building_name": "Wits Inter Campus Bus Service" },
+    { "building_name": "North West Engineering Building" },
+    { "building_name": "School of Mechanical, Industrial and Aeronautical Engineering" },
+    { "building_name": "Solomon Mahlangu House" },
+    { "building_name": "Main Hall" },
+    { "building_name": "RS Exam Hall" },
+    { "building_name": "Wartenweiler Library" },
+    { "building_name": "Physics Building" },
+  ];
+
+  console.log("Loading buildings from fallback array.");
+  populateBuildings(emergencyBuildings); 
+}
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  getLocationAndBuildings();
+});
+
 
     document.getElementById('mobile-nav-toggle').addEventListener('click',() =>{
         const menu = document.getElementById('headerMenu');
