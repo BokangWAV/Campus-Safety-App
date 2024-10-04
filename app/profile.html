@@ -22,6 +22,20 @@
   <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
 
+  <style>
+    #logOut{
+      opacity: 0.6;
+      color: antiquewhite;
+      background-color: #1a3e57;
+      text-decoration: none;
+      border: 0;
+      padding: 1em;
+    }
+
+    #logOut:hover{
+      opacity: 1;
+    }
+  </style>
 </head>
 
 <body>
@@ -81,6 +95,9 @@
       <button class="edit-button" onclick="window.location.href='./edit-profile.html'">Edit</button>
     </div>
   </div>
+  <div class="signOutContainer" style="display: block; padding: 1em; justify-content: center; width: 80%;">
+    <button type="button" id="logOut">Sign Out</button>
+  </div>
 
   <script type="module" src="./scripts/profiledata.js"></script>
   <script>
@@ -107,6 +124,6 @@
     })
 </script>
 
-<script src="./scripts/realtimenotification.js"></script>
+<!-- <script src="./scripts/realtimenotification.js"></script> -->
 
 </body>

@@ -144,7 +144,7 @@ async function displayNotifications(){
 
     // Incident image (hidden by default)
     const incidentImage = document.createElement("img");
-    if(notification.type === "report"){
+    if((notification.type === "report") || notification.type === "safety alert"){
       
       incidentImage.className = "incident-pic";
       console.log(notification.incident_image)
@@ -167,7 +167,7 @@ async function displayNotifications(){
     listItem.appendChild(messageDiv);
     listItem.appendChild(timestampDiv);
     if(notification.type === "report" && notification.incident_image.length>0)listItem.appendChild(incidentImage);
-
+    if(notification.type === "safety alert" && notification.incident_image.length>0)listItem.appendChild(incidentImage);
     // Toggle the display of additional info and the incident image on click
     listItem.addEventListener("click", async function () {
       if (listItem.classList.contains("expanded")) {
@@ -177,6 +177,7 @@ async function displayNotifications(){
         posterName.style.display = "none";
         timestampDiv.style.display = "none";
         if(notification.type == "report") incidentImage.style.display = "none";
+        if(notification.type == "safety alert") incidentImage.style.display = "none";
       } else {
         if(notification.type == "announcement")document.getElementById(`${notification.notificationID}`).style.display = 'flex';
         listItem.classList.add("expanded");
@@ -184,7 +185,8 @@ async function displayNotifications(){
         posterName.style.display = "block";
         timestampDiv.style.display = "block";
         if (notification.incident_image) {
-          if(notification.type == "report") incidentImage.style.display = "block"; // Show the image if available
+          if(notification.type == "report") incidentImage.style.display = "block";
+          if(notification.type == "safety alert") incidentImage.style.display = "block"; // Show the image if available
         }
         // Mark notification as read and update unread count
         if (notification.status === "unread") {
