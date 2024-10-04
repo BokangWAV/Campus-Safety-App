@@ -275,7 +275,7 @@ submit_btn.addEventListener("click",async ()=>{
       const message = document.getElementById('inform');
       if(verifySignInFields(email.value, password.value, message)){
         if(await NormalSignInUser(email.value, password.value, message)){
-          window.location.href = "http://127.0.0.1:5500/dashboardtest.html"
+          window.location.href = "./dashboardtest.html"
         }
       }
     }
@@ -287,7 +287,7 @@ if(googleBtn){
     googleBtn.addEventListener('click', async ()=>{
         //GooglesignInUser();
         if(await GooglesignInUser()){
-              window.location.href = "http://127.0.0.1:5500/dashboardtest.html"
+              window.location.href = "./dashboardtest.html"
         }
     });
 }
