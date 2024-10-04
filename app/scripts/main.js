@@ -283,13 +283,14 @@ submit_btn.addEventListener("click",async ()=>{
 });
 }
 
-googleBtn.addEventListener('click', async ()=>{
-    //GooglesignInUser();
-    if(await GooglesignInUser()){
-          window.location.href = "http://127.0.0.1:5500/dashboardtest.html"
-    }
-  
-});
+f(googleBtn){
+    googleBtn.addEventListener('click', async ()=>{
+        //GooglesignInUser();
+        if(await GooglesignInUser()){
+              window.location.href = "http://127.0.0.1:5500/dashboardtest.html"
+        }
+    });
+}
 
 
 
