@@ -155,7 +155,7 @@ function buildUserPage(){
     });
 
     const circleDivImg1 = document.createElement('img');
-    circleDivImg1.src = './assets/Undraw/Chatbot.png'
+    circleDivImg1.src = './assets/Undraw/chatbot.png'
 
     circleDiv1.appendChild(circleDivImg1);
 
@@ -207,7 +207,7 @@ function buildManagerPage(){
     });
 
     const circleDivImg1 = document.createElement('img');
-    circleDivImg1.src = './assets/Undraw/Chatbot.png'
+    circleDivImg1.src = './assets/Undraw/chatbot.png'
 
     circleDiv1.appendChild(circleDivImg1);
     circleDiv2.appendChild(circleDivImg2);
@@ -236,3 +236,4 @@ function addCard(cardTitle, cardBrief, cardAnchor, anchorLink){
 
     return card;
 }
+

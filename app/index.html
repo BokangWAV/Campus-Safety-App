@@ -2,106 +2,79 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Campus-Safety-App</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles/main.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Safety App - Landing Page</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="./styles/landing.css">
 </head>
 
 <body class="index-page">
-  <header id="header" class="header d-flex align-items-center sticky-top">
-    <div class="container-xl d-flex justify-content-between align-items-center">
-      <a href="index.html" class="logo">
-        <h1 class="sitename">Campus Safety</h1>
-      </a>
-      <nav id="navmenu" class="navmenu">
-        <ul class="nav-links">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="unavailable.html">About</a></li>
-          <li><a href="unavailable.html">FAQs</a></li>
-          <li><a href="unavailable.html">Contact</a></li>
-        </ul>
-        <button class="mobile-nav-toggle d-xl-none"><i class="bi bi-list"></i></button>
-      </nav>
-    </div>
-  </header>
-
-  <main class="main">
     <!-- Hero Section -->
-    <section id="hero" class="hero section dark-background">
-      <img src="assets/img/hero-bg.jpg" alt="" data-aos="fade-in">
-      <div class="container text-center">
-        <h2>Your Campus Safety, Our Priority</h2>
-        <p>Committed to delivering top-tier safety solutions for a secure campus environment.</p>
-        <a href="register.html" class="btn-get-started">Register</a>
+    <section class="hero">
+        <div class="hero-header">
+            <h2>Campus Safety</h2>
+            <ul class="nav-list">
+                <li><a href="unavailable.html">About</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="unavailable.html">Contact</a></li>
+            </ul>
+        </div>
+        <div class="hero-content">
+            <h2>Your Campus Safety, Our Priority</h2>
+            <p>Committed to delivering top-tier safety solutions for a secure campus environment.</p>
+            <a class="btn btn-primary" href="register.html">Register</a>
+        </div>
+        <div class="hero-image">
+          <img src="./assets/img/hero-bg.jpg" alt="Campus Safety Image" />
       </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="about section">
-      <div class="container text-center">
-        <h3>Making Wits Safer and Better</h3>
-        <p class="subtext">We are committed to providing a platform of relief and one to reach out to in times of danger or concern.</p>
-        <ul class="benefits-list">
-          <li><i class="bi bi-check-circle"></i> Seamless, smart, simple.</li>
-          <li><i class="bi bi-check-circle"></i> Dedicated support for your safety.</li>
-          <li><i class="bi bi-check-circle"></i> Ensuring peace of mind.</li>
-        </ul>
-        <a href="about.html" class="btn-more">Read More</a>
-      </div>
-    </section>
-
-    <!-- Why Us Section -->
-    <section id="why-us" class="section why-us">
-      <div class="container">
-        <div class="row text-center">
-          <div class="col-lg-4">
-            <div class="why-box">
-              <h3>What are we exactly?</h3>
-              <p>An environment where we all work together to make our campus a safer place.</p>
-              <a href="about.html" class="btn-more">Learn More</a>
-            </div>
-          </div>
-          <div class="col-lg-8">
+    <section class="about section">
+        <div class="container">
+            <h3>Making Wits Safer and Better</h3>
+            <p>We provide a platform for relief and assistance during times of danger or concern.</p>
             <div class="row">
-              <div class="col-md-4">
-                <div class="icon-box">
-                  <i class="bi bi-clipboard-data"></i>
-                  <h4>Emergency Alerts</h4>
-                  <p>Respond to emergencies of all degrees.</p>
+                <div class="col-lg-4">
+                    <div class="card">
+                        <i class="bi bi-clipboard-data"></i>
+                        <h4>Emergency Alerts</h4>
+                        <p>Swift responses to emergencies can save lives. Stay connected and informed with our real-time alert system.</p>
+                    </div>
                 </div>
-              </div>
-              <div class="col-md-4">
-                <div class="icon-box">
-                  <i class="bi bi-shield-lock"></i>
-                  <h4>Security</h4>
-                  <p>24/7 access to security services on campus.</p>
+                <div class="col-lg-4">
+                    <div class="card">
+                        <i class="bi bi-shield-lock"></i>
+                        <h4>Campus Security</h4>
+                        <p>Access to 24/7 security services ensures safety on campus. Our dedicated team is always ready to help.</p>
+                    </div>
                 </div>
-              </div>
-              <div class="col-md-4">
-                <div class="icon-box">
-                  <i class="bi bi-inboxes"></i>
-                  <h4>Report</h4>
-                  <p>Get almost immediate responses during emergencies.</p>
+                <div class="col-lg-4">
+                    <div class="card">
+                        <i class="bi bi-inboxes"></i>
+                        <h4>Incident Reporting</h4>
+                        <p>Report incidents easily and receive immediate support. Your safety is our priority, and we’re here for you.</p>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
     </section>
-  </main>
 
-  <footer id="footer" class="footer text-center">
-    <div class="container">
-      <p>© Copyright 2024 <strong class="sitename">TDKUs</strong>. All Rights Reserved.</p>
-    </div>
-  </footer>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container text-center">
+            <p>&copy; 2024 <strong>TDKUs</strong>. All Rights Reserved.</p>
+        </div>
+    </footer>
 
-  <script src="/scripts/main.js"></script>
+    <!-- Scripts -->
+    <script src="./scripts/main.js"></script>
 </body>
 
 </html>

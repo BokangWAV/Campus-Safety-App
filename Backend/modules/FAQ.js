@@ -49,11 +49,11 @@ async function respondFAQ(FAQID, answer){
     })
     .then(() => {
         responded = true
-       // console.log("Document successfully updated!");
+        console.log(`FAQ ${FAQID} successfully responded!`);
     })
     .catch((error) => {
         // The document probably doesn't exist.
-        //console.error("Error updating document: ", error);
+        console.error("Error updating document: ", error);
     });
 
     return responded;
@@ -73,11 +73,11 @@ async function  displayFAQ(FAQID){
     })
     .then(() => {
         displayable = true
-       // console.log("Document successfully updated!");
+       console.log(`FAQ ${FAQID} status successfully updated!`);
     })
     .catch((error) => {
         // The document probably doesn't exist.
-        //console.error("Error updating document: ", error);
+        console.error("Error updating document: ", error);
     });
 
     return displayable;
@@ -93,9 +93,9 @@ async function deleteFAQ(FAQID){
 
     await articlesRef2.doc(doc.id).delete()
     .then(() => {
-        //console.log("Document successfully deleted!");
+        console.log(`FAQ ${FAQID} successfully deleted!`);
     }).catch((error) => {
-        //console.error("Error removing document: ", error);
+        console.error("Error removing document: ", error);
         deleted = false;
     });
 
@@ -105,7 +105,7 @@ async function deleteFAQ(FAQID){
 async function addFAQ(FAQ){
     let added = true;   //Shows whether we added a user or we failed
 
-    const response = await verifyRef.orderBy("FAQID", "desc").get();
+    const response = await db.collection('FAQ').orderBy("FAQID", "desc").get();
     var count = 0;
     if( response.docs.length > 0){
         count = Number(response.docs[0].data().FAQID)
@@ -113,17 +113,19 @@ async function addFAQ(FAQ){
     
     count = count + 1
 
-    await verifyRef.add({
+    const verifyref = db.collection('FAQ')
+
+    await verifyref.add({
         question: FAQ.question,
         answer: "",
         FAQID: count,
         status: "pending"
     })
     .then(() => {
-        //console.log("Document successfully written!");
+        console.log("FAQ successfully added!");
     })
     .catch((error) => {
-        //console.error("Error writing document: ", error);
+        console.error("Error writing document: ", error);
         added = false;
     });
 

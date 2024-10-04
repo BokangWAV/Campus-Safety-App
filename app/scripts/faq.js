@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         console.log("Error:", error);
     }
 
-    if (userUID !== 0) {
+    
         let textArea = document.createElement("textarea");
         textArea.id = "faq-textarea";
         textArea.name = "faq-textarea";
@@ -123,11 +123,6 @@ document.addEventListener("DOMContentLoaded", async function() {
 
             textArea.value = "";
         });
-    } else {
-        let par = document.createElement("p");
-        par.innerHTML = 'If you want to ask a question, <a href="register.html">sign in</a>.';
-        document.querySelector(".faq-question").appendChild(par);
-    }
 });
 function addCard(question, answer, index){
     document.querySelector(".faq-list").innerHTML += `<div id="card"><i>${question}</i><div class="question" id=faq${index}><p>${answer}</p></div></div>`
@@ -148,7 +143,7 @@ function enableButton() {
 
 async function postFAQ(data, uid) {
     try {
-        const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/FAQ/${uid}`, {
+        const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/FAQ`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -167,3 +162,5 @@ async function postFAQ(data, uid) {
     }
 
 }
+
+module.exports = { fetchData, postFAQ, addCard, disableButton, enableButton };

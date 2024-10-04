@@ -1,12 +1,12 @@
 require('dotenv').config();
-
+const { processEvent } = require('./modules/events'); //New
 const express = require('express');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Get all functions to operate on articles
-const { getAllArticles, getPendingArticles, getApprovedArticles, addArticle, deleteArticle, addLike } = require('./modules/article.js');
+const { getAllArticles, getPendingArticles, getApprovedArticles, addArticle, deleteArticle, addLike, approveArticle } = require('./modules/article.js');
 
 // Get all the functions to operate on users
 const {getAllUsers, getUser, addUser, updateProfile, updateProfilePicture, setRole} = require('./modules/users.js');
@@ -15,7 +15,7 @@ const {getAllUsers, getUser, addUser, updateProfile, updateProfilePicture, setRo
 const { addReport, getAllReports, getUserReport, removeReport } = require('./modules/report.js');
 
 //Get all the functions to use for Alerts
-const { getAllAlerts, addAlert, deleteReport, updateViewAlert, managerViewAlert } = require('./modules/alert.js');
+const { getAllAlerts, addAlert, deleteReport, updateViewAlert, managerViewAlert, getUserAlerts } = require('./modules/alert.js');
 
 //Get all the functions to use for Notifications
 const { getAllNotifications, getAllReadNotifications, getAllUnreadNotifications, updateNotificationStatus, getUnSeenNotifications } = require('./modules/notification.js');
@@ -81,6 +81,20 @@ app.put('/users/profile/:uid', async (req, res)=>{
     }
     
 });
+// Add a new route to handle event submissions
+app.post('/events', async (req, res) => {
+    const event = req.body;  // Event data coming from the client (API call)
+    
+    // Process the event (calculate risk, store in Firestore, and send notifications)
+    const result = await processEvent(event);
+
+    if (result.success) {
+        res.status(200).json({ message: result.message });
+    } else {
+        res.status(500).json({ message: result.message });
+    }
+}); //New
+
 
 //Update the profile picture of the user
 app.put('/user/profilePicture/:uid', async (req, res)=>{
@@ -445,8 +459,38 @@ app.post('/announcement/:uid', async (req, res)=>{
     
 });
 
+//============================================= EVENT SECTION =========================================================//
+
+app.post('/events', async (req, res) => {
+    const event = req.body;  // The event data coming from the client
+
+    const result = await processEvent(event);
+
+    if (result.success) {
+        res.status(200).send("Event processed and notifications sent");
+    } else {
+        res.status(500).send("Failed to process event");
+    }
+});
 
 
+//============================================= MAINTANENCE SECTION ===============================================//
+app.get('/maintenance', async (req, res)=>{
+    const url = 'https://wiman.azurewebsites.net/api/venues'; 
+    const token = process.env.MAINTENACE_KEY;  
+
+    var response;
+
+    await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,  
+            'Content-Type': 'application/json'
+        }
+    }).then(async (data) =>{response = await data.json()})
+
+    res.json(response);
+})
 
 
 

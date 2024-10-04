@@ -69,13 +69,23 @@ document.addEventListener("DOMContentLoaded", async function(){
                         let hold = article.content;
                         let holder = hold.split("").slice(0, 150).join("");
                         
-                        createArticles(
-                            `${article.title} <sub><small><i>${article.likes} likes</i></small></sub>`,
-                            author,
-                            holder,
-                            hold,
-                            article.articleID
-                        );
+                        if(article.likes == 1){
+                            createArticles(
+                                `${article.title} <sub><small><i>${article.likes} like</i></small></sub>`,
+                                author,
+                                holder,
+                                hold,
+                                article.articleID
+                            );
+                        }else{    
+                            createArticles(
+                                `${article.title} <sub><small><i>${article.likes} likes</i></small></sub>`,
+                                author,
+                                holder,
+                                hold,
+                                article.articleID
+                            );
+                        }
                     }
 
 
