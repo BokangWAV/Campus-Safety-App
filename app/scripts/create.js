@@ -43,7 +43,7 @@ onAuthStateChanged(auth, (user) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById('articleForm').addEventListener('submit', function(event) {
+    document.getElementById('articleForm').addEventListener('submit',async function(event) {
         event.preventDefault();
         
         if (!currentUserName) {
@@ -61,25 +61,44 @@ document.addEventListener("DOMContentLoaded", () => {
             name: currentUserName
         }
 
-        console.log(JSON.stringify(data));
-
         // if(userUID == 0){
         //     alert("You cannot post if you are not logged in");
         // }else{
         disableButton();
-        postArticles(data, userUID)
-            .then(() => {
-                document.getElementById('articleTitle').value = '';
-                document.getElementById('articleContent').value = '';
+        // postArticles(content, title, currentUserName, currentUserSurname , userUID)
+        //     .then(() => {
+        //         document.getElementById('articleTitle').value = '';
+        //         document.getElementById('articleContent').value = '';
+        //     })
+        //     .catch(error => {
+        //         console.error("Error posting article:", error);
+        //         alert("Failed to post article. Please try again.");
+        //     })
+        //     .finally(() => {
+        //         enableButton();
+        //     });
+
+        await fetch(`https://sdp-campus-safety.azurewebsites.net/articles/${userUID}`,{
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                content: content,
+                surname: currentUserSurname,
+                name: currentUserName,
+                title: title
             })
-            .catch(error => {
-                console.error("Error posting article:", error);
-                alert("Failed to post article. Please try again.");
-            })
-            .finally(() => {
-                enableButton();
-            });
-        // }
+        }).then(()=>{
+            console.log("Uploaded");
+            alert("Article successfully posted!!!");
+            document.getElementById('articleTitle').value = '';
+            document.getElementById('articleContent').value = '';
+            enableButton();
+        }).catch(()=>{
+            console.log("Error!!");
+            alert("There was an error posting your article. Try again later...");
+            enableButton();
+        })
+        
   });
 
 })
@@ -96,14 +115,19 @@ function enableButton() {
     button.innerHTML = "Submit Article";
 }
 
-async function postArticles(data, uid) {
+async function postArticles(userContent, userTitle, userName, userSurname, uid) {
     try {
         const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/articles/${uid}`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'applidcation/json'
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify({
+                content: userContent,
+                title: userTitle,
+                name: userName,
+                surname: userSurname
+            })
         });
 
         if (response.ok) {

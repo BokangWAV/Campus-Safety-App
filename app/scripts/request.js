@@ -13,24 +13,34 @@ async function fetchData(url) {
 
 document.addEventListener("DOMContentLoaded", async function (){
     try {
+        if(window.localStorage.getItem('uid') === null){
+            alert("You need to sign in");
+            window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/register.html"
+        }
+        const uid = window.localStorage.getItem('uid');
+        
+        const user = await fetchData(`https://sdp-campus-safety.azurewebsites.net/users/${uid}`);
+        if(user[0].role == "user"){
+            alert("You are not authorised to be on this page");
+            window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/dashboardtest.html"
+        }
+        
         const list = await fetchData('https://sdp-campus-safety.azurewebsites.net/articles');
         const articleList = [];
         const myMap = new Map(Object.entries(list));
         for(let i = 0; i < myMap.size; i++){
             articleList.push(myMap.get(`${i}`))
-
-            console.log('Processing article:', myMap.get(`${i}`));
             }
             
-        document.querySelector("#preloader").style.opacity = "0";
+        document.querySelector("#preloader").remove();
         document.querySelector(".main-container").style.opacity = "1";
         
         if(articleList.length > 0){
             articleList.forEach((article) => {
                 if(article.status == "pending"){
-                    document.querySelector(".pending-section").appendChild(addCard(article.title, article.content, article.status));
+                    document.querySelector(".pending-section").appendChild(addCard(article.title, article.content, article.articleID, article.status));
                 }else{
-                    document.querySelector(".approved-section").appendChild(addCard(article.title, article.content, article.status));
+                    document.querySelector(".approved-section").appendChild(addCard(article.title, article.content, article.articleID, article.status));
                 }
             })
             }else{
@@ -41,51 +51,74 @@ document.addEventListener("DOMContentLoaded", async function (){
         } catch (error) {
             console.error('Error:', error);
         }
-    
-    document.querySelector("#btnDelete").addEventListener("click", ()=>{
-        const thisDiv = this.parentElement;
-        let thisID = this.dataset.userID;
 
-        fetch(`https://sdp-campus-safety.azurewebsites.net/articles/${thisID}`, {
-            method: 'DELETE'
-        }).then(response => {
-            if(response.ok){
-                thisDiv.remove();
-                console.log("This article is successfully deleted.");
-                alert("This article is successfully deleted.");
-            }else{
-                console.error("Error", response.statusText);
-                alert("An error has occurred");
-            }
-        }).catch(error =>{
-            console.error("Error:", error);
-        })
-    })
+    const deleteB = document.querySelectorAll("#btnDelete")
+    deleteB.forEach(deleteBtn => {
 
-    document.querySelector("#btnApprove").addEventListener("click", ()=>{
-        const thisDiv = this.parentElement;
-        let thisID = this.dataset.userID;
-        let thisTitle = this.dataset.title;
-        let thisName = this.dataset.name;
-
-        fetch(`https://sdp-campus-safety.azurewebsites.net/articles/approve/${thisID}`, {
-            method: 'PUT'
-        }).then(response => {
-            if(response.ok){
-                thisDiv.remove();
-                console.log("This article is successfully deleted.");
-                alert("This article is successfully deleted.");
-            }else{
-                console.error("Error", response.statusText);
-                alert("An error has occurred");
-            }
-        }).catch(error =>{
-            console.error("Error:", error);
-        })
+        deleteBtn.addEventListener("click", (event)=>{
+            event.target.textContent = "LOADING...";
+            const thisDiv = event.target.parentElement.parentElement;
+            let thisID = event.target.dataset.articleID;
+            let url =`https://sdp-campus-safety.azurewebsites.net/articles/${thisID}`;
+            
+            console.log(url);
+            fetch(url, {
+                method: 'DELETE'
+            }).then(response => {
+                if(response.ok){
+                    thisDiv.remove();
+                    console.log("This article is successfully deleted.");
+                    alert("This article is successfully deleted.");
+                }else{
+                    console.error("Error", response.statusText);
+                    alert("An error has occurred");
+                    event.target.textContent = "Delete article";
+                }
+            }).catch(error =>{
+                console.error("Error:", error);
+                event.target.textContent = "Delete article";
+            })
     })
 })
 
-function addCard(articleTitle ,articleContent, articleUserID, articleStatus, articleName){
+    const approve = document.querySelectorAll("#btnApprove");
+    approve.forEach(apprBtn =>{
+        apprBtn.addEventListener("click", (event) => {
+            event.target.textContent = "LOADING...";
+            const thisDiv = event.target.parentElement.parentElement;
+            let thisID = event.target.dataset.articleID;
+            let url =`https://sdp-campus-safety.azurewebsites.net/articles/approve/${thisID}`; 
+            console.log(url);
+        
+            fetch(url, {
+                method: 'PUT'
+            }).then(response => {
+                if (response.ok) {
+                    thisDiv.querySelector("#buttonsContainer").innerHTML = "";
+                    const positiveResponse = document.createElement("p");
+                    positiveResponse.style.color = "green";
+                    positiveResponse.style.fontSize = "20px";
+                    positiveResponse.textContent = "Article can be viewed by the users.";
+                    thisDiv.querySelector("#buttonsContainer").appendChild(positiveResponse);
+
+                    console.log("This article is successfully updated.");
+                    alert("This article is successfully updated.");
+                } else {
+                    console.error("Error", response.statusText);
+                    alert("An error has occurred");
+                    event.target.textContent = "Approve article";
+                }
+            }).catch(error => {
+                console.error("Error:", error);
+            });
+    });
+})
+    
+})
+
+    
+
+function addCard(articleTitle ,articleContent, articleID, articleStatus){
     let card = document.createElement("div");
     card.className = "dashboard-card";
     card.style.margin = "10px 10px";
@@ -111,17 +144,17 @@ function addCard(articleTitle ,articleContent, articleUserID, articleStatus, art
     deleteArticle.style.border = "none"
     deleteArticle.textContent = "Delete article";
 
-    deleteArticle.dataset.userID = articleUserID;
+    deleteArticle.dataset.articleID = articleID;
     deleteArticle.dataset.title = articleTitle;
 
     let buttonsDiv = document.createElement("div");
+    buttonsDiv.id = "buttonsContainer";
     buttonsDiv.style.display = "flex";
     buttonsDiv.style.flexDirection = "row";
     buttonsDiv.style.flexWrap = "wrap";
     buttonsDiv.appendChild(deleteArticle);
 
-    if(articleStatus == "pending"){
-        let approveBtn = document.createElement("button");
+    let approveBtn = document.createElement("button");
         approveBtn.id = "btnApprove";
         approveBtn.style.padding = "10px 20px";
         approveBtn.style.backgroundColor = "green";
@@ -129,12 +162,15 @@ function addCard(articleTitle ,articleContent, articleUserID, articleStatus, art
         approveBtn.style.borderRadius = "5px"
         approveBtn.style.color = "white";
         approveBtn.style.border = "none"
+        approveBtn.style.marginLeft = "2em";
         approveBtn.textContent = "Approve article";
 
-        approveBtn.dataset.userID = articleUserID;
+        approveBtn.dataset.articleID = articleID;
         approveBtn.dataset.title = articleTitle;
-        approveBtn.dataset.name = articleName;
         buttonsDiv.appendChild(approveBtn);
+
+    if(articleStatus == "approved"){
+        approveBtn.style.display = "none";        
     }
 
     card.appendChild(buttonsDiv);

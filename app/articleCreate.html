@@ -14,28 +14,45 @@
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <link href="/styles/dashboard.css" rel="stylesheet">
+  
   <link rel="stylesheet" href="/styles/articlesCreate.css">
+  <link href="/styles/dashboard.css" rel="stylesheet">
 </head>
 
 <body>
-  <div class="header">
-    <h2>Campus Safety</h2>
-    <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
+ <div class="header">
+    <h2 style="cursor: pointer;" id="logo" >Campus Safety</h2>
+    <div class="mobile-nav-toggle" id="mobile-nav-toggle">
       <span></span>
       <span></span>
       <span></span>
     </div>
     <ul id="headerMenu">
-      <li><a href="dashboardtest.html" class="active">Dashboard</a></li>
-      <li><a href="profile.html">Profile Page</a></li>
-      <li><a href="alerts.html">Emergency Alerts</a></li>
-      <li><a href="reports.html">Report an Incident</a></li>
+      
+      <li><a href="current.html" id="managerAlert" style="display: none;">Emergency Alerts</a></li>
+      <li><a href="dashboardtest.html">Dashboard</a></li>
+      <li><a href="reports.html">Incident Report</a></li>
+      <li><a href="summary.html">Summary</a></li>
       <li><a href="article.html">Articles</a></li>
-      <li><a href="request.html">Requests</a></li>
-      <li><a href="ai-page.html">ChatBot</a></li>
+      <li><a href="request.html" id="managerRequests" style="display: none;">Requests</a></li>
       <li><a href="unavailable.html">Contact Security</a></li>
+      <li class="notifationer"><a href="notification.html"><img src="./assets/Undraw/notification.png" style="height: 24px; width: 24px; cursor: pointer;"></a></li>
+      <li class="profileDisplay"><a href="profile.html" ><img id="profileDisplay" src="./assets/Undraw/defaultpic.jpg" style="width: 33px; height: 33px; border-radius: 50%; border:3px solid #FFFFFF; margin-right: 22px;"></a></li>
+      <li><a href="notification.html" class="mobileNotification" id="mobileNotification">Notifications</a></li>
+      <li><a href="profile.html" class="MobileProfile" id="MobileProfile">Profile</a></li>
+
+      <!-- <li><a href="resources.html">Safety Resources</a></li> -->
+      
     </ul>
+
+    <!-- Dropdown Menu -->
+    <div class="dropdown-menu" id="dropdownMenu">
+      <ul>
+        <li><a href="item1.html">Item 1</a></li>
+        <li><a href="item2.html">Item 2</a></li>
+        <li><a href="item3.html">Item 3</a></li>
+      </ul>
+    </div>
   </div>
 
   <div class="main-container">
@@ -64,17 +81,31 @@
 
   <!-- <script src="/scripts/main.js" type="module"></script> -->
   <script src="/scripts/create.js" type="module"></script>
-  <script>
-    function toggleMobileMenu() {
-      const menu = document.getElementById('headerMenu');
-      menu.classList.toggle('active');
-    }
+ <script>
+    document.getElementById('mobile-nav-toggle').addEventListener('click',() =>{
+        const menu = document.getElementById('headerMenu');
+        menu.classList.toggle('active');
+    });
 
     function toggleDropdown() {
-      const dropdownMenu = document.getElementById('dropdownMenu');
-      dropdownMenu.classList.toggle('active');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        dropdownMenu.classList.toggle('active');
     }
-  </script>
+
+    if(window.localStorage.getItem('userProfile') != ""){
+        document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
+    }
+    if(window.localStorage.getItem('userRole') == "manager"){
+        document.getElementById('managerAlert').style.display = 'flex'
+        document.getElementById('managerRequests').style.display = 'flex'
+    }
+
+    document.getElementById('logo').addEventListener('click', ()=>{
+        window.location.href = 'dashboardtest.html';
+    })
+</script>
+
+<script src="./scripts/realtimenotification.js"></script>
 
 </body>
 </html>

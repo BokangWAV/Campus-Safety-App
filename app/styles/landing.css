@@ -1,0 +1,214 @@
+/* General Styling */
+body, html {
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f6f9;
+    color: #333;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Hero Section */
+.hero {
+    position: relative; /* Allows positioning of child elements */
+    overflow: hidden; /* Ensures anything outside the section doesn't show */
+    background-color: #214a61;
+    color: #fff;
+    padding: 4rem 2rem; /* Adjust for mobile */
+    text-align: center;
+}
+
+/* Header Styles */
+.hero-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.hero-header h2 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 2rem;
+    margin: 0;
+}
+
+/* Hero Image */
+.hero-image {
+    position: absolute; /* Positioned to overlap other content */
+    top: 0; /* Move the image down a bit */
+    left: 0; /* Align to the left of the section */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: hidden; /* Ensures the image doesn't overflow */
+    z-index: 1; /* Place behind text */
+}
+
+.hero-image img {
+    width: 100%; /* Make image responsive */
+    height: 100%; /* Make image cover the section */
+    object-fit: cover; /* Maintain aspect ratio and cover */
+    opacity: 0; /* Start invisible */
+    animation: fadeInOut 20s infinite; /* Loop animation with slower speed */
+}
+
+/* Fade In/Out Animation */
+@keyframes fadeInOut {
+    0%, 100% {
+        opacity: 0; /* Fade out */
+    }
+    50% {
+        opacity: 1; /* Fade in */
+    }
+}
+
+/* Hero Content */
+.hero-content {
+    position: relative; /* Ensure content stays above the image */
+    z-index: 2; /* Place content above image */
+    text-align: center;
+}
+
+.hero-content h2 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 2.5rem; /* Increased font size */
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+/* Navigation List Styles */
+.nav-list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 1.5rem;
+    z-index: 2; /* Ensure nav stays above the image */
+    position: relative; /* Allow for stacking context */
+}
+
+.nav-list li {
+    margin: 0;
+}
+
+.nav-list li a {
+    background-color: #1a3e57;
+    color: #fff;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-list li a:hover {
+    background-color: #1a2d3b;
+}
+
+/* Hero Button */
+.hero .btn-primary {
+    background-color: #ff5252;
+    color: #fff;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none; /* Removes the underline */
+    transition: background-color 0.3s;
+}
+
+.hero .btn-primary:hover {
+    background-color: #ff3333;
+}
+
+/* About Section */
+.about {
+    padding: 4rem 2rem; /* Increased padding */
+    text-align: center;
+}
+
+.about h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Card Styles */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin: 1rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%; /* Full width for responsive */
+    max-width: 350px; /* Increased maximum width for cards */
+    flex: 1 1 300px; /* Added flexibility for responsiveness */
+}
+
+.card i {
+    font-size: 2rem; /* Increase icon size */
+    margin-bottom: 1rem; /* Space below icon */
+}
+
+.card h4 {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.card p {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+
+/* Adjust layout for smaller screens */
+@media (max-width: 768px) {
+    .hero {
+        padding: 2rem 1rem; /* Reduced padding for mobile */
+    }
+    
+    .hero-content h2 {
+        font-size: 2rem; /* Reduce font size for mobile */
+    }
+    
+    .hero-content p {
+        font-size: 1rem; /* Reduce font size for mobile */
+    }
+
+    .nav-list {
+        flex-direction: column; /* Stack nav items vertically on mobile */
+        gap: 0.5rem; /* Reduced gap for mobile */
+    }
+
+    .card {
+        margin: 0.5rem; /* Reduced margin for cards on mobile */
+        padding: 1.5rem; /* Reduced padding for cards on mobile */
+    }
+}
+
+/* Footer */
+.footer {
+    background-color: #1a3e57;
+    color: #fff;
+    bottom: 0;
+    padding: 1rem;
+    text-align: center;
+}
+
+.footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
