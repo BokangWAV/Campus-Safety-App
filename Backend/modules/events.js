@@ -42,17 +42,23 @@ async function processEvent(event) {
 
   
     try {
+        console.log(event.title)
         const eventRef = db.collection('events');
         await eventRef.add({
-            eventName: event.name,
+            eventName: event.title,
             capacity: event.capacity,
             availableTickets: event.availableTickets,
-            location: event.location,
+            location: event.venue,
             imageUrl: event.imageUrl,
             riskLevel: riskLevel,
             safetyGuideline: safetyGuideline,
             eventTime: event.time,
             timestamp: FieldValue.serverTimestamp(),
+        })
+        .catch((error) => {
+            // The document probably doesn't exist.
+            console.error("Error adding event: ", error);
+            added = false;
         });
         console.log('Event successfully added to Firestore with risk level:', riskLevel);
     } catch (error) {
@@ -72,6 +78,11 @@ async function processEvent(event) {
                     idArray.push(doc.id);
                 });
             }
+        })
+        .catch((error) => {
+            // The document probably doesn't exist.
+            console.error("Error getting user: ", error);
+            added = false;
         });
 
         
@@ -82,8 +93,8 @@ async function processEvent(event) {
         };
 
        
-        const message = `Event: ${event.name} at ${event.location}, on ${event.time}. Risk level: ${riskLevel}. ${safetyGuideline}`;
-        appendNotifications(idArray, message, user2, 'safety alert', event.location, event.imageUrl);
+        const message = `Event: ${event.title} at ${event.venue}, on ${event.time}. Risk level: ${riskLevel}. ${safetyGuideline}`;
+        appendNotifications(idArray, message, user2, 'safety alert', event.venue, event.imageUrl);
 
         console.log('Notifications successfully sent to users');
         return { success: true, message: 'Event processed and notifications sent' };
