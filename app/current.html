@@ -29,8 +29,8 @@
 <body>
     <!-- Header for Web and Mobile -->
     <div class="header">
-        <h2>Campus Safety</h2>
-        <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
+        <h2 style="cursor: pointer;" id="logo" >Campus Safety</h2>
+        <div class="mobile-nav-toggle" id="mobile-nav-toggle" onclick="toggleMobileMenu()">
         <span></span>
         <span></span>
         <span></span>
@@ -150,7 +150,7 @@
                     <option value="Maintenances"> Maintenances</option>
                 </select>
                 <select name="Location-DropDown" disabled="true" id="Location-DropDown" class="dropDownOptions">
-                    
+                    <option value="viewAll">View All</option>
                 </select>
             </div>
 
