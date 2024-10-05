@@ -1,7 +1,24 @@
+
+
 const firstName = window.localStorage.getItem('userFirstName');
 const lastName = window.localStorage.getItem('userLastName');
 const userProfile = window.localStorage.getItem('userProfile');
 const sendBtn = document.getElementById('SendBtn');
+
+
+
+async function fetchData(url) {
+  try {
+      const response = await fetch(url);
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+  } catch (error) {
+      console.error('Error fetching data:', error);
+  }
+}
 
 
 async function sendAnnouncement(){
@@ -34,7 +51,17 @@ async function sendAnnouncement(){
     }
 
     try {
+        if(window.localStorage.getItem('uid') === null){
+            alert("You need to sign in.");
+            window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/register.html"
+        }
         const uid = window.localStorage.getItem('uid')
+        const user = await fetchData(`https://sdp-campus-safety.azurewebsites.net/users/${uid}`);
+        if(user[0].role == "user"){
+            alert("You are not authorised to be on this page");
+            window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/dashboardtest.html"
+        }
+        
         const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/announcement/${uid}`, {
           method: 'POST',
           headers: {
@@ -47,7 +74,7 @@ async function sendAnnouncement(){
           //window.location.href = '/profile.html'; // Redirect after successful submission
           sent = true
         } else {
-          alert('Failed to update');
+          alert('Failed to send announcement');
           sendBtn.disabled = false;
             sendBtn.innerText = "Send";
             sendBtn.className = "SendBtn"
@@ -68,6 +95,7 @@ async function sendAnnouncement(){
         sendBtn.disabled = false;
         sendBtn.innerText = "Send";
         sendBtn.className = "SendBtn"
+        alert("Announcement sent")
     }
     
 }
