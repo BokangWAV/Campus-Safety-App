@@ -26,6 +26,9 @@ const {getAllFAQ, getUserFAQ, respondFAQ, displayFAQ, deleteFAQ,  addFAQ} = requ
 //Get all fuctions to use for Announcements
 const { sendAnnouncement} = require('./modules/announcement.js');
 
+//Get all functions to use for applications
+const { getApplications,  addApplication,  approveApplication, getApplication} = require('./modules/applications.js');
+
 app.use(cors());
 app.use(express.json())
 
@@ -82,6 +85,7 @@ app.put('/users/profile/:uid', async (req, res)=>{
     
 });
 // Add a new route to handle event submissions
+/*
 app.post('/events', async (req, res) => {
     const event = req.body;  // Event data coming from the client (API call)
     
@@ -93,7 +97,7 @@ app.post('/events', async (req, res) => {
     } else {
         res.status(500).json({ message: result.message });
     }
-}); //New
+}); //New*/
 
 
 //Update the profile picture of the user
@@ -125,6 +129,48 @@ app.put('/user/role/:managerUid/:uid', async (req, res)=>{
         res.status(200).send('Updated Profile Picture successfully');
     }else{
         res.status(404).send('Unable to update Profile Picture');
+    }
+})
+
+
+//------------------------------------- APPLICATIONS SECTION ----------------------------------------------//
+// This is to get all applications by user to be a manager
+app.get('/applications', async (req, res)=>{
+    const response = await getApplications();
+
+    res.json(response);
+})
+
+// This is to get a user's application
+app.get('/applications/:uid', async (req, res)=>{
+    const uid = req.params['uid'];
+
+    const reponse = await getApplication(uid);
+
+    res.json(reponse)
+})
+
+//This is the add an application to be a manager
+app.post('/applications/:uid', async (req, res)=>{
+    const uid = req.params['uid'];
+
+    if(await addApplication(uid)){
+        res.status(200).send("Added successfully");
+    }else{
+        res.status(404).send("Unable to add application");
+    }
+})
+
+// This is to approve an application
+app.put('/applications/:uid', async (req, res)=>{
+    const uid = req.params['uid'];
+    const status = req.body.status;
+    const applicationID = req.body.applicationID;
+
+    if(await approveApplication(uid, status, applicationID)){
+        res.status(200).send("Application approved")
+    }else{
+        res.status(404).send("Unable to approve Application")
     }
 })
 
@@ -462,15 +508,65 @@ app.post('/announcement/:uid', async (req, res)=>{
 //============================================= EVENT SECTION =========================================================//
 
 app.post('/events', async (req, res) => {
-    const event = req.body;  // The event data coming from the client
+    const url = 'https://us-central1-witslivelycampus.cloudfunctions.net/app/events';
 
-    const result = await processEvent(event);
+    var response;
+    var success;
 
-    if (result.success) {
+    await fetch(url, {
+        method: 'GET',
+        headers: {  
+            'Content-Type': 'application/json'
+        }
+    }).then(async (data) =>{response = await data.json()})
+    response.forEach(async (event) => {
+        const inputDate = event.date; // Input date as string
+        var result = false
+
+        // Get today's date
+        const today = new Date();
+        const todayString = today.toISOString().slice(0, 10); // Convert to 'YYYY-MM-DD' format
+
+        // Compare the input date with today's date
+        if (inputDate === todayString  ) {
+            if(typeof(event.title) === "undefined"){
+                console.log(event);
+            }else{
+                result = await processEvent(event);
+            }
+            
+        } else {
+            if(typeof(event.title) === "undefined"){
+                console.log(event);
+            }else{
+                console.log(event.title, event.date);
+            }
+            
+        }
+        
+
+        if (result.success) {
+            success = true;
+        } else {
+            success = false;
+            return;
+        }
+        
+    });
+    if (success) {
         res.status(200).send("Event processed and notifications sent");
     } else {
         res.status(500).send("Failed to process event");
     }
+    //const event = req.body;  // The event data coming from the client
+
+   // const result = await processEvent(event);
+
+    //if (result.success) {
+    //    res.status(200).send("Event processed and notifications sent");
+    //} else {
+    //    res.status(500).send("Failed to process event");
+    //}
 });
 
 
