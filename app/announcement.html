@@ -8,54 +8,53 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manager Summary Page</title>
+    <title>Manager Annoncement Page</title>
 
     <!-- Favicons -->
     <link href="assets/img/favicon.png" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <link href="./styles/announcement.css" rel="stylesheet">
+    <link href="./styles/dashboard.css" rel="stylesheet">
 
-
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="./scripts/announcement.js" defer type="module"></script>
 </head>
 <body>
     <!-- Header for Web and Mobile -->
     <!-- Header for Web and Mobile -->
-  <div class="header">
-    <h2 style="cursor: pointer;" id="logo" >Campus Safety</h2>
-    <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <ul id="headerMenu">
-      
-      <li><a href="current.html" id="managerAlert" style="display: none;">Emergency Alerts</a></li>
-      <li><a href="reports.html">Incident Report</a></li>
-      <li><a href="summary.html">Summary</a></li>
-      <li><a href="article.html">Articles</a></li>
-      <li><a href="request.html" id="managerRequests" style="display: none;">Requests</a></li>
-      <li><a href="unavailable.html">Contact Security</a></li>
-      <li class="notifationer"><a href="notification.html"><img src="./assets/Undraw/notification.png" style="height: 24px; width: 24px; cursor: pointer;"></a></li>
-      <li class="profileDisplay"><a href="profile.html" ><img id="profileDisplay" src="./assets/Undraw/defaultpic.jpg" style="width: 33px; height: 33px; border-radius: 50%; border:3px solid #FFFFFF; margin-right: 22px;"></a></li>
-      <li><a href="notification.html" class="mobileNotification" style="display: none;">Notifications</a></li>
-      <li><a href="profile.html" class="MobileProfile" style="display: none;" >Profile</a></li>
-
-      <!-- <li><a href="resources.html">Safety Resources</a></li> -->
-      
-    </ul>
-
-    <!-- Dropdown Menu -->
-    <div class="dropdown-menu" id="dropdownMenu">
-      <ul>
-        <li><a href="item1.html">Item 1</a></li>
-        <li><a href="item2.html">Item 2</a></li>
-        <li><a href="item3.html">Item 3</a></li>
+    <div class="header">
+      <h2 style="cursor: pointer;" id="logo" >Campus Safety</h2>
+      <div class="mobile-nav-toggle" id="mobile-nav-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <ul id="headerMenu">
+        
+        <li><a href="current.html" id="managerAlert" style="display: none;">Emergency Alerts</a></li>
+        <li><a href="reports.html">Incident Report</a></li>
+        <li><a href="summary.html">Summary</a></li>
+        <li><a href="article.html">Articles</a></li>
+        <li><a href="request.html" id="managerRequests" style="display: none;">Requests</a></li>
+        <li><a href="unavailable.html">Contact Security</a></li>
+        <li class="notifationer"><a href="notification.html"><img src="./assets/Undraw/notification.png" style="height: 24px; width: 24px; cursor: pointer;"></a></li>
+        <li class="profileDisplay"><a href="profile.html" ><img id="profileDisplay" src="./assets/Undraw/defaultpic.jpg" style="width: 33px; height: 33px; border-radius: 50%; border:3px solid #FFFFFF; margin-right: 22px;"></a></li>
+        <li><a href="notification.html" class="mobileNotification" id="mobileNotification">Notifications</a></li>
+        <li><a href="profile.html" class="MobileProfile" id="MobileProfile">Profile</a></li>
+  
+        <!-- <li><a href="resources.html">Safety Resources</a></li> -->
+        
       </ul>
+  
+      <!-- Dropdown Menu -->
+      <div class="dropdown-menu" id="dropdownMenu">
+        <ul>
+          <li><a href="item1.html">Item 1</a></li>
+          <li><a href="item2.html">Item 2</a></li>
+          <li><a href="item3.html">Item 3</a></li>
+        </ul>
+      </div>
     </div>
-  </div>
     
 
     <!-- Dashboard Container -->
@@ -75,6 +74,31 @@
         </div>
     </div>
     
+    <script>
+      document.getElementById('mobile-nav-toggle').addEventListener('click',() =>{
+          const menu = document.getElementById('headerMenu');
+          menu.classList.toggle('active');
+      });
+  
+      function toggleDropdown() {
+          const dropdownMenu = document.getElementById('dropdownMenu');
+          dropdownMenu.classList.toggle('active');
+      }
+  
+      if(window.localStorage.getItem('userProfile') != ""){
+          document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
+      }
+      if(window.localStorage.getItem('userRole') == "manager"){
+          document.getElementById('managerAlert').style.display = 'flex'
+          document.getElementById('managerRequests').style.display = 'flex'
+      }
+  
+      document.getElementById('logo').addEventListener('click', ()=>{
+          window.location.href = 'dashboardtest.html';
+      })
+  </script>
+
+<script src="./scripts/realtimenotification.js"></script>
 
 
 </body>
