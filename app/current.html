@@ -29,8 +29,8 @@
 <body>
     <!-- Header for Web and Mobile -->
     <div class="header">
-        <h2>Campus Safety</h2>
-        <div class="mobile-nav-toggle" onclick="toggleMobileMenu()">
+        <h2 style="cursor: pointer;" id="logo" >Campus Safety</h2>
+        <div class="mobile-nav-toggle" id="mobile-nav-toggle" onclick="toggleMobileMenu()">
         <span></span>
         <span></span>
         <span></span>
@@ -149,7 +149,7 @@
                     <option value="Maintenances"> Maintenances</option>
                 </select>
                 <select name="Location-DropDown" disabled="true" id="Location-DropDown" class="dropDownOptions">
-                    
+                    <option value="viewAll">View All</option>
                 </select>
             </div>
 
@@ -205,7 +205,31 @@
     <!--- Include the Leaflet JavaScript library -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/@turf/turf"></script>
-    <script src="./scripts/realtimenotification.js"></script>
+    <script>
+    document.getElementById('mobile-nav-toggle').addEventListener('click',() =>{
+        const menu = document.getElementById('headerMenu');
+        menu.classList.toggle('active');
+    });
+
+    function toggleDropdown() {
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        dropdownMenu.classList.toggle('active');
+    }
+
+    if(window.localStorage.getItem('userProfile') != ""){
+        document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
+    }
+    if(window.localStorage.getItem('userRole') == "manager"){
+        document.getElementById('managerAlert').style.display = 'flex'
+        document.getElementById('managerRequests').style.display = 'flex'
+    }
+
+    document.getElementById('logo').addEventListener('click', ()=>{
+        window.location.href = 'dashboardtest.html';
+    })
+</script>
+
+<script src="./scripts/realtimenotification.js"></script>
 
 
 </body>
