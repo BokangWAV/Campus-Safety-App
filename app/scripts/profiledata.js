@@ -1,4 +1,4 @@
-
+import { signOutUser } from "../modules/users.js"
 
 async function  loadData() {
     try {
