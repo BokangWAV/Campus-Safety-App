@@ -118,7 +118,7 @@ async function updateProfilePicture(uid, url){
 
 
 async function setRole(managerUID, uid, role){
-    const changed = false;
+    var changed = false;
     const manager = await getUser(managerUID);
 
     if(!manager[0].role == "manager"){
@@ -131,7 +131,7 @@ async function setRole(managerUID, uid, role){
         role: role,
     })
     .then(() => {
-       // console.log("Document successfully updated!");
+       console.log("User role changed");
        changed = true;
     })
     .catch((error) => {
