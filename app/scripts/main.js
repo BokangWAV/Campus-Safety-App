@@ -78,6 +78,38 @@ function showRegistrationInputs(){
   email_text.required;
   full_form.appendChild(email_text);
 
+  const genderSelect = document.createElement('select');
+  genderSelect.id = "GenderSelect"
+  genderSelect.className = "GenderSelect"
+
+  const placeholderOption = document.createElement("option");
+  placeholderOption.value = "";
+  placeholderOption.disabled = true;
+  placeholderOption.selected = true;
+  placeholderOption.textContent = "Gender";
+  genderSelect.appendChild(placeholderOption);
+
+  const MaleOption = document.createElement('option');
+  MaleOption.value = "Male";
+  MaleOption.innerText = "Male"
+
+  const FemaleOption = document.createElement('option');
+  FemaleOption.vale = "Female";
+  FemaleOption.innerText = "Female";
+
+  const OtherOption = document.createElement('option');
+  OtherOption.vale = "Other"
+  OtherOption.innerText = "Other"
+
+  genderSelect.appendChild(MaleOption);
+  genderSelect.appendChild(FemaleOption);
+  genderSelect.appendChild(OtherOption);
+  full_form.appendChild(genderSelect);
+
+  genderSelect.addEventListener('change', ()=>{
+    genderSelect.style.color = "black";
+  });
+
   const pass1 = document.createElement('input');
   pass1.type = 'password';
   pass1.id = 'password_text';
@@ -135,6 +167,7 @@ function showLogInFields(){
     document.getElementById('confirmPassword_text').remove(); 
     document.getElementById('Switch').remove();
     document.getElementById('lastName_text').remove();
+    document.getElementById('GenderSelect').remove()
   }
   submit_btn.remove();
   
@@ -198,7 +231,7 @@ function showLogInFields(){
 
 
 
-function verifyRegisterFields(f, l, e, p, cp, pTag){
+function verifyRegisterFields(f, l, e, p, cp, pTag, g){
   let missing = false;
 
   if(!f){
@@ -211,6 +244,8 @@ function verifyRegisterFields(f, l, e, p, cp, pTag){
     missing = true;
   }else if(!cp){
     missing = true;
+  }else if( g == ""){
+    missing = true
   }
 
   if(missing){
@@ -251,7 +286,7 @@ function verifySignInFields(e, p, pTag){
 }
 
 
-if(submit_btn){
+
 submit_btn.addEventListener("click",async ()=>{
     //Show registration form if user is not registered
     if( registration){
@@ -261,8 +296,9 @@ submit_btn.addEventListener("click",async ()=>{
       const password = document.getElementById('password_text');
       const confirmPassword = document.getElementById('confirmPassword_text');
       const message = document.getElementById('inform');
-      if(verifyRegisterFields(firstName.value, lastName.value, email.value, password.value,confirmPassword.value, message)){
-        if(await NormalRegisterUser(firstName.value, lastName.value, email.value, password.value, message)){
+      const gender = document.getElementById('GenderSelect');
+      if(verifyRegisterFields(firstName.value, lastName.value, email.value, password.value,confirmPassword.value, message, gender.value)){
+        if(await NormalRegisterUser(firstName.value, lastName.value, email.value, password.value, message, gender.value)){
           window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/edit-profile.html"
         }
       }
@@ -275,22 +311,21 @@ submit_btn.addEventListener("click",async ()=>{
       const message = document.getElementById('inform');
       if(verifySignInFields(email.value, password.value, message)){
         if(await NormalSignInUser(email.value, password.value, message)){
-          window.location.href = "http://127.0.0.1:5500/dashboardtest.html"
+          window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/dashboardtest.html"
         }
       }
     }
-
+  
 });
-}
 
-f(googleBtn){
-    googleBtn.addEventListener('click', async ()=>{
-        //GooglesignInUser();
-        if(await GooglesignInUser()){
-              window.location.href = "http://127.0.0.1:5500/dashboardtest.html"
-        }
-    });
-}
+
+googleBtn.addEventListener('click', async ()=>{
+    //GooglesignInUser();
+    if(await GooglesignInUser()){
+      window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/dashboardtest.html"
+    }
+  
+});
 
 
 

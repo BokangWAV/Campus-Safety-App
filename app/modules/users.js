@@ -175,4 +175,4 @@ function signOutUser(){
 }
 
 
-export { GooglesignInUser, NormalRegisterUser, NormalSignInUser }
+export { GooglesignInUser, NormalRegisterUser, NormalSignInUser, signOutUser }
