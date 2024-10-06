@@ -141,7 +141,7 @@ function buildUserPage(){
 
     content.appendChild(addCard("Emergency Alerts", "Stay updated on campus alerts", "View Alerts","summary.html"));
     content.appendChild(addCard("Report an Incident", "Quickly report any safety issues", "Report Now", "reports.html"));
-    content.appendChild(addCard("Safety Resources", "Access emergency contacts and tips.", "View Resources", "ai-page.html"));
+    content.appendChild(addCard("Safety Resources", "Access safety tips and resources from other users.", "View Resources", "ai-page.html"));
     content.appendChild(addCard("Emergency Contacts", "Get in touch with security personnel", "View Contacts", "unavailable.html"));
 
     document.querySelector(".dashboard-container").appendChild(content);
