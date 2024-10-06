@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -41,6 +41,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
             console.log("No user is signed in");
             currentUserName = "Unknown";
             currentUserSurname = "Unknown";
+            displayNotPermittedMessage();
+            alert("Please sign in...");
+            window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/register.html"
         }
     });
     setTimeout(retrieveData, 2000);
@@ -68,7 +71,7 @@ async function retrieveData(){
                 alertContainer.appendChild(alertHeader);
 
                 list.forEach(alert => {
-                    createHistoryAlert(alertContainer, alert.alertDate, alert.details, alert.status);
+                    createHistoryAlert(alertContainer, alert.alertDate, alert.status);
                 });
                 document.querySelector(".dashboard-content").appendChild(alertContainer);
             }
@@ -79,7 +82,7 @@ async function retrieveData(){
                 const reportHeader = document.createElement("h2");
                 reportHeader.textContent = "Previous Reports";
 
-                alertContainer.appendChild(reportHeader);
+                reportContainer.appendChild(reportHeader);
 
                 reportList.forEach(report => {
                     createHistoryReport(reportContainer, report.timestamp, report.description, report.location);
@@ -99,17 +102,23 @@ function createHistoryAlert(container, alertDate, articleStatus) {
     dashboardCard.classList.add("dashboard-card");
 
     const heading = document.createElement("h3");
-    const timestampInMilliseconds = alertDate._seconds * 1000 + alertDate._nanoseconds / 1000;
+    const timestampInMilliseconds = alertDate._seconds * 1000 + alertDate._nanoseconds / 1000000;
     const date = new Date(timestampInMilliseconds);
-    heading.textContent = `${date.getDay()} ${monthName[date.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-    dashboardCard.appendChild(heading);
 
+    heading.textContent = `${date.getDate()} ${monthName[date.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+    dashboardCard.appendChild(heading);
+    
     const p = document.createElement("p");
     p.innerHTML = `<b>Degree of alert:</b> Emergency alert`;
     dashboardCard.appendChild(p);
 
     const status = document.createElement("p");
-    status.innerHTML = `Final status:<b>${articleStatus}</b>`;
+    if(articleStatus == "ASSISTED"){
+        status.innerHTML = `Final status:<b style="color: green;">Assisted</b>`;
+    }else{
+        status.innerHTML = `Final status:<b style="color: red;">To be assisted</b>`;
+    }
+    
 
     dashboardCard.appendChild(status);
 
@@ -122,9 +131,10 @@ function createHistoryReport(reportContainer, reportDate, description, location)
     dashboardCard.classList.add("dashboard-card");
 
     const heading = document.createElement("h3");
-    const timestampInMilliseconds = alertDate._seconds * 1000 + alertDate._nanoseconds / 1000;
+    const timestampInMilliseconds = reportDate._seconds * 1000 + reportDate._nanoseconds / 1000000;
     const date = new Date(timestampInMilliseconds);
-    heading.textContent = `${date.getDay()} ${monthName[date.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+
+    heading.textContent = `${date.getDate()} ${monthName[date.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
     dashboardCard.appendChild(heading);
 
     const p = document.createElement("p");

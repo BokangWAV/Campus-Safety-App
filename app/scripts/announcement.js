@@ -1,7 +1,24 @@
+
+
 const firstName = window.localStorage.getItem('userFirstName');
 const lastName = window.localStorage.getItem('userLastName');
 const userProfile = window.localStorage.getItem('userProfile');
 const sendBtn = document.getElementById('SendBtn');
+
+
+
+async function fetchData(url) {
+  try {
+      const response = await fetch(url);
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+  } catch (error) {
+      console.error('Error fetching data:', error);
+  }
+}
 
 
 async function sendAnnouncement(){
@@ -57,7 +74,7 @@ async function sendAnnouncement(){
           //window.location.href = '/profile.html'; // Redirect after successful submission
           sent = true
         } else {
-          alert('Failed to update');
+          alert('Failed to send announcement');
           sendBtn.disabled = false;
             sendBtn.innerText = "Send";
             sendBtn.className = "SendBtn"
@@ -78,6 +95,7 @@ async function sendAnnouncement(){
         sendBtn.disabled = false;
         sendBtn.innerText = "Send";
         sendBtn.className = "SendBtn"
+        alert("Announcement sent")
     }
     
 }

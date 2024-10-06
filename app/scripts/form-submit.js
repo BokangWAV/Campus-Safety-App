@@ -40,6 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
   
         if (response.ok) {
           console.log('Updated user data:', updatedUser);
+          // Show success alert when data is saved successfully
+          alert('Profile changes saved successfully!');
           window.location.href = "./profile.html";
           //window.location.href = '/profile.html'; // Redirect after successful submission
         } else {

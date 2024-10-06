@@ -32,9 +32,29 @@ document.addEventListener("DOMContentLoaded", async function (){
             articleList.push(myMap.get(`${i}`))
             }
             
+        document.querySelector(".dashboard-container").style.display = "flex";
+        document.querySelector(".dashboard-container").style.flexDirection = "column";
+
         document.querySelector("#preloader").remove();
         document.querySelector(".main-container").style.opacity = "1";
         
+        const applyManager = await fetchData('https://sdp-campus-safety.azurewebsites.net/applications');
+        console.log(applyManager);
+
+        if(applyManager.length > 0){
+            applyManager.forEach((apply)=>{
+                if(apply.status == "pending"){
+                    document.querySelector(".role-section").appendChild(addApplyCard(apply.firstName, apply.lastName, apply.uid, apply.applicationID));
+                }
+            })
+        }else{
+            
+            let errorMsg = document.createElement("div");
+            errorMsg.innerHTML = "Currently, no requests for role change.";
+            errorMsg.style.margin = "10vh 10%";
+            document.querySelector(".role-section").appendChild(errorMsg);
+        }
+
         if(articleList.length > 0){
             articleList.forEach((article) => {
                 if(article.status == "pending"){
@@ -81,6 +101,78 @@ document.addEventListener("DOMContentLoaded", async function (){
     })
 })
 
+    const rejectBtns = document.querySelectorAll("#changeReject");
+    rejectBtns.forEach(rejectBtn =>{
+        rejectBtn.addEventListener("click", (event)=>{
+            event.target.textContent = "LOADING...";
+            let userID = event.target.dataset.userID;
+            let applID = event.target.dataset.applID;
+            let thisDiv = event.target.parentElement.parentElement;
+            let url =`https://sdp-campus-safety.azurewebsites.net/applications/${userID}`;
+            
+            console.log(url);
+            fetch(url, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    status: "rejected",
+                    applicationID: Number.parseInt(applID),
+                    managerID: "GTGCINvyJIXLXglT7kxO0u4rgFn2"
+                })
+            }).then(response => {
+                if(response.ok){
+                    thisDiv.remove();
+                    console.log("This user's request has been rejected.");
+                    alert("This user's request has been rejected.");
+                }else{
+                    console.error("Error", response.statusText);
+                    alert("An error has occurred");
+                    event.target.textContent = "Reject role change";
+                }
+            }).catch(error =>{
+                console.error("Error:", error);
+                event.target.textContent = "Reject role change";
+            })
+
+        })
+    })
+
+    const approveBtns = document.querySelectorAll("#changeApprove");
+    approveBtns.forEach(approveBtn =>{
+        approveBtn.addEventListener("click", (event)=>{
+            event.target.textContent = "LOADING...";
+            let userID = event.target.dataset.userID;
+            let applID = event.target.dataset.applID;
+            let thisDiv = event.target.parentElement.parentElement;
+            let url =`https://sdp-campus-safety.azurewebsites.net/applications/${userID}`;
+            
+            console.log(url);
+            fetch(url, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    status: "accepted",
+                    applicationID: Number.parseInt(applID),
+                    managerID: "GTGCINvyJIXLXglT7kxO0u4rgFn2"
+                })
+            }).then(response => {
+                if(response.ok){
+                    thisDiv.remove();
+                    console.log("This user is now a manager.");
+                    alert("This user is now a manager.");
+                }else{
+                    console.error("Error", response.statusText);
+                    alert("An error has occurred");
+                    event.target.textContent = "Accept role change";
+                }
+            }).catch(error =>{
+                console.error("Error:", error);
+                event.target.textContent = "Accept role change";
+            })
+
+        })
+    })
+
     const approve = document.querySelectorAll("#btnApprove");
     approve.forEach(apprBtn =>{
         apprBtn.addEventListener("click", (event) => {
@@ -116,12 +208,58 @@ document.addEventListener("DOMContentLoaded", async function (){
     
 })
 
-    
+function addApplyCard(name, surname, userID, applicationID){
+    let card = document.createElement("div");
+    card.className = "dashboard-card";
+    card.style.margin = "15px 10px";
+
+    let title = document.createElement("h3");
+    title.textContent = `${name} ${surname}`;
+    card.appendChild(title);
+
+    let buttonsDiv = document.createElement("div");
+    buttonsDiv.id = "buttonsContainer";
+    buttonsDiv.style.display = "flex";
+    buttonsDiv.style.flexDirection = "row";
+    buttonsDiv.style.flexWrap = "wrap";
+
+    let rejectChange = document.createElement("button");
+    rejectChange.id = "changeReject";
+    rejectChange.style.display = "inline-block";
+    rejectChange.style.padding = "10px 20px";
+    rejectChange.style.backgroundColor = "red";
+    rejectChange.style.fontWeight = "bold";
+    rejectChange.style.borderRadius = "5px"
+    rejectChange.style.color = "white";
+    rejectChange.style.border = "none"
+    rejectChange.textContent = "Reject role change";
+    rejectChange.dataset.userID = userID;
+    rejectChange.dataset.applID = applicationID;
+
+    let approveChange = document.createElement("button");
+    approveChange.id = "changeApprove";
+    approveChange.style.padding = "10px 20px";
+    approveChange.style.backgroundColor = "green";
+    approveChange.style.fontWeight = "bold";
+    approveChange.style.borderRadius = "5px"
+    approveChange.style.color = "white";
+    approveChange.style.border = "none"
+    approveChange.style.marginLeft = "2em";
+    approveChange.textContent = "Approve role change";
+    approveChange.dataset.userID = userID;
+    approveChange.dataset.applID = applicationID;
+
+    buttonsDiv.appendChild(approveChange);
+    buttonsDiv.appendChild(rejectChange);
+
+    card.appendChild(buttonsDiv);
+    return card;
+}  
 
 function addCard(articleTitle ,articleContent, articleID, articleStatus){
     let card = document.createElement("div");
     card.className = "dashboard-card";
-    card.style.margin = "10px 10px";
+    card.style.margin = "15px 10px";
 
     let title = document.createElement("h3");
     title.textContent = articleTitle;
@@ -174,6 +312,7 @@ function addCard(articleTitle ,articleContent, articleID, articleStatus){
     }
 
     card.appendChild(buttonsDiv);
+    card.style.padding = "10vh 10vw";
 
     return card;
 }
