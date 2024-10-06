@@ -36,6 +36,9 @@ jobs:
       - name: Install express
         run: npm install express
 
+      - name: Install node-cron
+        run: npm install node-cron
+
       - name: Install firebase-admin
         run: npm install firebase-admin
 
