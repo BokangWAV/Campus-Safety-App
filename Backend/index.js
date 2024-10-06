@@ -2,6 +2,7 @@ require('dotenv').config();
 const { processEvent } = require('./modules/events'); //New
 const express = require('express');
 const cors = require('cors');
+const cron = require('node-cron');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -166,8 +167,9 @@ app.put('/applications/:uid', async (req, res)=>{
     const uid = req.params['uid'];
     const status = req.body.status;
     const applicationID = req.body.applicationID;
+    const managerID = req.body.managerID;
 
-    if(await approveApplication(uid, status, applicationID)){
+    if(await approveApplication(uid, status, applicationID, managerID)){
         res.status(200).send("Application approved")
     }else{
         res.status(404).send("Unable to approve Application")
@@ -507,11 +509,13 @@ app.post('/announcement/:uid', async (req, res)=>{
 
 //============================================= EVENT SECTION =========================================================//
 
-app.post('/events', async (req, res) => {
+cron.schedule('0 0 * * *', async () => {
+    console.log("Checking event to see which to upload")
     const url = 'https://us-central1-witslivelycampus.cloudfunctions.net/app/events';
 
     var response;
-    var success;
+    var success = false;
+    var result = false
 
     await fetch(url, {
         method: 'GET',
@@ -519,55 +523,43 @@ app.post('/events', async (req, res) => {
             'Content-Type': 'application/json'
         }
     }).then(async (data) =>{response = await data.json()})
-    response.forEach(async (event) => {
-        const inputDate = event.date; // Input date as string
-        var result = false
-
-        // Get today's date
-        const today = new Date();
-        const todayString = today.toISOString().slice(0, 10); // Convert to 'YYYY-MM-DD' format
-
-        // Compare the input date with today's date
-        if (inputDate === todayString  ) {
-            if(typeof(event.title) === "undefined"){
-                console.log(event);
-            }else{
-                result = await processEvent(event);
+    .then(()=>{
+        response.forEach(async (event) => {
+            const inputDate = event.date; // Input date as string
+            
+    
+            // Get today's date
+            const today = new Date();
+            const todayString = today.toISOString().slice(0, 10); // Convert to 'YYYY-MM-DD' format
+    
+            // Compare the input date with today's date
+            if (inputDate === todayString  ) {
+                if(typeof(event.title) === "undefined"){
+                    console.log(event);
+                }else{
+                    result = await processEvent(event);
+                    //console.log(result)
+                }
+                
+            } else {
+                if(typeof(event.title) === "undefined"){
+                    console.log(event);
+                }else{
+                    //console.log(event.title, event.date);
+                }
+                
             }
             
-        } else {
-            if(typeof(event.title) === "undefined"){
-                console.log(event);
-            }else{
-                console.log(event.title, event.date);
+    
+            if (await result.success) {
+                success = true;
             }
-            
-        }
-        
 
-        if (result.success) {
-            success = true;
-        } else {
-            success = false;
-            return;
-        }
+        })
         
     });
-    if (success) {
-        res.status(200).send("Event processed and notifications sent");
-    } else {
-        res.status(500).send("Failed to process event");
-    }
-    //const event = req.body;  // The event data coming from the client
-
-   // const result = await processEvent(event);
-
-    //if (result.success) {
-    //    res.status(200).send("Event processed and notifications sent");
-    //} else {
-    //    res.status(500).send("Failed to process event");
-    //}
 });
+
 
 
 //============================================= MAINTANENCE SECTION ===============================================//
