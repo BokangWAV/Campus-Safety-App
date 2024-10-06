@@ -1,5 +1,18 @@
 import { signOutUser } from "../modules/users.js"
 
+async function fetchData(url) {
+  try {
+      console.log(url);
+      const response = await fetch(url);
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return await response.json();
+  } catch (error) {
+      console.error('Error fetching data:', error);
+  }
+}
+
 async function  loadData() {
     try {
       if(window.localStorage.getItem('uid') === null){
@@ -9,10 +22,6 @@ async function  loadData() {
       const uid = window.localStorage.getItem('uid');
       
       const userData = await fetchData(`https://sdp-campus-safety.azurewebsites.net/users/${uid}`);
-      if(userData[0].role == "user"){
-          alert("You are not authorised to be on this page");
-          window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/dashboardtest.html"
-      }
 
        console.log(uid);
         const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${uid}`);

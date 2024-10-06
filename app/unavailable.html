@@ -42,6 +42,11 @@
 
         .contact-info {
             font-weight: bold;
+            color: red; /* Phone numbers will be red */
+        }
+
+        .location {
+            color: #0057a7; /* Locations will be blue */
         }
 
         .helpline {
@@ -60,9 +65,8 @@
             color: white;
         }
 
-        .emergency p {
-            font-size: 1.2em;
-            margin: 10px 0;
+        .emergency p .contact-info {
+            color: white; /* Emergency contact numbers remain white */
         }
 
         .safety-tips ul {
@@ -174,11 +178,11 @@
         <div class="contact-card">
             <h2>Campus Protection Services (CPS)</h2>
             <p>Wits University Campus Protection Services (CPS)</p>
-            <p>Phone: <span class="contact-info">+27 11 717 4444 / 6666 (East Campus)</span></p>
-            <p>Phone: <span class="contact-info">+27 11 717 1842 (West Campus)</span></p>
-            <p>Phone: <span class="contact-info">+27 11 717 2222 / 2232 (Health Sciences Campus)</span></p>
-            <p>Phone: <span class="contact-info">+27 11 717 3340 (Education Campus)</span></p>
-            <p>Phone: <span class="contact-info">+27 11 717 3589 (Business School)</span></p>
+            <p>Phone: <span class="contact-info">+27 11 717 4444 / 6666</span> <span class="location">(East Campus)</span></p>
+            <p>Phone: <span class="contact-info">+27 11 717 1842</span> <span class="location">(West Campus)</span></p>
+            <p>Phone: <span class="contact-info">+27 11 717 2222 / 2232</span> <span class="location">(Health Sciences Campus)</span></p>
+            <p>Phone: <span class="contact-info">+27 11 717 3340</span> <span class="location">(Education Campus)</span></p>
+            <p>Phone: <span class="contact-info">+27 11 717 3589</span> <span class="location">(Business School)</span></p>
         </div>
 
         <div class="contact-card">
