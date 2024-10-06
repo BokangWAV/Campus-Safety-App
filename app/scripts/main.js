@@ -286,48 +286,62 @@ function verifySignInFields(e, p, pTag){
 }
 
 
-
+if(submit_btn){
 submit_btn.addEventListener("click",async ()=>{
-    //Show registration form if user is not registered
-    if( registration){
-      const firstName = document.getElementById('firstName_text');
-      const lastName = document.getElementById('lastName_text');
-      const email = document.getElementById('email_text');
-      const password = document.getElementById('password_text');
-      const confirmPassword = document.getElementById('confirmPassword_text');
-      const message = document.getElementById('inform');
-      const gender = document.getElementById('GenderSelect');
-      if(verifyRegisterFields(firstName.value, lastName.value, email.value, password.value,confirmPassword.value, message, gender.value)){
-        if(await NormalRegisterUser(firstName.value, lastName.value, email.value, password.value, message, gender.value)){
-          window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/edit-profile.html"
-        }
+  //Show registration form if user is not registered
+  if( registration){
+    const firstName = document.getElementById('firstName_text');
+    const lastName = document.getElementById('lastName_text');
+    const email = document.getElementById('email_text');
+    const password = document.getElementById('password_text');
+    const confirmPassword = document.getElementById('confirmPassword_text');
+    const message = document.getElementById('inform');
+    const gender = document.getElementById('GenderSelect');
+    if(verifyRegisterFields(firstName.value, lastName.value, email.value, password.value,confirmPassword.value, message, gender.value)){
+      if(await NormalRegisterUser(firstName.value, lastName.value, email.value, password.value, message, gender.value)){
+        window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/edit-profile.html"
       }
     }
+  }
 
-    //Show password input text if user is already registered
-    if(signin){
-      const email = document.getElementById('email-input');
-      const password = document.getElementById('password_text');
-      const message = document.getElementById('inform');
-      if(verifySignInFields(email.value, password.value, message)){
-        if(await NormalSignInUser(email.value, password.value, message)){
-          window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/dashboardtest.html"
-        }
+  //Show password input text if user is already registered
+  if(signin){
+    const email = document.getElementById('email-input');
+    const password = document.getElementById('password_text');
+    const message = document.getElementById('inform');
+    if(verifySignInFields(email.value, password.value, message)){
+      if(await NormalSignInUser(email.value, password.value, message)){
+        window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/dashboardtest.html"
       }
     }
-  
-});
+  }
+
+});}
 
 
-googleBtn.addEventListener('click', async ()=>{
-    //GooglesignInUser();
+if(googleBtn){
+  googleBtn.addEventListener('click', async ()=>{
+//GooglesignInUser();
     if(await GooglesignInUser()){
       window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/dashboardtest.html"
     }
-  
-});
 
+  });
+}
 
+function iterateLocalStorage() {
+  if (typeof(Storage) !== "undefined") {
+      for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          const value = localStorage.getItem(key);
+          console.log(`${key}: ${value}`);
+      }
+  } else {
+      console.log("Local storage is not supported in this browser.");
+  }
+}
+
+iterateLocalStorage();
 
 
 
