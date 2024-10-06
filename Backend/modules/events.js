@@ -60,7 +60,7 @@ async function processEvent(event) {
             console.error("Error adding event: ", error);
             added = false;
         });
-        console.log('Event successfully added to Firestore with risk level:', riskLevel);
+        console.log(`Event ${event.title} successfully added to Firestore with risk level:`, riskLevel);
     } catch (error) {
         console.error('Error adding event to Firestore:', error);
         return { success: false, message: 'Error adding event to Firestore' };
