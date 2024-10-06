@@ -46,9 +46,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('articleForm').addEventListener('submit',async function(event) {
         event.preventDefault();
         
-        if (!currentUserName) {
+        if(window.localStorage.getItem('uid') === null){
             alert("You must be logged in to post an article.");
-            return;
+            window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/register.html"
         }
 
         const title = document.getElementById('articleTitle').value;
