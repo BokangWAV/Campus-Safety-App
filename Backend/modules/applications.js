@@ -110,7 +110,7 @@ async function addApplication(uid){
 async function approveApplication(uid, status, applicationID, managerID){
     
     let added = true;
-    const articlesRef = await db.collection('application').where("uid", "==", uid).where("applicationID", "==", applicationID).get();
+    const articlesRef = await db.collection('application').where("uid", "==", uid).where("applicationID", "==", Number(applicationID)).get();
 
     const doc = articlesRef.docs[0];
 
@@ -121,7 +121,7 @@ async function approveApplication(uid, status, applicationID, managerID){
     })
     .then(() => {
         console.log("Application status successfully updated!");
-        if(status === "rejcted"){
+        if(status === "rejected"){
             //Do nothin just set the application status to rejected
         }else{
             setRole(managerID, uid, "manager");
