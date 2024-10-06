@@ -15,7 +15,12 @@
 
   <link href="./styles/edit-profile.css" rel="stylesheet">
   <link href="./styles/dashboard.css" rel="stylesheet">
-
+  <style>
+    #managerReq:hover{
+      background-color: darkred;
+      opacity: 0.8;
+    }
+  </style>
 </head>
 
 <body>
@@ -54,7 +59,7 @@
     </div>
   </div>
   
-  <div class="profile-container">
+  <div class="profile-container" style="display: block;">
     <form class="edit-profile-card" id="editProfileForm">
       <label for="firstname">First Name:</label>
       <input type="text" id="firstname" name="firstname">
@@ -74,6 +79,15 @@
       <!-- Submit Button -->
       <button type="submit">Save Changes</button>
     </form>
+    <div class="role-change-div">
+      <button type="submit" id="managerReq" style="color: black;
+       background-color: red;
+       border-radius: 6px; 
+       border: none; 
+       padding: 1em;
+       font-weight: 300;
+       margin: 2em 1em;">Request Admin Permission</button>
+    </div>
   </div>
 
   
