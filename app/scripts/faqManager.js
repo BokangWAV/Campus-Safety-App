@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", async function(){
         
         deleteBtns.forEach(button => {
             button.addEventListener("click", (event) =>{
-                const thisDiv = event.target.parentElement;
+                const thisDiv = event.target.parentElement.parentElement;
                 const thisID = event.target.dataset.faqid;
 
                 fetch(`https://sdp-campus-safety.azurewebsites.net/FAQ/${thisID}`, {

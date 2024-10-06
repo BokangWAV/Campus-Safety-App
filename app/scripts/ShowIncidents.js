@@ -25,6 +25,7 @@ var TempReports = [];
 var TempAlerts = [];
 var currentReport;
 var reportIndex;
+var allReportIndex;
 
 
 document.getElementById('target').addEventListener('click', ()=>{
@@ -77,7 +78,8 @@ async function displayPoints() {
             });
 
             TempReports.forEach(elem=>{
-              //console.log(elem)
+              //console.log(buildingMap)
+              //console.log(elem.location)
                 //Add the incident to the buildingMap. To ensure we have a counter of the incidents
                 buildingMap[elem.location].push(elem);
                 maintanenceMap[elem.location] = [];
@@ -194,6 +196,38 @@ async function plotBuildings(lat, lon, name) {
     }
 }
 
+async function plotBuilding(lat, lon, name) {
+  try {
+      plotLocation(lat, lon, ` <b> ${name} <b><br>
+          <br>${buildingMap[name].length} reported incidents in this Building`, 
+          L.icon({
+          iconUrl: './assets/Undraw/building.png',
+          iconSize: [25, 25],
+          iconColor: 'blue',
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34]
+      }));
+  } catch (error) {
+      console.error("Error fetching data from Nominatim API:", error);
+  }
+}
+
+async function plotActiveBuildings(lat, lon, name) {
+  try {
+      plotLocation(lat, lon, ` <b> ${name} <b><br>
+          <br>${buildingMap[name].length} reported incidents in this Building`, 
+          L.icon({
+          iconUrl: './assets/Undraw/activeBuilding.png',
+          iconSize: [25, 25],
+          iconColor: 'blue',
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34]
+      }));
+  } catch (error) {
+      console.error("Error fetching data from Nominatim API:", error);
+  }
+}
+
 async function plotAlerts(){
     try {
       
@@ -235,6 +269,7 @@ typeDropdown.addEventListener('change', async ()=>{
     locationDropdown.className = "dropDownOptions active";
     locationDropdown.disabled = true;
 
+
     displayAlerts();
   }else if(typeDropdown.value == "Reports"){
     locationDropdown.className = "dropDownOptions"
@@ -264,6 +299,7 @@ async function displayAlerts(){
     const temp = document.getElementById("Summary-Section");
     temp.remove();
   }
+  
 
   //Diplay no ALerts found if there are currently no alerts
   if(alerts.length == 0){
@@ -372,15 +408,52 @@ async function displayAlerts(){
 }
 
 async function displayReports(){
+  map.eachLayer(function(layer) {
+    APIBuildings.forEach((elem)=>{
+      // Check if the layer is a marker
+      if (layer instanceof L.Marker) {
+        // Remove marker if it matches specific coordinates
+        var latlng = layer.getLatLng();
+        if (latlng.lat === elem.latitude && latlng.lng === elem.longitude) {
+            map.removeLayer(layer);
+        }
+    }
+    })
+      
+  });
+  
   currentType = typeDropdown.value;
   currentBuilding = locationDropdown.value;
 
-  buildingMap[currentBuilding].sort((a, b) => {
-    if (b.timestamp._seconds !== a.timestamp._seconds) {
-        return b.timestamp._seconds - a.timestamp._seconds;
-    }
 
-    return b.timestamp._nanoseconds - a.timestamp._nanoseconds;});
+  if( !(document.getElementById('Location-DropDown').value  == "viewAll")){
+    buildingMap[currentBuilding].sort((a, b) => {
+      if (b.timestamp._seconds !== a.timestamp._seconds) {
+          return b.timestamp._seconds - a.timestamp._seconds;
+      }
+  
+      return b.timestamp._nanoseconds - a.timestamp._nanoseconds;});
+  }
+
+  var tempBuildingName;
+  var tempLatitudeBuilding;
+  var tempLongitudeBuilding;
+  APIBuildings.forEach((elem)=>{
+    if(elem.building_name == currentBuilding && !(document.getElementById('Location-DropDown').value  == "viewAll")){
+      //console.log(elem);
+      tempBuildingName = elem.building_name;
+      tempLatitudeBuilding = elem.latitude;
+      tempLongitudeBuilding = elem.longitude;
+    }else{
+      plotBuildings(elem.latitude, elem.longitude, elem.building_name)
+    }
+  })
+  if(!(document.getElementById('Location-DropDown').value  == "viewAll")){
+    console.log("element")
+    plotActiveBuildings(tempLatitudeBuilding, tempLongitudeBuilding, tempBuildingName);
+  }
+  //plotActiveBuildings()
+  
 
   //First remove Anything that is on the summary
   if(summaryDiv.querySelector('div[id="Summary-Section"]')){
@@ -388,8 +461,33 @@ async function displayReports(){
     temp.remove();
   }
 
+  console.log(document.getElementById('Location-DropDown').value)
+  if(document.getElementById('Location-DropDown').value == "viewAll" && TempReports.length == 0){
+    const tempDiv = document.createElement('div');
+    tempDiv.id = "Summary-Section";
+    tempDiv.className = "Summary-Section"
+    
+    const resultsDiv = document.createElement('div');
+    resultsDiv.id = 'noResults';
+    resultsDiv.className = 'noResults';
+
+    const imgTemp = document.createElement('img');
+    imgTemp.height = 150;
+    imgTemp.width = 150;
+    imgTemp.src = "./assets/Undraw/noResults.svg";
+
+    const pTag = document.createElement('p');
+    pTag.innerText = "No Reports Found";
+
+    resultsDiv.appendChild(imgTemp);
+    resultsDiv.appendChild(pTag);
+
+    tempDiv.appendChild(resultsDiv);
+    summaryDiv.appendChild(tempDiv);
+  }
   //If the reports for the current building are not there then show no results thing
-  if(buildingMap[currentBuilding].length == 0){
+  else if(document.getElementById('Location-DropDown').value != "viewAll" &&buildingMap[currentBuilding].length == 0){
+    console.log(document.getElementById('Location-DropDown').value)
     const tempDiv = document.createElement('div');
     tempDiv.id = "Summary-Section";
     tempDiv.className = "Summary-Section"
@@ -416,42 +514,85 @@ async function displayReports(){
 
   //Now we show the results
   else{
+    console.log(currentBuilding)
     const tempDiv = document.createElement('div');
     tempDiv.id = "Summary-Section";
     tempDiv.className = "Summary-Section"
 
-    buildingMap[currentBuilding].forEach((elem, index)=>{
+    if(!(document.getElementById('Location-DropDown').value  == "viewAll")){
+      console.log(document.getElementById('Location-DropDown').value)
+      buildingMap[currentBuilding].forEach((elem, index)=>{
 
-      const reportSummaryDiv = document.createElement('div');
-      reportSummaryDiv.id ="report-Summary";
-      reportSummaryDiv.className = "report-Summary";
+        const reportSummaryDiv = document.createElement('div');
+        reportSummaryDiv.id ="report-Summary";
+        reportSummaryDiv.className = "report-Summary";
+  
+        const reportPTag = document.createElement('p');
+        reportPTag.id = "description";
+        reportPTag.className = "description";
+        reportPTag.innerText = elem.description;
+  
+        const reportDivSeperator = document.createElement('div');
+        reportDivSeperator.id = "seperator";
+        reportDivSeperator.className = "seperator";
+  
+        console.log(elem)
+        console.log(elem.time)
+        reportDivSeperator.innerHTML = `
+            <p>${elem.time}</p>
+            <div id="btns" class="btns">
+                <button type="button" data-index="${index}" id="btn-View" class="btn-View" >View</button>
+                <button type="button" data-index="${index}" id="btn-delete"  class="btn-delete" >Remove</button>
+            </div>
+          `;
+  
+          reportSummaryDiv.appendChild(reportPTag);
+          reportSummaryDiv.appendChild(reportDivSeperator);
+          tempDiv.appendChild(reportSummaryDiv);
+      });
+  
+      summaryDiv.appendChild(tempDiv);
+    }else{
+      TempReports.sort((a, b) => {
+        if (b.timestamp._seconds !== a.timestamp._seconds) {
+            return b.timestamp._seconds - a.timestamp._seconds;
+        }
+    
+        return b.timestamp._nanoseconds - a.timestamp._nanoseconds;});
+      TempReports.forEach((elem, index)=>{
+        const reportSummaryDiv = document.createElement('div');
+        reportSummaryDiv.id ="report-Summary";
+        reportSummaryDiv.className = "report-Summary";
+  
+        const reportPTag = document.createElement('p');
+        reportPTag.id = "description";
+        reportPTag.className = "description";
+        reportPTag.innerText = elem.description;
+  
+        const reportDivSeperator = document.createElement('div');
+        reportDivSeperator.id = "seperator";
+        reportDivSeperator.className = "seperator";
+  
+        console.log(elem)
+        console.log(elem.time)
+        reportDivSeperator.innerHTML = `
+            <p>${elem.time}</p>
+            <div id="btns" class="btns">
+                <button type="button" data-index="${index}" id="btn-View" class="btn-View" >View</button>
+            </div>
+          `;
+  
+          reportSummaryDiv.appendChild(reportPTag);
+          reportSummaryDiv.appendChild(reportDivSeperator);
+          tempDiv.appendChild(reportSummaryDiv);
+      })
 
-      const reportPTag = document.createElement('p');
-      reportPTag.id = "description";
-      reportPTag.className = "description";
-      reportPTag.innerText = elem.description;
-
-      const reportDivSeperator = document.createElement('div');
-      reportDivSeperator.id = "seperator";
-      reportDivSeperator.className = "seperator";
-
-      console.log(elem)
-      console.log(elem.time)
-      reportDivSeperator.innerHTML = `
-          <p>${elem.time}</p>
-          <div id="btns" class="btns">
-              <button type="button" data-index="${index}" id="btn-View" class="btn-View" >View</button>
-              <button type="button" data-index="${index}" id="btn-delete"  class="btn-delete" >Remove</button>
-          </div>
-        `;
-
-        reportSummaryDiv.appendChild(reportPTag);
-        reportSummaryDiv.appendChild(reportDivSeperator);
-        tempDiv.appendChild(reportSummaryDiv);
-    });
-
-    summaryDiv.appendChild(tempDiv);
+      summaryDiv.appendChild(tempDiv);
+    }
+    
   }
+
+  showPosition()
 }
 
 async function displayMaintanence(){
@@ -544,10 +685,17 @@ async function getBuildingLocations(){
   await fetch('https://witsgobackend.azurewebsites.net/v1/map/getBuildings')
     .then(response=>{return response.json()})
     .then(data=>{
+      console.log(data)
         APIBuildings = data.data.data;
     })
     .catch(error=>{
       setTempBuildings();
+  })
+
+  APIBuildings.sort((a, b) => a.building_name.localeCompare(b.building_name));
+
+  APIBuildings.forEach((elem)=>{
+    buildingMap[elem.building_name] = []
   })
 }
 
@@ -574,7 +722,7 @@ async function removeAlert(){
     .then(() => {
       //Show user profile
       //loadData()
-      console.log("sucessfully removed")
+      alert("Alert has been successfully removed");
     }).catch((error)=>{
       console.error(error)
     });
@@ -582,8 +730,74 @@ async function removeAlert(){
     console.error(error)
   }
 
+  
+  
+  
+
+TempReports.forEach(elem=>{
+  //console.log(buildingMap)
+  console.log(elem.location)
+    //Add the incident to the buildingMap. To ensure we have a counter of the incidents
+    buildingMap[elem.location] = [];      
+}); 
+TempReports = [];
+
+if(document.getElementById('Location-DropDown').value  == "viewAll"){
+  TempReports.splice(allReportIndex, 1);
+}else{
   buildingMap[currentBuilding].splice(reportIndex, 1);
-  displayReports();
+}
+try {
+  await fetch('https://sdp-campus-safety.azurewebsites.net/reports')
+  .then(response=>{return response.json()})
+  .then(data=>{
+      data.forEach(elem=>{
+          const temp = {};
+          temp['latitude'] = Number(elem.geoLocation.split(" ")[0].split(",")[0]);
+          temp['longitude'] = Number(elem.geoLocation.split(" ")[1]);
+          temp['image'] = elem.imageUrls[0] || "";
+          temp['video'] = elem.videoUrls[0] || "";
+          temp['description'] = elem.description;
+          
+          const date = new Date(elem.timestamp._seconds * 1000);
+          const dateOptions = { year: 'numeric', month: 'long', day: '2-digit' };
+          const formattedDate = date.toLocaleDateString(undefined, dateOptions);  // Date in a human-readable format
+          temp['time'] = formattedDate;
+          incidents.push(temp);
+          if(!elem.removed){
+            const date = new Date(elem.timestamp._seconds * 1000);
+            const dateOptions = { year: 'numeric', month: 'long', day: '2-digit' };
+            const formattedDate = date.toLocaleDateString(undefined, dateOptions);
+            elem['time'] = formattedDate
+            TempReports.push(elem)
+            //console.log(temp)
+            console.log(elem)
+          }
+          
+      });
+      
+      TempReports.forEach(elem=>{
+        //console.log(buildingMap)
+        //console.log(elem.location)
+          //Add the incident to the buildingMap. To ensure we have a counter of the incidents
+          buildingMap[elem.location].push(elem);
+          maintanenceMap[elem.location] = [];
+          
+      });   
+  })
+  .catch(error=>{
+      console.error("Error getting reports, API return with status: ", error);
+  })
+  
+  
+} catch (error) {
+  console.error(error);
+}
+
+console.log(TempReports);
+console.log(buildingMap)
+
+displayReports();
   APIBuildings.forEach(elem=>{
    if(elem.building_name == currentBuilding) plotBuildings(elem.latitude, elem.longitude, elem.building_name);
 });
@@ -632,7 +846,7 @@ async function rescuedUser(index){
         'Content-Type': 'application/json',
       }
     }).then(()=>{
-      console.log("rescued")
+      alert("User alert status has been updated")
     }).catch(e=>{
       console.error(e)
     })
@@ -644,6 +858,9 @@ async function rescuedUser(index){
   displayAlerts();
 
   alertInterval = setInterval(async ()=>{
+    if(document.getElementById('Type-Dropdown').value != "Alerts"){
+      return
+    }
     //Then fetch all the alerts
     try {
       await fetch('https://sdp-campus-safety.azurewebsites.net/alert')
@@ -688,10 +905,18 @@ async function rescuedUser(index){
 
 
 function displayPopUp(index){
-  currentReport = buildingMap[currentBuilding][index];
+  if(document.getElementById('Location-DropDown').value == "viewAll"){
+    currentReport = TempReports[index];
+    allReportIndex = index;
+  }else{
+    currentReport = buildingMap[currentBuilding][index];
+    reportIndex = index;
+  }
+  
+  console.log(currentReport)
   const PopUpDate = document.getElementById('PopUp-Date');
   PopUpDate.innerHTML = `
-      <h2>Report at ${currentBuilding}</h2>
+      <h2>Report at ${currentReport.location}</h2>
   `;
 
   const PopUpDescription = document.getElementById('PopUp-Description');
@@ -789,7 +1014,7 @@ function nearestBuilding( lat, lon) {
   
     const distance = R * c;
 
-    if(distance< maxDistance && distance < 3){
+    if(distance< maxDistance && distance < 0.5){
       maxDistance = distance;
       buildingNear = `near ${building.building_name}`
     }
@@ -849,15 +1074,14 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1909492,
-      "longitude": 28.0287961,
+      "latitude": -26.1916304175718,
+      "longitude": 28.0320247853218,
       "building_id": "011673db",
       "created_at": "2024-09-16T18:02:20.712Z",
       "__v": 0,
       "code": "OLS"
     },
     {
-      "code": null,
       "_id": "66e74910307946e74d85026e",
       "building_name": "Wits Science Stadium",
       "campus": [
@@ -866,11 +1090,12 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1912742,
-      "longitude": 28.0274903,
+      "latitude": -26.1906342684242,
+      "longitude": 28.0253481890317,
       "building_id": "5519b211",
-      "created_at": "2024-09-15T20:52:32.910Z",
-      "__v": 0
+      "created_at": "2024-09-28T13:13:22.978Z",
+      "__v": 0,
+      "code": "WSS"
     },
     {
       "_id": "66e74933307946e74d850271",
@@ -881,15 +1106,14 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1898124,
-      "longitude": 28.0257656,
+      "latitude": -26.1893390749146,
+      "longitude": 28.0264661036274,
       "building_id": "56272f69",
-      "created_at": "2024-09-16T21:01:41.900Z",
+      "created_at": "2024-09-28T13:10:07.698Z",
       "__v": 0,
       "code": "CLM"
     },
     {
-      "code": null,
       "_id": "66e7495e307946e74d850274",
       "building_name": "WITS Entrance 9",
       "campus": [
@@ -898,11 +1122,12 @@ function setTempBuildings(){
       "type": [
         "gatehouse"
       ],
-      "latitude": -26.1929038,
-      "longitude": 28.0269152,
+      "latitude": -26.1925055138171,
+      "longitude": 28.0266170526877,
       "building_id": "9775fafe",
-      "created_at": "2024-09-15T20:53:50.521Z",
-      "__v": 0
+      "created_at": "2024-09-28T13:16:53.856Z",
+      "__v": 0,
+      "code": ""
     },
     {
       "code": null,
@@ -914,62 +1139,61 @@ function setTempBuildings(){
       "type": [
         "library"
       ],
-      "latitude": -26.1894572,
-      "longitude": 28.025734,
+      "latitude": -26.1894267044978,
+      "longitude": 28.0257029516225,
       "building_id": "2c9ba499",
       "created_at": "2024-09-16T17:11:07.041Z",
       "__v": 0
     },
     {
-      "code": null,
       "_id": "66e89940edf9137f7c42f5d8",
-      "building_name": "MSL",
+      "building_name": "Mathematical Science Lab",
       "campus": [
         "west_campus"
       ],
       "type": [
         "building"
       ],
-      "latitude": -26.1906419,
-      "longitude": 28.0266491,
+      "latitude": -26.1905413960909,
+      "longitude": 28.026821486509,
       "building_id": "a8658eca",
-      "created_at": "2024-09-16T20:46:56.432Z",
-      "__v": 0
+      "created_at": "2024-09-28T13:09:25.272Z",
+      "__v": 0,
+      "code": "MSL"
     },
     {
-      "code": null,
       "_id": "66e899dcedf9137f7c42f5da",
-      "building_name": "NCB",
+      "building_name": "School of Information Systems",
       "campus": [
         "west_campus"
       ],
       "type": [
         "building"
       ],
-      "latitude": -26.189887,
-      "longitude": 28.0260583,
+      "latitude": -26.1897099426423,
+      "longitude": 28.0266393955161,
       "building_id": "fca9e12b",
-      "created_at": "2024-09-16T20:49:32.024Z",
-      "__v": 0
+      "created_at": "2024-09-28T13:18:28.902Z",
+      "__v": 0,
+      "code": "NCB"
     },
     {
-      "code": null,
       "_id": "66e89a17edf9137f7c42f5dc",
-      "building_name": "MSB",
+      "building_name": "Mathematical Science Building",
       "campus": [
         "west_campus"
       ],
       "type": [
         "building"
       ],
-      "latitude": -26.189887,
-      "longitude": 28.0260583,
+      "latitude": -26.1900548311195,
+      "longitude": 28.0264887035423,
       "building_id": "47384ede",
-      "created_at": "2024-09-16T20:50:31.265Z",
-      "__v": 0
+      "created_at": "2024-09-28T13:08:55.656Z",
+      "__v": 0,
+      "code": "MSB"
     },
     {
-      "code": null,
       "_id": "66e89a3cedf9137f7c42f5de",
       "building_name": "CCDU",
       "campus": [
@@ -978,30 +1202,30 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1899953,
-      "longitude": 28.0255647,
+      "latitude": -26.1908713482634,
+      "longitude": 28.0267879981671,
       "building_id": "255f9557",
-      "created_at": "2024-09-16T20:51:08.240Z",
-      "__v": 0
+      "created_at": "2024-09-28T13:10:42.405Z",
+      "__v": 0,
+      "code": ""
     },
     {
-      "code": null,
       "_id": "66e89adbedf9137f7c42f5e0",
-      "building_name": "FNB Building",
+      "building_name": "First National Bank Building",
       "campus": [
         "west_campus"
       ],
       "type": [
         "building"
       ],
-      "latitude": -26.1888117,
-      "longitude": 28.0250411,
+      "latitude": -26.1886096611816,
+      "longitude": 28.0263877820143,
       "building_id": "3c1d5cec",
-      "created_at": "2024-09-16T20:53:47.242Z",
-      "__v": 0
+      "created_at": "2024-09-28T13:15:00.713Z",
+      "__v": 0,
+      "code": "FNB"
     },
     {
-      "code": null,
       "_id": "66e89b17edf9137f7c42f5e2",
       "building_name": "Wits Law School",
       "campus": [
@@ -1010,11 +1234,12 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1886721,
-      "longitude": 28.0247376,
+      "latitude": -26.1887039813431,
+      "longitude": 28.0253421894851,
       "building_id": "934e3c6f",
-      "created_at": "2024-09-16T20:54:47.895Z",
-      "__v": 0
+      "created_at": "2024-09-28T13:16:16.743Z",
+      "__v": 0,
+      "code": "LB"
     },
     {
       "code": null,
@@ -1026,14 +1251,13 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1886347,
-      "longitude": 28.0240738,
+      "latitude": -26.1883132770864,
+      "longitude": 28.0240500497715,
       "building_id": "4f129d19",
       "created_at": "2024-09-16T20:55:24.360Z",
       "__v": 0
     },
     {
-      "code": null,
       "_id": "66e89b6dedf9137f7c42f5e6",
       "building_name": "Wits Law Clinic",
       "campus": [
@@ -1042,14 +1266,14 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1889716,
-      "longitude": 28.0254356,
+      "latitude": -26.189537032437,
+      "longitude": 28.0253781014593,
       "building_id": "2f2534bc",
-      "created_at": "2024-09-16T20:56:13.095Z",
-      "__v": 0
+      "created_at": "2024-09-28T13:15:36.711Z",
+      "__v": 0,
+      "code": "LB"
     },
     {
-      "code": null,
       "_id": "66e89e9f8515e58447d79195",
       "building_name": "Chemistry Labs",
       "campus": [
@@ -1058,11 +1282,12 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1907534,
-      "longitude": 28.02586,
+      "latitude": -26.1907569133242,
+      "longitude": 28.0260908587921,
       "building_id": "aded2776",
-      "created_at": "2024-09-16T21:09:51.139Z",
-      "__v": 0
+      "created_at": "2024-09-28T13:12:33.829Z",
+      "__v": 0,
+      "code": ""
     },
     {
       "code": null,
@@ -1074,8 +1299,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.191644,
-      "longitude": 28.026033,
+      "latitude": -26.1917492315253,
+      "longitude": 28.0260970823093,
       "building_id": "e608ef1b",
       "created_at": "2024-09-16T21:11:06.087Z",
       "__v": 0
@@ -1090,8 +1315,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1914761,
-      "longitude": 28.0269351,
+      "latitude": -26.1917736126705,
+      "longitude": 28.0268860497717,
       "building_id": "50df0bf3",
       "created_at": "2024-09-16T21:12:21.132Z",
       "__v": 0
@@ -1106,8 +1331,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1914761,
-      "longitude": 28.0269351,
+      "latitude": -26.1917736126705,
+      "longitude": 28.0268860497717,
       "building_id": "46c532de",
       "created_at": "2024-09-16T21:12:42.295Z",
       "__v": 0
@@ -1122,8 +1347,8 @@ function setTempBuildings(){
       "type": [
         "parking"
       ],
-      "latitude": -26.1924677,
-      "longitude": 28.0262417,
+      "latitude": -26.1926074082798,
+      "longitude": 28.0270452140747,
       "building_id": "6e081697",
       "created_at": "2024-09-16T21:15:30.896Z",
       "__v": 0
@@ -1138,8 +1363,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1843267,
-      "longitude": 28.0239573,
+      "latitude": -26.1914687797118,
+      "longitude": 28.0281438732507,
       "building_id": "dd1cad09",
       "created_at": "2024-09-16T21:17:25.440Z",
       "__v": 0
@@ -1154,8 +1379,8 @@ function setTempBuildings(){
       "type": [
         "walkway"
       ],
-      "latitude": -26.1843267,
-      "longitude": 28.0239573,
+      "latitude": -26.1914128690191,
+      "longitude": 28.0281398096702,
       "building_id": "ad218d56",
       "created_at": "2024-09-16T21:17:33.297Z",
       "__v": 0
@@ -1170,8 +1395,8 @@ function setTempBuildings(){
       "type": [
         "parking"
       ],
-      "latitude": -26.1875746,
-      "longitude": 28.0245301,
+      "latitude": -26.1874129973342,
+      "longitude": 28.0264713377662,
       "building_id": "d445b32d",
       "created_at": "2024-09-16T21:18:50.743Z",
       "__v": 0
@@ -1186,8 +1411,8 @@ function setTempBuildings(){
       "type": [
         "lawns"
       ],
-      "latitude": -26.18741,
-      "longitude": 28.0249324,
+      "latitude": -26.1876056862094,
+      "longitude": 28.0253363072923,
       "building_id": "939ecc63",
       "created_at": "2024-09-16T21:19:37.649Z",
       "__v": 0
@@ -1202,8 +1427,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1867963,
-      "longitude": 28.0243886,
+      "latitude": -26.1864190731969,
+      "longitude": 28.0261576215919,
       "building_id": "a52e2156",
       "created_at": "2024-09-16T21:20:54.276Z",
       "__v": 0
@@ -1218,8 +1443,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1867963,
-      "longitude": 28.0243886,
+      "latitude": -26.1854889947836,
+      "longitude": 28.0258336958015,
       "building_id": "31969ab7",
       "created_at": "2024-09-16T21:21:28.458Z",
       "__v": 0
@@ -1234,14 +1459,13 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1867963,
-      "longitude": 28.0243886,
+      "latitude": -26.1868433904122,
+      "longitude": 28.024990909294,
       "building_id": "2b4144fc",
       "created_at": "2024-09-16T21:24:09.034Z",
       "__v": 0
     },
     {
-      "code": null,
       "_id": "66e8a2198515e58447d791ad",
       "building_name": "David Webster",
       "campus": [
@@ -1250,11 +1474,12 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1867963,
-      "longitude": 28.0243886,
+      "latitude": -26.1867269228888,
+      "longitude": 28.0262227852655,
       "building_id": "26171747",
-      "created_at": "2024-09-16T21:24:41.009Z",
-      "__v": 0
+      "created_at": "2024-09-28T13:17:40.534Z",
+      "__v": 0,
+      "code": ""
     },
     {
       "code": null,
@@ -1266,8 +1491,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1877409,
-      "longitude": 28.0287539,
+      "latitude": -26.188251609551,
+      "longitude": 28.0281593804581,
       "building_id": "fcc2e1a1",
       "created_at": "2024-09-16T21:25:45.667Z",
       "__v": 0
@@ -1282,8 +1507,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1866592,
-      "longitude": 28.030159,
+      "latitude": -26.1869298076948,
+      "longitude": 28.0305825669656,
       "building_id": "0b609d90",
       "created_at": "2024-09-16T21:27:04.940Z",
       "__v": 0
@@ -1298,8 +1523,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1881858,
-      "longitude": 28.028996,
+      "latitude": -26.1881448443905,
+      "longitude": 28.0290681516224,
       "building_id": "734e33ae",
       "created_at": "2024-09-16T21:29:19.865Z",
       "__v": 0
@@ -1314,8 +1539,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1887975,
-      "longitude": 28.0295616,
+      "latitude": -26.1888849885829,
+      "longitude": 28.0293919718287,
       "building_id": "8f5f348c",
       "created_at": "2024-09-16T21:30:03.890Z",
       "__v": 0
@@ -1330,8 +1555,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1888696,
-      "longitude": 28.0303059,
+      "latitude": -26.1889904306869,
+      "longitude": 28.0304580505331,
       "building_id": "4a9ab404",
       "created_at": "2024-09-16T21:30:31.578Z",
       "__v": 0
@@ -1346,8 +1571,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1880709,
-      "longitude": 28.0311215,
+      "latitude": -26.1881195268504,
+      "longitude": 28.0323909804583,
       "building_id": "9921cffe",
       "created_at": "2024-09-16T21:31:01.274Z",
       "__v": 0
@@ -1362,8 +1587,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1880709,
-      "longitude": 28.0311215,
+      "latitude": -26.1873584255928,
+      "longitude": 28.0312229669658,
       "building_id": "a122cc65",
       "created_at": "2024-09-16T21:31:31.971Z",
       "__v": 0
@@ -1378,8 +1603,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1895047,
-      "longitude": 28.0290692,
+      "latitude": -26.1894428521405,
+      "longitude": 28.0293178295005,
       "building_id": "a26dd49f",
       "created_at": "2024-09-16T21:32:07.553Z",
       "__v": 0
@@ -1394,8 +1619,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1899,
-      "longitude": 28.0295217,
+      "latitude": -26.1899956408138,
+      "longitude": 28.0306940264885,
       "building_id": "8a0cc984",
       "created_at": "2024-09-16T21:33:36.603Z",
       "__v": 0
@@ -1408,10 +1633,10 @@ function setTempBuildings(){
         "east_campus"
       ],
       "type": [
-        "building"
+        "library"
       ],
-      "latitude": -26.1906694,
-      "longitude": 28.0288162,
+      "latitude": -26.1905757119144,
+      "longitude": 28.0294686768103,
       "building_id": "7c20046b",
       "created_at": "2024-09-16T21:34:30.464Z",
       "__v": 0
@@ -1426,8 +1651,8 @@ function setTempBuildings(){
       "type": [
         "parking"
       ],
-      "latitude": -26.1914707,
-      "longitude": 28.0288787,
+      "latitude": -26.1910946761055,
+      "longitude": 28.0284148277358,
       "building_id": "4407a9b6",
       "created_at": "2024-09-16T21:35:21.760Z",
       "__v": 0
@@ -1442,8 +1667,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1914707,
-      "longitude": 28.0288787,
+      "latitude": -26.1911921988589,
+      "longitude": 28.0290436189607,
       "building_id": "5df50cfd",
       "created_at": "2024-09-16T21:36:02.585Z",
       "__v": 0
@@ -1451,15 +1676,15 @@ function setTempBuildings(){
     {
       "code": null,
       "_id": "66e8a4ed8515e58447d791c7",
-      "building_name": "chool of Mechanical, Industrial and Aeronautical Engineering",
+      "building_name": "School of Mechanical, Industrial and Aeronautical Engineering",
       "campus": [
         "east_campus"
       ],
       "type": [
         "building"
       ],
-      "latitude": -26.1917993,
-      "longitude": 28.028837,
+      "latitude": -26.1916440415305,
+      "longitude": 28.0293678092943,
       "building_id": "4653dee9",
       "created_at": "2024-09-16T21:36:45.015Z",
       "__v": 0
@@ -1474,8 +1699,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1918288,
-      "longitude": 28.0299226,
+      "latitude": -26.1927955670246,
+      "longitude": 28.0305149448448,
       "building_id": "639380dd",
       "created_at": "2024-09-16T21:38:04.592Z",
       "__v": 0
@@ -1490,8 +1715,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1919539,
-      "longitude": 28.0298139,
+      "latitude": -26.1915607407244,
+      "longitude": 28.0303403190848,
       "building_id": "395b0863",
       "created_at": "2024-09-16T21:38:54.451Z",
       "__v": 0
@@ -1506,8 +1731,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1919539,
-      "longitude": 28.0298139,
+      "latitude": -26.1921030333248,
+      "longitude": 28.0303736193587,
       "building_id": "c3e8f358",
       "created_at": "2024-09-16T21:39:02.237Z",
       "__v": 0
@@ -1520,10 +1745,10 @@ function setTempBuildings(){
         "east_campus"
       ],
       "type": [
-        "building"
+        "library"
       ],
-      "latitude": -26.1911185,
-      "longitude": 28.0303412,
+      "latitude": -26.1911619194852,
+      "longitude": 28.0307180120736,
       "building_id": "e12c3107",
       "created_at": "2024-09-16T21:40:31.056Z",
       "__v": 0
@@ -1538,8 +1763,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1914172,
-      "longitude": 28.0311313,
+      "latitude": -26.1906179775549,
+      "longitude": 28.0309915973877,
       "building_id": "07a23e28",
       "created_at": "2024-09-16T21:41:22.865Z",
       "__v": 0
@@ -1554,8 +1779,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1911103,
-      "longitude": 28.0312252,
+      "latitude": -26.1909830764011,
+      "longitude": 28.0314026229486,
       "building_id": "fa145529",
       "created_at": "2024-09-16T21:42:00.103Z",
       "__v": 0
@@ -1570,8 +1795,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1921308,
-      "longitude": 28.0324523,
+      "latitude": -26.1919067874912,
+      "longitude": 28.0328238669659,
       "building_id": "0de6d1b8",
       "created_at": "2024-09-16T21:42:50.215Z",
       "__v": 0
@@ -1586,8 +1811,8 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1925313,
-      "longitude": 28.0307648,
+      "latitude": -26.1922710002252,
+      "longitude": 28.0315847220282,
       "building_id": "0bdb22ab",
       "created_at": "2024-09-16T21:43:31.943Z",
       "__v": 0
@@ -1602,15 +1827,31 @@ function setTempBuildings(){
       "type": [
         "building"
       ],
-      "latitude": -26.1925313,
-      "longitude": 28.0307648,
+      "latitude": -26.1930981922029,
+      "longitude": 28.0311901186987,
       "building_id": "8669ecbc",
       "created_at": "2024-09-16T21:44:13.783Z",
+      "__v": 0
+    },
+    {
+      "_id": "66fc4804c03b9ac9acaf9e7f",
+      "building_name": "liams house",
+      "code": "0",
+      "campus": [
+        "12"
+      ],
+      "type": [
+        "building"
+      ],
+      "latitude": 0,
+      "longitude": 0,
+      "building_id": "6cb17ccb",
+      "created_at": "2024-10-01T20:28:31.462Z",
       "__v": 0
     }
   ]
 
-  APIBuildings.sort((a, b) => a.building_name.localeCompare(b.building_name));
+  
 }
 
 TempReports = []
@@ -1710,6 +1951,10 @@ TempAlerts = [
 let alertInterval;
 alertInterval = setInterval(async ()=>{
   //Then fetch all the alerts
+  if(document.getElementById('Type-Dropdown').value != "Alerts"){
+    return
+  }
+  else{
   try {
     await fetch('https://sdp-campus-safety.azurewebsites.net/alert')
     .then(response=>{return response.json()})
@@ -1747,6 +1992,7 @@ alertInterval = setInterval(async ()=>{
   } catch (error) {
       console.error(error);
   }
+}
 }, 30000)
 
 
@@ -1802,7 +2048,7 @@ async function getMaintanence(){
   .then(response => response.json())  // Convert response to JSON
   .then(data => {
     //console.log(namesOfBuildings)
-    //console.log(data);
+    console.log(data);
     data.forEach((elem)=>{
       
       if(namesOfBuildings.includes(elem.buildingName)){

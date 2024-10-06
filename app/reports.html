@@ -157,6 +157,7 @@
     <ul id="headerMenu">
       
       <li><a href="current.html" id="managerAlert" style="display: none;">Emergency Alerts</a></li>
+      <li><a href="dashboardtest.html">Dashboard</a></li>
       <li><a href="reports.html">Incident Report</a></li>
       <li><a href="summary.html">Summary</a></li>
       <li><a href="article.html">Articles</a></li>
@@ -226,7 +227,7 @@
             <input type="file" id="videoUpload" accept="video/*" multiple>
           </div>
           
-          <!-- Success Message (Initially Hidden) -->
+          
           <div class="dashboard-card" id="successMessage" style="display: none;">
             <h2>Report Submitted Successfully!</h2>
             <p>Your incident report has been submitted. Thank you for helping keep the campus safe!</p>
@@ -272,76 +273,72 @@
 }
 
 
-    async function submitReport() {
-      
-      const reportBtn = document.getElementById("submit");
-      reportBtn.disabled = true;
-      reportBtn.innerText = "Submitting"
-      reportBtn.style.backgroundColor = "#316183"
+async function submitReport() {
+  const reportBtn = document.getElementById("submit");
 
-      const geoLocation = document.getElementById("geoLocation").value;
-      const description = document.getElementById("description").value;
-      const location = document.getElementById("buildings").value;
-      const urgencyLevel = document.getElementById("urgencyLevel").value;
-      const imageFiles = document.getElementById("imageUpload").files;
-      const videoFiles = document.getElementById("videoUpload").files;
+  
+  reportBtn.disabled = true;
+  reportBtn.innerText = "Submitting...";
+  reportBtn.style.backgroundColor = "#316183";
 
-      let imageUrls = [];
-      let videoUrls = [];
+  alert("Your report is being submitted...");
 
-      if (imageFiles.length > 0) {
-        imageUrls = await uploadFiles(imageFiles, 'incident_images');
-      }
+  const geoLocation = document.getElementById("geoLocation").value;
+  const description = document.getElementById("description").value;
+  const location = document.getElementById("buildings").value;
+  const urgencyLevel = document.getElementById("urgencyLevel").value;
+  const imageFiles = document.getElementById("imageUpload").files;
+  const videoFiles = document.getElementById("videoUpload").files;
 
-      if (videoFiles.length > 0) {
-        videoUrls = await uploadFiles(videoFiles, 'incident_videos');
-      }
+  let imageUrls = [];
+  let videoUrls = [];
 
-        const reportData = {
-          geoLocation: geoLocation,
-          description: description,
-          location: location,
-          urgencyLevel: urgencyLevel,
-          status: "Open",
-          imageUrls: imageUrls,
-          videoUrls: videoUrls
-        };
+  if (imageFiles.length > 0) {
+    imageUrls = await uploadFiles(imageFiles, 'incident_images');
+  }
 
-        console.log(reportData);
+  if (videoFiles.length > 0) {
+    videoUrls = await uploadFiles(videoFiles, 'incident_videos');
+  }
 
-        try {
-            const uid = window.localStorage.getItem('uid');
-            console.log(uid)
-            const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/reports/${uid}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(reportData)
-            });
-    
-            if (response.ok) {
-                //console.log('Updated user data:', updatedUser);
-                //window.location.href = "./profile.html";
-                //window.location.href = '/profile.html'; // Redirect after successful submission
-                document.getElementById("reportForm").reset();
-            } else {
-                //console.error("Error submitting report:", error);
-                alert("Error submitting report. Please try again.");
-            }
-        } catch (error) {
-            console.error(error);
-        }
+  const reportData = {
+    geoLocation: geoLocation,
+    description: description,
+    location: location,
+    urgencyLevel: urgencyLevel,
+    status: "Open",
+    imageUrls: imageUrls,
+    videoUrls: videoUrls
+  };
 
-        //await db.collection('reports').add(reportData);
-        //alert("Report submitted successfully!");
+  try {
+    const uid = window.localStorage.getItem('uid');
+    const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/reports/${uid}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(reportData)
+    });
 
-
-        reportBtn.innerText = "Submit Report"
-        reportBtn.style.backgroundColor = "#1a3e57"
-        reportBtn.disabled = false;
-
+    if (response.ok) {
+      document.getElementById("reportForm").reset(); // Reset the form
+      document.getElementById("successMessage").style.display = 'block'; // Show success message
+    } else {
+      alert("Error submitting report. Please try again.");
+      reportBtn.disabled = false;
+      reportBtn.innerText = "Submit Report";
+      reportBtn.style.backgroundColor = "#1a3e57";
     }
+  } catch (error) {
+    console.error(error);
+    alert("An error occurred. Please try again.");
+    reportBtn.disabled = false;  // Re-enable the button
+    reportBtn.innerText = "Submit Report";
+    reportBtn.style.backgroundColor = "#1a3e57";
+  }
+}
+
 
     async function getLocationAndBuildings() {
 
@@ -381,6 +378,7 @@
 
 
 function populateBuildings(buildings) {
+  buildings.sort((a, b) => a.building_name.localeCompare(b.building_name));
   const buildingsDropdown = document.getElementById('buildings');
   buildingsDropdown.innerHTML = ""; 
   
