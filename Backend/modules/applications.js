@@ -1,5 +1,6 @@
 const {db, FieldValue} = require('./init.js');
 const { appendNotifications } = require('./notification.js');
+const { setRole} = require('./users.js')
 
 async function getApplications(){
     const usersRef = db.collection('application');    // Get a reference to the articles collection
@@ -106,7 +107,7 @@ async function addApplication(uid){
     return added;
 }
 
-async function approveApplication(uid, status, applicationID){
+async function approveApplication(uid, status, applicationID, managerID){
     
     let added = true;
     const articlesRef = await db.collection('application').where("uid", "==", uid).where("applicationID", "==", applicationID).get();
@@ -120,6 +121,11 @@ async function approveApplication(uid, status, applicationID){
     })
     .then(() => {
         console.log("Application status successfully updated!");
+        if(status === "rejcted"){
+            //Do nothin just set the application status to rejected
+        }else{
+            setRole(managerID, uid, "manager");
+        }
     })
     .catch((error) => {
         // The document probably doesn't exist.
