@@ -162,17 +162,31 @@ async function NormalSignInUser(email, password, pTag){
 }
 
 
+function iterateLocalStorage() {
+    if (typeof(Storage) !== "undefined") {
+        for (let i = 0; i < window.localStorage.length; i++) {
+            const key = window.localStorage.key(i);
+            const value = window.localStorage.removeItem(key);
+            console.log(`${key}: ${value}`);
+        }
+    } else {
+        console.log("Local storage is not supported in this browser.");
+    }
+  }
 
 
 
-
-function signOutUser(){
-    signOut(auth).then(() => {
-    // Sign-out successful.
-    }).catch((error) => {
-    // An error happened.
-    });
+  async function signOutUser() {
+    try {
+        await signOut(auth);
+        iterateLocalStorage();
+        console.log("Sign-out successful.");
+    } catch (error) {
+        console.error("Sign-out error:", error.message);
+        alert("An error occurred during sign-out. Please try again.");
+    }
 }
+
 
 
 export { GooglesignInUser, NormalRegisterUser, NormalSignInUser, signOutUser }
