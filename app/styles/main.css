@@ -270,6 +270,10 @@
     background: #fff;
   }
 
+  #The-Dropdown{
+    display: none;
+  }
+
   #sub-header-mobile{
     display: none;
   }
@@ -590,6 +594,7 @@
     #The-Dropdown{
       cursor: pointer;
       margin-right: 5%;
+      display: flex;
     }
 
     #The-Dropdown img{
