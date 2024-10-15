@@ -14,7 +14,47 @@
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <link href="/styles/dashboard.css" rel="stylesheet">
+  <link href="./styles/dashboard.css" rel="stylesheet">
+  <style>
+    #like{
+      background-color: #3e6785;
+      padding: 10px;
+      padding-left: 15px;
+      padding-right: 15px;
+      border-radius: 8px;
+      
+      border: 1px solid #3e6785;
+      color: #fff;
+      margin-top: 20px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 550;
+    }
+
+    #like:hover{
+      box-shadow: none;
+      border: 1px solid #fff;
+    }
+
+    #liked{
+      background-color: #55c755;
+      padding: 10px;
+      padding-left: 15px;
+      padding-right: 15px;
+      border-radius: 8px;
+      
+      border: 1px solid #55c755;
+      color: #fff;
+      margin-top: 20px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 550;
+    }
+
+    #liked:hover{
+      box-shadow: none;
+    }
+  </style>
 
 </head>
 
@@ -62,7 +102,7 @@
     <div id="dashboard-header" class="write-article-section">
       <h2>Got Something to Share?</h2>
       <p>Your voice matters. Share your thoughts, experiences, and insights with the campus community.</p>
-      <a href="/articleCreate.html" class="btn-write-article">Start Writing Your Article</a>
+      <a href="./articleCreate.html" class="btn-write-article">Start Writing Your Article</a>
     </div>      
   </div>
 
@@ -74,7 +114,7 @@
 
   <div id="preloader"></div>
 
-  <script src="/scripts/article.js" type="module"></script>
+  <script src="./scripts/article.js" type="module"></script>
   <!-- <script src="/scripts/main.js"></script> -->
   <script>
     document.getElementById('mobile-nav-toggle').addEventListener('click',() =>{
