@@ -17,6 +17,8 @@ body {
   box-sizing: border-box;
   width: 100%;
   box-sizing: border-box;
+  overflow: hidden;
+  overflow-y: auto;
 }
 
 /* Header Styles */
@@ -107,7 +109,7 @@ body {
 
 /* Main Content Styles */
 .dashboard-container {
-  margin-top: 60px;
+  margin-top: 90px;
   padding: 2rem;
   flex-grow: 1;
   overflow: hidden;
@@ -152,8 +154,11 @@ body {
 }
 
 .dashboard-header {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   text-align: center;
-  margin: 6rem;
+  margin-bottom: 60px;
 }
 
 .dashboard-header h1 {
@@ -180,10 +185,14 @@ body {
   flex: 1 1 calc(33.333% - 1rem);
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   padding: 2rem;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin: 3px;
+  margin-bottom: 3px;
+  margin-top: 3px;
+
 }
 
 .dashboard-card:hover {
@@ -554,4 +563,14 @@ body {
 
 .btn-write-article:hover {
   background-color: #45a049;
+}
+
+#innerContainer{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  overflow-x: hidden;
 }
