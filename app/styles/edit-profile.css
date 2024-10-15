@@ -150,6 +150,70 @@ body {
   .edit-profile-card button:hover {
     background-color: #45a049;
   }
+
+  #fullIntroDiv{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    backdrop-filter: blur(0.9px);
+    z-index: 10000;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #innerIntroDiv{
+    width: 50%;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 2px 2px 2px rgb(51, 51, 51, 0.4);
+    padding: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    color: #333;
+  }
+
+  #innerIntroDiv #introHeader{
+    color: #1a3e57;
+    margin-bottom: 20px;
+    font-size: 23px;
+  }
+
+  #innerIntroDiv #introMessage{
+    font-family: "Raleway",  sans-serif;
+    line-height: 22px;
+    margin-bottom: 10px;
+  }
+
+  #innerIntroDiv #introHint{
+    background-color: #1a3e57;
+    width: 95%;
+    color: #fff;
+    border-radius: 4px;
+    padding: 10px;
+    line-height: 25px;
+    margin-bottom: 20px;
+  }
+
+  #innerIntroDiv #introButtonDiv{
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+  }
+
+  #innerIntroDiv #introButtonDiv #introButton{
+    color: #1a3e57;
+    font-weight: 550;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+    margin-right: 10px;
+  }
   
   /* Responsive design adjustments for smaller devices */
   @media (max-width: 768px) {
@@ -237,6 +301,15 @@ body {
   
     .info {
       font-size: 14px;
+    }
+
+    #innerIntroDiv{
+      width: 90%;
+      box-shadow: 0px 2px 2px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    #innerIntroDiv #introHeader{
+      font-size: 20px;
     }
   }
   
