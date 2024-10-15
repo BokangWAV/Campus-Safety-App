@@ -127,6 +127,7 @@ body {
   font-size: 50px;
   font-family: Arial, sans-serif;
   margin: 0 auto;
+  border: 2px solid rgb(26, 62, 87, 0.2);
 }
 
 .profile-img img {
@@ -139,7 +140,7 @@ body {
 .edit-image-button {
   display: block;
   margin: 10px auto; /* Centers the button */
-  background-color: #007bff;
+  background-color: #1a3e57;
   color: white;
   border: none;
   padding: 8px 12px;
@@ -148,7 +149,7 @@ body {
 }
 
 .edit-image-button:hover {
-  background-color: #0056b3;
+  background-color: #1a3e57;
 }
 
 .name {
