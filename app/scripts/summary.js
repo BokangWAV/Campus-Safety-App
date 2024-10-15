@@ -69,10 +69,13 @@ async function retrieveData(){
                 alertHeader.textContent = "Previous Alerts";
 
                 alertContainer.appendChild(alertHeader);
+                const innerContainer = document.createElement('div');
+                innerContainer.id = "innerContainer";
 
                 list.forEach(alert => {
-                    createHistoryAlert(alertContainer, alert.alertDate, alert.status);
+                    createHistoryAlert(innerContainer, alert.alertDate, alert.status);
                 });
+                alertContainer.appendChild(innerContainer);
                 document.querySelector(".dashboard-content").appendChild(alertContainer);
             }
 
@@ -83,10 +86,13 @@ async function retrieveData(){
                 reportHeader.textContent = "Previous Reports";
 
                 reportContainer.appendChild(reportHeader);
+                const innerContainer = document.createElement('div');
+                innerContainer.id = "innerContainer";
 
                 reportList.forEach(report => {
-                    createHistoryReport(reportContainer, report.timestamp, report.description, report.location);
+                    createHistoryReport(innerContainer, report.timestamp, report.description, report.location);
                 });
+                reportContainer.appendChild(innerContainer);
                 document.querySelector(".dashboard-content").appendChild(reportContainer);
             }
         } else {
