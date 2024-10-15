@@ -149,15 +149,14 @@ function createArticles(title, author, subtext, fullText, articleId){
     likeBtn.id = "like";
     likeBtn.dataset.articleId = articleId;
     likeBtn.type = "button";
-    likeBtn.style.backgroundColor = "blue"; 
-    likeBtn.style.padding = "1em";
+    // likeBtn.style.backgroundColor = "blue"; 
+    // likeBtn.style.padding = "1em";
     likeBtn.textContent = "LIKE";
-    likeBtn.style.color = "whitesmoke";  
-    likeBtn.style.textDecoration = "none"
+    // likeBtn.style.color = "whitesmoke";  
+    // likeBtn.style.textDecoration = "none"
 
     let buttonsContainer = document.createElement("div");
-    buttonsContainer.style.padding = "2em";
-    buttonsContainer.style.margin = "1em";
+    buttonsContainer.style.margin = "10px";
     buttonsContainer.appendChild(likeBtn);
 
     dashboardCard.appendChild(readDiv);
@@ -172,9 +171,10 @@ function createArticles(title, author, subtext, fullText, articleId){
             headers: {'Content-Type': 'application/json'}
         }).then(response => {
             if(response.ok){
+                event.target.id = 'liked';
                 event.target.disabled = true;
                 event.target.textContent = "LIKED";
-                event.target.style.backgroundColor = "#eef100"
+                //event.target.style.backgroundColor = "#eef100"
                 
                 alert("This article has been liked.");
             }else{
