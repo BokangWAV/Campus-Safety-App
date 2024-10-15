@@ -8,7 +8,7 @@ window.onload = async function () {
   
       const result = await response.json();
 
-        console.log(response)
+        console.log(result)
       //console.log('User data fetched:', result); // Debugging line
   
       const user = Array.isArray(result) ? result[0] : result; // Assuming user is at index 0, if it's in an array
@@ -25,6 +25,10 @@ window.onload = async function () {
 
       if(window.localStorage.getItem('userProfile') != ""){
         document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
+      
+      if( user.profileIntro){
+        document.getElementById('fullIntroDiv').style.display = 'flex';
+      }
     }
     if(window.localStorage.getItem('userRole') == "manager"){
       document.getElementById('managerAlert').style.display = 'flex'
