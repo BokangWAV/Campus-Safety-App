@@ -1,3 +1,8 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
 
 body {
   font-family: 'Open Sans', sans-serif;
@@ -9,6 +14,9 @@ body {
   flex-direction: column;
   height: 100dvh;
   overflow-y: scroll;
+  box-sizing: border-box;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Header Styles */
@@ -301,7 +309,7 @@ body {
     height: 50px;
     padding: 1rem 2rem;
     font-size: 24px;
-    width: 400px;
+    width: 100%;
 }
 
 .header ul {
