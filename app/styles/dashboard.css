@@ -13,14 +13,18 @@ body {
   display: flex;
   flex-direction: column;
   height: 100dvh;
-  overflow-y: scroll;
   box-sizing: border-box;
   width: 100%;
-  box-sizing: border-box;
   overflow: hidden;
   overflow-y: auto;
-}
-
+  width: 100%;
+  -ms-overflow-style: none; /* Hides scrollbar in IE and Edge */
+  }
+  
+  /* Hides scrollbar for WebKit-based browsers (Chrome, Safari, Edge) */
+  body::-webkit-scrollbar {
+      display: none;
+  }
 /* Header Styles */
 .header {
   width: 100%;
