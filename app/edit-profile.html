@@ -90,6 +90,24 @@
        font-weight: 300;
        margin: 2em 1em;">Request Admin Permission</button>
     </div>
+
+    <div id="fullIntroDiv">
+      <div id="innerIntroDiv">
+        <h3 id="introHeader"> Please fill in your details</h3>
+        <p id="introMessage">
+          To ensure that the authorities easily recognise you during an emergency, please take a moment to fill in your personal details. Please provide accurate information as this will help us in providing proper and quick assistance during emergencies.
+        </p>
+
+        <div id="introHint">
+          <p id="introHintMessage"> <strong>NOTE:</strong>  Privacy is our priority, and your data will <strong>ONLY</strong> be used for safety-related purposes</p>
+        </div>
+
+        <div id="introButtonDiv">
+          <button type="button" id="introButton"> ok, got it!</button>
+        </div>
+       
+      </div>
+    </div>
   </div>
 
   
@@ -116,6 +134,15 @@
 
     document.getElementById('logo').addEventListener('click', ()=>{
         window.location.href = 'dashboardtest.html';
+    })
+
+    document.getElementById('introButton').addEventListener('click', ()=>{
+      document.getElementById('fullIntroDiv').style.display = 'none';
+      try {
+        //Update the profileIntro to false
+      } catch (error) {
+        console.error(error)
+      }
     })
 </script>
 
