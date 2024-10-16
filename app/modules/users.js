@@ -1,4 +1,4 @@
-import {  signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js"; 
+import {  signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword,  getAuth, sendPasswordResetEmail  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js"; 
 import { auth, provider} from "./init.js";
 import { smoothTRansition } from "../scripts/main.js";
 
@@ -29,6 +29,7 @@ async function GooglesignInUser(){
         //console.log(user.displayName.split(" ")[0], user.email);
 
 
+        window.localStorage.setItem('accessToken', token)
         window.localStorage.setItem('uid', user.uid);
         const currentUser = {
             email: userEmail,
@@ -95,6 +96,7 @@ async function NormalRegisterUser(firstName, lastName, email, password, pTag, ge
 
             window.localStorage.setItem('uid', user.uid);
             window.localStorage.setItem('user', currentUser);
+            window.localStorage.setItem('accessToken', user.accessToken)
 
             //console.log("fetching");
             await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${user.uid}`, {
@@ -141,6 +143,7 @@ async function NormalSignInUser(email, password, pTag){
             //console.log(user);
             const uid = user.uid;
             window.localStorage.setItem('uid', uid);
+            window.localStorage.setItem('accessToken', user.accessToken)
             // ...
 
             signed = true;
@@ -188,5 +191,27 @@ function iterateLocalStorage() {
 }
 
 
+async function resetPassword(email){
+    var reset = false
+    const auth = getAuth();
+    await sendPasswordResetEmail(auth, email)
+    .then(() => {
+        // Password reset email sent!
+        // ..
+        reset = true;
+        alert("Email link has been sent to your email")
+    })
+    .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
 
-export { GooglesignInUser, NormalRegisterUser, NormalSignInUser, signOutUser }
+        alert(errorMessage.split(' ')[1] + ' ' + errorMessage.split(' ')[2]);
+    });
+
+    return reset;
+}
+
+
+
+export { GooglesignInUser, NormalRegisterUser, NormalSignInUser, signOutUser, resetPassword }
