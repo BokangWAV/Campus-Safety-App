@@ -1,4 +1,4 @@
-import { GooglesignInUser, NormalRegisterUser, NormalSignInUser } from "../modules/users.js";
+import { GooglesignInUser, NormalRegisterUser, NormalSignInUser, resetPassword  } from "../modules/users.js";
 
 
 
@@ -10,6 +10,7 @@ const googleBtn = document.getElementById("google-login");
 
 
 var registration = false;
+var passwordReset = false;
 var signin = true;
 var waiting = false;
 
@@ -30,11 +31,11 @@ function smoothTRansition(){
 
 }
 
-
-function showRegistrationInputs(){
-  registration = true;
+function showResetPassword(){
+  registration = false;
   signin = false;
-  if(full_form.querySelector('input[id="firstName_text"]')){
+  passwordReset = true;
+  if(full_form.querySelector('input[id="InformationLink"]')){
     return;
   }
   if(full_form.querySelector('input[id="email-input"]')){
@@ -43,6 +44,81 @@ function showRegistrationInputs(){
     document.getElementById('RegisterLink').remove();
     document.getElementById('RegisterText').remove();
     document.getElementById('Switch').remove();
+    document.getElementById('ResetPassword').remove();
+  }
+  submit_btn.remove();
+
+  header.innerText = "Reset Password";
+
+
+  const forgotPassword = document.createElement('p');
+  forgotPassword.className = "InformationLink show";
+  forgotPassword.id = "InformationLink";
+  forgotPassword.innerText = "Please provide your email that you registered with. A link to reset your password will be sent to this email. If you logged in with google, please click the google button.";
+  forgotPassword.style.cursor = 'pointer';
+  //forgotPassword.onclick = showRegistrationInputs;
+  forgotPassword.addEventListener('click',()=>{
+    showResetPassword();
+  })
+  full_form.appendChild(forgotPassword);
+
+
+  const  firstName_text = document.createElement('input');
+  firstName_text.type = 'text';
+  firstName_text.id = 'resetEmail';
+  firstName_text.className = 'add';
+  firstName_text.placeholder = 'Email *';
+  firstName_text.required;
+  full_form.appendChild(firstName_text);
+
+
+  submit_btn.innerText = 'Send Link';
+  full_form.appendChild(submit_btn);
+
+
+  const SwitchDiv = document.createElement('div');
+  SwitchDiv.className = "Switch";
+  SwitchDiv.id = "Switch";
+
+  const loginSwitch = document.createElement('div');
+  loginSwitch.id = "LoginSwitch";
+  loginSwitch.className = "LoginSwitch";
+
+  const pTag1 = document.createElement('p');
+  pTag1.id = "LoginText";
+  pTag1.className = "LoginText show";
+  pTag1.innerText = "Already Registered?";
+  loginSwitch.appendChild(pTag1);
+
+  const pTag2 = document.createElement('p');
+  pTag2.className = "LoginLink show";
+  pTag2.id = "LoginLink";
+  pTag2.innerText = "Login";
+  pTag2.style.cursor = 'pointer';
+  pTag2.onclick = showLogInFields;
+  loginSwitch.appendChild(pTag2);
+
+  SwitchDiv.appendChild(loginSwitch)
+  full_form.appendChild(SwitchDiv);
+}
+
+
+function showRegistrationInputs(){
+  //resetPassword("2508872@students.wits.ac.za");
+  registration = true;
+  signin = false;
+  passwordReset = false;
+  if(full_form.querySelector('input[id="firstName_text"]')){
+    return;
+  }
+  if(full_form.querySelector('input[id="email-input"]')){
+    document.getElementById('email-input').remove();
+    document.getElementById('password_text').remove();
+    document.getElementById('RegisterLink').remove();
+    document.getElementById('RegisterText').remove();
+    document.getElementById('RegisterSwitch').remove();
+    document.getElementById('Switch').remove();
+    document.getElementById('ResetPassword').remove();
   }
   submit_btn.remove();
 
@@ -157,19 +233,33 @@ function showRegistrationInputs(){
 function showLogInFields(){
   registration = false;
   signin = true;
+  passwordReset = false;
   if(full_form.querySelector('input[id="email-input"]')){
     return;
   }
+
+  // Remove the registration stuff if it is there
   if(full_form.querySelector('input[id="confirmPassword_text"]')){
     document.getElementById('firstName_text').remove();
     document.getElementById('email_text').remove();
     document.getElementById('password_text').remove();
-    document.getElementById('confirmPassword_text').remove(); 
+    document.getElementById('confirmPassword_text').remove();
+    document.getElementById('LoginSwitch').remove(); 
     document.getElementById('Switch').remove();
     document.getElementById('lastName_text').remove();
     document.getElementById('GenderSelect').remove()
   }
   submit_btn.remove();
+
+  // Remove the password Reset if it is there
+  if(full_form.querySelector('input[id="resetEmail"]')){
+    document.getElementById('InformationLink').remove();
+    document.getElementById('resetEmail').remove();
+    document.getElementById('LoginLink').remove();
+    document.getElementById('LoginText').remove(); 
+    document.getElementById('LoginSwitch').remove();
+    document.getElementById('Switch').remove();
+  }
   
 
 
@@ -213,6 +303,18 @@ function showLogInFields(){
   pTag1.innerText = "Not Registered?";
   loginSwitch.appendChild(pTag1);
 
+  const forgotPassword = document.createElement('p');
+  forgotPassword.className = "ResetPassword show";
+  forgotPassword.id = "ResetPassword";
+  forgotPassword.innerText = "Forgot Password?";
+  forgotPassword.style.cursor = 'pointer';
+  //forgotPassword.onclick = showRegistrationInputs;
+  forgotPassword.addEventListener('click',()=>{
+    showResetPassword();
+  })
+  full_form.appendChild(forgotPassword);
+
+
   const pTag2 = document.createElement('p');
   pTag2.className = "RegisterLink show";
   pTag2.id = "RegisterLink";
@@ -244,12 +346,19 @@ function verifyRegisterFields(f, l, e, p, cp, pTag, g){
     missing = true;
   }else if(!cp){
     missing = true;
+  }else if( p !==cp){
+    missing = true
   }else if( g == ""){
     missing = true
   }
 
   if(missing){
-    pTag.innerText = '*Fill in all Fields';
+    if(p!==cp){
+      pTag.innerText = '*Incorrect confirmed password';
+    }else{
+      pTag.innerText = '*Fill in all Fields';
+    }
+    
     smoothTRansition();
     // Trigger the transition
     requestAnimationFrame(() => {
@@ -286,6 +395,16 @@ function verifySignInFields(e, p, pTag){
 }
 
 
+function verifyResetPassword(e){
+  if(!e){
+    alert("Please provide your email")
+    return false
+  }
+
+  return true
+}
+
+
 if(submit_btn){
 submit_btn.addEventListener("click",async ()=>{
   //Show registration form if user is not registered
@@ -299,7 +418,9 @@ submit_btn.addEventListener("click",async ()=>{
     const gender = document.getElementById('GenderSelect');
     if(verifyRegisterFields(firstName.value, lastName.value, email.value, password.value,confirmPassword.value, message, gender.value)){
       if(await NormalRegisterUser(firstName.value, lastName.value, email.value, password.value, message, gender.value)){
-        window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/edit-profile.html"
+        window.location.href = "./edit-profile.html"
+        //showLogInFields();
+        
       }
     }
   }
@@ -314,6 +435,17 @@ submit_btn.addEventListener("click",async ()=>{
         window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/dashboardtest.html"
       }
     }
+  }
+
+  // This is when the user clicks the email for the reset password
+  if(passwordReset){
+    const email = document.getElementById('resetEmail');
+    if(verifyResetPassword(email.value)){
+      if(await resetPassword(email.value)){
+        showLogInFields();
+      }
+    }
+    
   }
 
 });}
