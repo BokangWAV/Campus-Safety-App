@@ -29,7 +29,7 @@ async function GooglesignInUser(){
         //console.log(user.displayName.split(" ")[0], user.email);
 
 
-        window.localStorage.setItem('accessToken', token)
+        window.localStorage.setItem('accessToken', user.accessToken)
         window.localStorage.setItem('uid', user.uid);
         const currentUser = {
             email: userEmail,
@@ -39,20 +39,27 @@ async function GooglesignInUser(){
           };
 
         window.localStorage.setItem('user', currentUser);
+
+
         //addGoogleUser(userFirstName, userLastName, userEmail);
-        await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${user.uid}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(currentUser),
-          })
-        .then(() => {
-            created = true;
-            //console.log("added");
-        }).catch((error)=>{
-            console.error(error)
-        });
+            const uid = user.uid;
+            //console.log("fetching");
+            await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${user.uid}`, {
+                method: 'POST',
+                headers: {
+                    userid:uid,
+                    authtoken: user.accessToken,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(currentUser),
+              })
+            .then(() => {
+                created = true;
+            })
+            .catch((error)=>{
+                created = true;
+                console.error(error)
+            });
 
         //signOutUser();
         // IdP data available using getAdditionalUserInfo(result)
@@ -98,22 +105,24 @@ async function NormalRegisterUser(firstName, lastName, email, password, pTag, ge
             window.localStorage.setItem('user', currentUser);
             window.localStorage.setItem('accessToken', user.accessToken)
 
+            const uid = user.uid;
+            const token = user.accessToken;
             //console.log("fetching");
             await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${user.uid}`, {
                 method: 'POST',
                 headers: {
+                    userid:uid,
+                    authtoken: token,
                   'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(currentUser),
               })
             .then(() => {
                 created = true;
-                //console.log("added");
             })
             .catch((error)=>{
                 console.error(error)
             });
-            console.log("fetching");
 
             
         })
