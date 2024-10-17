@@ -325,6 +325,10 @@ body {
     width: 100%;
 }
 
+#headerMenu{
+  height: fit-content;
+}
+
 .header ul {
     display: none;
     flex-direction: column;
@@ -432,6 +436,14 @@ body {
   margin-right: 20px;
 }
 
+#MobileProfile{
+  display: flex;
+}
+
+#mobileNotification{
+  display: flex;
+}
+
 }
 
 
@@ -442,8 +454,14 @@ body {
     max-width: 55svh;
   }
 
+  #headerMenu{
+    height: fit-content;
+    transform: translateY(-10px);
+  }
+
   .header{
     padding: 10px;
+    
   }
 
   .dashboard-container{
@@ -461,6 +479,7 @@ body {
     align-items: center;
     margin: 0;
     width: 100%;
+    
   }
 
   .dashboard-card {
