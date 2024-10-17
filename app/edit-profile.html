@@ -136,10 +136,19 @@
         window.location.href = 'dashboardtest.html';
     })
 
-    document.getElementById('introButton').addEventListener('click', ()=>{
+    document.getElementById('introButton').addEventListener('click', async ()=>{
       document.getElementById('fullIntroDiv').style.display = 'none';
       try {
-        //Update the profileIntro to false
+        const uid = window.localStorage.getItem('uid');
+        const token = window.localStorage.getItem('accessToken');
+        const response = await fetch(`http://localhost:8080/user/profileIntro/${uid}`, {
+            method: 'PUT',
+            headers: {
+                userid:uid,
+                authtoken: token,
+              'Content-Type': 'application/json',
+            },
+          })
       } catch (error) {
         console.error(error)
       }
