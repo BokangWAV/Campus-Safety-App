@@ -257,5 +257,18 @@
         <p>Stay safe! For more information, visit the <a href="https://www.wits.ac.za">Wits University</a> website or contact your local safety authorities.</p>
     </footer>
 
+    <script>
+        let count = 0;
+        document.getElementById('The-Dropdown').addEventListener('click', ()=>{
+          if(count === 0){
+            document.getElementById('sub-header-mobile').style.display = 'flex';
+            count = 1;
+          }else{
+            document.getElementById('sub-header-mobile').style.display = 'none';
+            count = 0;
+          }
+        })
+      </script>
+
 </body>
 </html>
