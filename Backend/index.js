@@ -671,7 +671,8 @@ cron.schedule('0 0 * * *', async () => {
 //============================================= MAINTANENCE SECTION ===============================================//
 app.get('/maintenance', async (req, res)=>{
     const url = 'https://wiman.azurewebsites.net/api/venues'; 
-    const token = process.env.MAINTENACE_KEY;  
+    const token = process.env.MAINTENACE_KEY; 
+    console.log(token)
 
     var response;
 
