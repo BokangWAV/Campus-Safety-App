@@ -30,13 +30,16 @@ document.addEventListener('DOMContentLoaded', function() {
   
       try {
         const uid = window.localStorage.getItem('uid');
+        const token = window.localStorage.getItem('accessToken');
         const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/users/profile/${uid}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(updatedUser)
-        });
+            method: 'PUT',
+            headers: {
+                userid:uid,
+                authtoken: token,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedUser)
+          })
   
         if (response.ok) {
           console.log('Updated user data:', updatedUser);
