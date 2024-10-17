@@ -432,7 +432,7 @@ submit_btn.addEventListener("click",async ()=>{
     const message = document.getElementById('inform');
     if(verifySignInFields(email.value, password.value, message)){
       if(await NormalSignInUser(email.value, password.value, message)){
-        window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/dashboardtest.html"
+        window.location.href = "./dashboardtest.html"
       }
     }
   }
@@ -455,11 +455,13 @@ if(googleBtn){
   googleBtn.addEventListener('click', async ()=>{
 //GooglesignInUser();
     if(await GooglesignInUser()){
-      window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/dashboardtest.html"
+      window.location.href = "./dashboardtest.html"
     }
 
   });
 }
+
+
 
 function iterateLocalStorage() {
   if (typeof(Storage) !== "undefined") {
