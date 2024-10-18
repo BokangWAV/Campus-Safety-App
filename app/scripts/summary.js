@@ -25,6 +25,7 @@ let userUID = null;
 document.addEventListener("DOMContentLoaded", ()=>{
     onAuthStateChanged(auth, (user) => {
         if (user) {
+            window.localStorage.setItem('accessToken', user.accessToken)
             userUID = user.uid;
             console.log("User ID:", user.uid);
             console.log("Email:", user.email);
@@ -156,12 +157,21 @@ function createHistoryReport(reportContainer, reportDate, description, location)
 
 async function fetchData(url) {
     try {
-        console.log(url);
-        const response = await fetch(url);
+        const token = window.localStorage.getItem('accessToken');
+        const uid = window.localStorage.getItem('uid');
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+              userid:uid,
+              authtoken: token,
+            'Content-Type': 'application/json',
+          }
+        })
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        return await response.json();
+        const data = await response.json();
+        return data;
     } catch (error) {
         console.error('Error fetching data:', error);
     }
