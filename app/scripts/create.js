@@ -23,6 +23,7 @@ let userUID = 0;
 onAuthStateChanged(auth, (user) => {
     if (user) {
         // User is signed in
+        window.localStorage.setItem('accessToken', user.accessToken)
         console.log("User ID:", user.uid);
         console.log("Email:", user.email);
         console.log("Display Name:", user.displayName);
