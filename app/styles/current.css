@@ -1038,4 +1038,8 @@ body {
     .profileDisplay{
     display: none;
     }
+
+    #AreUSureDive{
+        height: fit-content;
+    }
 }    
