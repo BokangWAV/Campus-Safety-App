@@ -372,6 +372,8 @@ async function displayAlerts(){
       if(elem.age>0){
         temp = elem.age +" years";
       }
+
+      console.log(elem)
       extraAlertDiv.innerHTML = `
         <p id="race" class="race">${elem.race}</p>
         <p id="age" class="age"> ${temp}</p>
