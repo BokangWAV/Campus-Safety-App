@@ -26,6 +26,7 @@ var TempAlerts = [];
 var currentReport;
 var reportIndex;
 var allReportIndex;
+var alertSize = 0;
 
 
 document.getElementById('target').addEventListener('click', ()=>{
@@ -34,6 +35,8 @@ document.getElementById('target').addEventListener('click', ()=>{
 
 
 async function displayPoints() {
+
+  await getMaintanence();
 
   if(window.localStorage.getItem('userProfile') != ""){
       document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
@@ -105,6 +108,7 @@ async function displayPoints() {
             if(elem.status == "processing"){
               elem.location = `${nearestBuilding(Number(elem.lat), Number(elem.lon))}`
               alerts.push(elem);
+              alertSize++;
             }
           }); 
           /*
@@ -302,7 +306,7 @@ async function displayAlerts(){
   
 
   //Diplay no ALerts found if there are currently no alerts
-  if(alerts.length == 0){
+  if(alertSize == 0){
     const tempDiv = document.createElement('div');
     tempDiv.id = "Summary-Section";
     tempDiv.className = "Summary-Section"
@@ -332,79 +336,81 @@ async function displayAlerts(){
     tempDiv.className = "Summary-Section"
 
     alerts.forEach((elem, index)=>{
-      const alertSummaryDiv = document.createElement('div');
-      alertSummaryDiv.id = "alert-Summary";
-      alertSummaryDiv.className = "alert-Summary";
+      if(elem.status !== "ASSISTED"){
+        
+        const alertSummaryDiv = document.createElement('div');
+        alertSummaryDiv.id = "alert-Summary";
+        alertSummaryDiv.className = "alert-Summary";
 
-      const alertInformationDiv = document.createElement('div');
-      alertInformationDiv.id = "information";
-      alertInformationDiv.className = "information";
+        const alertInformationDiv = document.createElement('div');
+        alertInformationDiv.id = "information";
+        alertInformationDiv.className = "information";
 
-      const alertDetailsDiv = document.createElement('div');
-      alertDetailsDiv.id = "details";
-      alertDetailsDiv.className = "details";
-      alertDetailsDiv.innerHTML = `
-        <p id="firstName" class="firstName"> ${elem.firstName}</p>
-        <p id="lastName" class="lastName">${elem.lastName}</p>
-      `;
-
-      console.log(elem)
-      const alertGender = document.createElement('div');
-      if(elem.gender !== ""){
-        alertGender.id = "details";
-        alertGender.className = "details";
-        alertGender.innerHTML = `
-          <p id="genderDiv" class="locationDiv"> ${elem.gender}</p>
+        const alertDetailsDiv = document.createElement('div');
+        alertDetailsDiv.id = "details";
+        alertDetailsDiv.className = "details";
+        alertDetailsDiv.innerHTML = `
+          <p id="firstName" class="firstName"> ${elem.firstName}</p>
+          <p id="lastName" class="lastName">${elem.lastName}</p>
         `;
+
+        console.log(elem)
+        const alertGender = document.createElement('div');
+        if(elem.gender !== ""){
+          alertGender.id = "details";
+          alertGender.className = "details";
+          alertGender.innerHTML = `
+            <p id="genderDiv" class="locationDiv"> ${elem.gender}</p>
+          `;
+        }
+
+        const alertLocationDiv = document.createElement('div');
+        alertInformationDiv.id = "locationDiv";
+        alertLocationDiv.className = "locationDiv";
+        alertLocationDiv.innerHTML = `
+          <p id="location" class="location"><strong>Location:</strong> ${elem.location}</p>
+        `;
+
+        const extraAlertDiv = document.createElement('div');
+        extraAlertDiv.id = "extra";
+        extraAlertDiv.className = "extra";
+        var temp = "";
+        if(elem.age>0){
+          temp = elem.age +" years";
+        }
+
+        extraAlertDiv.innerHTML = `
+          <p id="race" class="race">${elem.race}</p>
+          <p id="age" class="age"> ${temp}</p>
+          <p id="phoneNumber" class="phoneNumber">${elem.phoneNumber}</p>
+        `;
+
+        const alertbtnDiv = document.createElement('div');
+        alertbtnDiv.id = "seperator";
+        alertbtnDiv.className = "seperator";
+        alertbtnDiv.innerHTML = `
+          <div id="btns" class="btns">
+              <button type="button"  data-index="${index}" id="btn-rescued" class="btn-rescued" > Rescued</button>
+              <button type="button"  data-index="${index}" id="btn-call" class="btn-call" ><img src="./assets/Undraw/call-Icon.svg" height="13px" width="13px"> Call</button>
+              <button type="button"  data-index="${index}" id="btn-zoom" class="btn-zoom" > zoom</button>
+          </div>
+        `;
+
+        
+        alertInformationDiv.appendChild(alertDetailsDiv);
+        if(elem.gender!= "") alertInformationDiv.appendChild(alertGender)
+        alertInformationDiv.appendChild(alertLocationDiv);
+        alertInformationDiv.appendChild(extraAlertDiv);
+        alertInformationDiv.appendChild(alertbtnDiv);
+
+        alertSummaryDiv.appendChild(alertInformationDiv);
+        tempDiv.appendChild(alertSummaryDiv);
+
       }
-
-      const alertLocationDiv = document.createElement('div');
-      alertInformationDiv.id = "locationDiv";
-      alertLocationDiv.className = "locationDiv";
-      alertLocationDiv.innerHTML = `
-        <p id="location" class="location"><strong>Location:</strong> ${elem.location}</p>
-      `;
-
-      const extraAlertDiv = document.createElement('div');
-      extraAlertDiv.id = "extra";
-      extraAlertDiv.className = "extra";
-      var temp = "";
-      if(elem.age>0){
-        temp = elem.age +" years";
-      }
-
-      console.log(elem)
-      extraAlertDiv.innerHTML = `
-        <p id="race" class="race">${elem.race}</p>
-        <p id="age" class="age"> ${temp}</p>
-        <p id="phoneNumber" class="phoneNumber">${elem.phoneNumber}</p>
-      `;
-
-      const alertbtnDiv = document.createElement('div');
-      alertbtnDiv.id = "seperator";
-      alertbtnDiv.className = "seperator";
-      alertbtnDiv.innerHTML = `
-        <div id="btns" class="btns">
-            <button type="button"  data-index="${index}" id="btn-rescued" class="btn-rescued" > Rescued</button>
-            <button type="button"  data-index="${index}" id="btn-call" class="btn-call" ><img src="./assets/Undraw/call-Icon.svg" height="13px" width="13px"> Call</button>
-            <button type="button"  data-index="${index}" id="btn-zoom" class="btn-zoom" > zoom</button>
-        </div>
-      `;
-
-      
-      alertInformationDiv.appendChild(alertDetailsDiv);
-      if(elem.gender!= "") alertInformationDiv.appendChild(alertGender)
-      alertInformationDiv.appendChild(alertLocationDiv);
-      alertInformationDiv.appendChild(extraAlertDiv);
-      alertInformationDiv.appendChild(alertbtnDiv);
-
-      alertSummaryDiv.appendChild(alertInformationDiv);
-      tempDiv.appendChild(alertSummaryDiv);
-
     });
 
     summaryDiv.appendChild(tempDiv);
-
+    
   }
 
 }
@@ -839,8 +845,23 @@ summaryDiv.addEventListener('click', async(event) => {
 });
 
 async function rescuedUser(index){
+  if(alerts[index].status === "ASSISTED"){
+    return
+  }
   console.log(alerts[index].alertID)
-  clearInterval(alertInterval);
+  map.eachLayer(function(layer) {
+      // Check if the layer is a marker
+      if (layer instanceof L.Marker) {
+        // Remove marker if it matches specific coordinates
+        var latlng = layer.getLatLng();
+        if (latlng.lat === alerts[index].lat && latlng.lng === alerts[index].lon) {
+            map.removeLayer(layer);
+        }
+    }
+      
+  });
+  clearTimeout(alertInterval);
+  
   try {
     await fetch(`https://sdp-campus-safety.azurewebsites.net/alert/${alerts[index].alertID}`,{
       method: 'PUT',
@@ -856,7 +877,8 @@ async function rescuedUser(index){
     console.error(error);
   }
 
-  alerts.splice(index, 1);
+  alerts[index].status = "ASSISTED";
+  alertSize--;
   displayAlerts();
 
   alertInterval = setInterval(async ()=>{
@@ -865,44 +887,46 @@ async function rescuedUser(index){
     }
     //Then fetch all the alerts
     try {
-      await fetch('https://sdp-campus-safety.azurewebsites.net/alert')
-      .then(response=>{return response.json()})
-      .then(data=>{
-        var tempData = [];
-        data.forEach((elem)=>{
-          if(elem.status == "processing"){
-            tempData.push(elem)
-          }
+        await fetch('https://sdp-campus-safety.azurewebsites.net/alert')
+        .then(response=>{return response.json()})
+        .then(data=>{
+          var tempData = [];
+          data.forEach((elem)=>{
+            if(elem.status == "processing"){
+              tempData.push(elem)
+            }
+          })
+          
+          console.log(tempData.length);
+          console.log(alerts.length)
+          console.log("Done")
+            if(tempData.length > alertSize){
+              alerts = []
+              alertSize=0;
+              tempData.forEach(elem=>{
+                console.log(elem);
+                if(elem.status == "processing"){
+                  console.log("pushing element");
+                  elem.location = `${nearestBuilding(Number(elem.lat), Number(elem.lon))}`
+                  alerts.push(elem);
+                  alertSize++;
+                }
+              });
+    
+              plotAlerts();
+              showPosition();
+              displayAlerts();
+            }
         })
-        
-        console.log(tempData.length);
-        console.log(alerts.length)
-        console.log("Done")
-          if(tempData.length > alerts.length && currentType == 'Alerts'){
-            alerts = []
-            tempData.forEach(elem=>{
-              console.log(elem);
-              if(elem.status == "processing"){
-                console.log("pushing element");
-                elem.location = `${nearestBuilding(Number(elem.lat), Number(elem.lon))}`
-                alerts.push(elem);
-              }
-            });
-  
-            plotAlerts();
-            showPosition();
-            displayAlerts();
-          }
-      })
-      .catch(error=>{
-          console.error("Error getting reports, API return with status: ", error);
-      })
-      
+        .catch(error=>{
+            console.error("Error getting reports, API return with status: ", error);
+        })
       
     } catch (error) {
         console.error(error);
     }
   }, 30000)
+  
 }
 
 
@@ -1049,14 +1073,6 @@ async function areYouSure(index){
 
 
 console.log(window.localStorage.getItem('uid'))
-const q = query(collection(db, "alert"), where("status", "==", "processing"));
-const unsubscribe = onSnapshot(q, (querySnapshot) => {
-  querySnapshot.forEach((doc) => {
-      alert.push(doc.data());
-  });
-  
-  displayAlerts();
-});
 
 FullAreYouSure.addEventListener('click', ()=>{
   FullAreYouSure.style.display = 'none'
@@ -1970,14 +1986,16 @@ alertInterval = setInterval(async ()=>{
       
       console.log(tempData.length);
       console.log(alerts.length)
-        if(tempData.length > alerts.length && currentType == 'Alerts'){
+        if(tempData.length > alertSize && currentType == 'Alerts'){
           alerts = []
+          alertSize =0;
           tempData.forEach(elem=>{
             console.log(elem);
             if(elem.status == "processing"){
               console.log("pushing element");
               elem.location = `${nearestBuilding(Number(elem.lat), Number(elem.lon))}`
               alerts.push(elem);
+              alertSize++;
             }
           });
 
