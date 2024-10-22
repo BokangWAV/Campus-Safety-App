@@ -88,7 +88,7 @@ body{
 
 .Switch{
     display: inline-block;
-    margin-top: 1rem;
+    margin-top: 0px;
     align-items: center;
     justify-content: center;
     
@@ -146,4 +146,12 @@ body{
   color: #000000;
   font-weight: 100;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#ResetPassword{
+  color: blue;
+  margin: 0px;
+  margin-top: 10px;
+  margin-left: 25%;
+  cursor: pointer;
 }

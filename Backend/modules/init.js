@@ -32,4 +32,4 @@ try {
 const db = admin.firestore();
 const FieldValue = require("firebase-admin").firestore.FieldValue;
 
-module.exports = { db, FieldValue };
+module.exports = { db, FieldValue, admin };

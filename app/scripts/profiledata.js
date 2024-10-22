@@ -1,4 +1,6 @@
 import { signOutUser } from "../modules/users.js"
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js"
+import { auth } from "../modules/init.js";
 
 async function fetchData(url) {
   try {
@@ -19,12 +21,18 @@ async function  loadData() {
         alert("You need to sign in");
         window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/register.html"
       }
-      const uid = window.localStorage.getItem('uid');
       
-      const userData = await fetchData(`https://sdp-campus-safety.azurewebsites.net/users/${uid}`);
+      const uid = window.localStorage.getItem('uid');
+      const token = window.localStorage.getItem('accessToken');
+      const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${uid}`, {
+          method: 'GET',
+          headers: {
+              userid:uid,
+              authtoken: token,
+            'Content-Type': 'application/json',
+          }
+        })
 
-       console.log(uid);
-        const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${uid}`);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
   
       const result = await response.json();
@@ -64,8 +72,8 @@ async function  loadData() {
 
 
 
-  document.querySelector("#logOut").addEventListener("click", ()=>{
-    signOutUser();
+  document.querySelector("#logOut").addEventListener("click", async ()=>{
+    await signOutUser();
     window.location.href = "https://agreeable-forest-0b968ac03.5.azurestaticapps.net/register.html";
     
   })
@@ -139,21 +147,39 @@ imageUploader.addEventListener('change', async () => {
     if (imageUrls.length > 0) {
       console.log("Images uploaded, updating user profile...");
       const bodyElement = { url: imageUrls[0] };
+
       const uid = window.localStorage.getItem('uid');
-      
+      const token = window.localStorage.getItem('accessToken');
       await fetch(`https://sdp-campus-safety.azurewebsites.net/user/profilePicture/${uid}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(bodyElement),
-      });
+          method: 'PUT',
+          headers: {
+              userid:uid,
+              authtoken: token,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(bodyElement),
+        })
+      
+      // await fetch(`https://sdp-campus-safety.azurewebsites.net/user/profilePicture/${uid}`, {
+      //   method: 'PUT',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(bodyElement),
+      // });
       
       console.log("User profile updated successfully.");
       loadData(); // Reload the updated profile data
     }
   } catch (error) {
     console.error("Error updating user profile:", error);
+  }
+});
+
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+      window.localStorage.setItem('accessToken', user.accessToken)
   }
 });
 

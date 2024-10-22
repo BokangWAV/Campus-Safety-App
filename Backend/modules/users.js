@@ -60,13 +60,14 @@ async function addUser(uid, user){
         age: 0,
         profilePicture: "",
         race: "",
-        gender: user.gender
+        gender: user.gender,
+        profileIntro: true
     })
     .then(() => {
-        //console.log("Document successfully written!");
+        console.log("User successfully added!");
     })
     .catch((error) => {
-        //console.error("Error writing document: ", error);
+        console.error("Error writing document: ", error);
         added = false;
     });
 
@@ -85,11 +86,11 @@ async function updateProfile(uid, user){
         race: user.race
     })
     .then(() => {
-       // console.log("Document successfully updated!");
+        console.log("Profile successfully updated!");
     })
     .catch((error) => {
         // The document probably doesn't exist.
-        //console.error("Error updating document: ", error);
+        console.error("Error updating document: ", error);
 
         updated = false;
     });
@@ -107,9 +108,10 @@ async function updateProfilePicture(uid, url){
         profilePicture: url,
     })
     .then(() => {
-       // console.log("Document successfully updated!");
+        console.log("Profile picture successfully updated!");
     })
     .catch((error) => {
+        console.error(error)
         updated = false;
     });
 
@@ -142,8 +144,28 @@ async function setRole(managerUID, uid, role){
 }
 
 
+async function updateProfileIntro(uid){
+    let updated = true;   //Shows whether we updated a user or we failed
+
+    const userRef = db.collection("users").doc(uid);    //Stores a reference to the user
+
+    await userRef.update({
+        profileIntro: false
+    })
+    .then(() => {
+       console.log("ProfileIntro successfully updated!");
+    })
+    .catch((error) => {
+        console.error(error)
+        updated = false;
+    });
+
+    return updated;
+}
 
 
 
 
-module.exports = { getAllUsers, getUser, addUser, updateProfile, updateProfilePicture, setRole  }
+
+
+module.exports = { getAllUsers, getUser, addUser, updateProfile, updateProfilePicture, setRole, updateProfileIntro  }

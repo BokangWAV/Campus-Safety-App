@@ -115,7 +115,7 @@ const data2 =[ {
 
 let interval;
 setInterval(() => {
-    sendNotification()
+    //sendNotification()
 }, 30000);
 
 window.onload = sendNotification

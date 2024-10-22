@@ -53,16 +53,25 @@
     color: var(--default-color);
     background-color: var(--background-color);
     font-family: var(--default-font);
+    margin: 0;
+    overflow: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+    width: 100%;
+    -ms-overflow-style: none; /* Hides scrollbar in IE and Edge */
+  }
+  
+  /* Hides scrollbar for WebKit-based browsers (Chrome, Safari, Edge) */
+  body::-webkit-scrollbar {
+      display: none;
   }
   
   a {
-    color: var(--accent-color);
     text-decoration: none;
     transition: 0.3s;
   }
   
   a:hover {
-    color: color-mix(in srgb, var(--accent-color), transparent 25%);
     text-decoration: none;
   }
   
@@ -72,7 +81,6 @@
   h4,
   h5,
   h6 {
-    color: var(--heading-color);
     font-family: var(--heading-font);
   }
   
@@ -210,22 +218,30 @@
   /*--------------------------------------------------------------
   # Global Header
   --------------------------------------------------------------*/
-  .header {
-    color: var(--default-color);
-    background-color: var(--background-color);
-    padding: 15px 0;
+  #header {
+    color: #fff ;
+    background-color: #1a3e57;
+    padding: 15px;
+    padding-right: 50px ;
     transition: all 0.5s;
     z-index: 997;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
   }
   
   .header .logo {
     line-height: 1;
   }
-  
-  .header .logo img {
-    max-height: 36px;
-    margin-right: 8px;
+
+  #menu-icon{
+    opacity: 1;
+    width: 10px;
+    height: 10px;
   }
+  
   
   .header .logo h1 {
     font-weight: 700;
@@ -233,37 +249,55 @@
     margin: 0;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: var(--accent-color);
+    color: #fff ;
   }
   
   .header .btn-getstarted,
   .header .btn-getstarted:focus {
-    color: var(--contrast-color);
-    background: var(--accent-color);
+    color: #fff;
+    background-color: #1a3e57;
     font-size: 14px;
     padding: 8px 25px;
     margin: 0 0 0 30px;
     border-radius: 50px;
     transition: 0.3s;
+    border: 2px solid #fff;
   }
   
   .header .btn-getstarted:hover,
   .header .btn-getstarted:focus:hover {
-    color: var(--contrast-color);
-    background: color-mix(in srgb, var(--accent-color), transparent 15%);
+    color: #1a3e57;
+    background: #fff;
   }
 
-  #header #container-header{
-    display: flex;
-    flex-direction: row;
-    justify-content:space-between ;
-    align-items: center;
+  #The-Dropdown{
+    display: none;
   }
+
+  #sub-header-mobile{
+    display: none;
+  }
+
+  #title-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+  }
+
+  #title-page h1{
+    color: #1a3e57;
+    margin: 0;
+  }
+
+  #title-page p{
+    margin: 20px;
+  }
+
   
   @media (max-width: 768px) {
-    .header .logo {
-      order: 1;
-    }
   
     .header .btn-getstarted {
       order: 2;
@@ -291,6 +325,7 @@
   
     .navmenu ul {
       margin: 0;
+      margin-right: 30px;
       padding: 0;
       display: flex;
       list-style: none;
@@ -303,7 +338,7 @@
   
     .navmenu a,
     .navmenu a:focus {
-      color: var(--nav-color);
+      color: #fff ;
       padding: 18px 15px;
       font-size: 16px;
       font-family: var(--nav-font);
@@ -330,13 +365,13 @@
     .navmenu li:hover>a,
     .navmenu .active,
     .navmenu .active:focus {
-      color: var(--nav-hover-color);
+      color:#fff;
     }
   
     .navmenu .dropdown ul {
       margin: 0;
       padding: 10px 0;
-      background: var(--nav-dropdown-background-color);
+      background-color: #1a3e57;
       display: block;
       position: absolute;
       visibility: hidden;
@@ -357,7 +392,7 @@
       padding: 10px 20px;
       font-size: 15px;
       text-transform: none;
-      color: var(--nav-dropdown-color);
+      color: #fff ;
     }
   
     .navmenu .dropdown ul a i {
@@ -397,7 +432,7 @@
   /* Navmenu - Mobile */
   @media (max-width: 768px) {
     .mobile-nav-toggle {
-      color: var(--nav-color);
+      color: #fff ;
       font-size: 28px;
       line-height: 0;
       margin-right: 10px;
@@ -408,6 +443,7 @@
     .navmenu {
       padding: 0;
       z-index: 9997;
+      display: none;
     }
   
     .navmenu ul {
@@ -417,7 +453,7 @@
       padding: 10px 0;
       margin: 0;
       border-radius: 6px;
-      background-color: var(--nav-mobile-background-color);
+      background-color: #1a3e57;
       border: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
       box-shadow: none;
       overflow-y: auto;
@@ -427,7 +463,7 @@
   
     .navmenu a,
     .navmenu a:focus {
-      color: var(--nav-dropdown-color);
+      color: #fff ;
       padding: 10px 20px;
       font-family: var(--nav-font);
       font-size: 17px;
@@ -456,20 +492,20 @@
   
     .navmenu a i:hover,
     .navmenu a:focus i:hover {
-      background-color: var(--accent-color);
-      color: var(--contrast-color);
+      color: #fff ;
+    background-color: #1a3e57;
     }
   
     .navmenu a:hover,
     .navmenu .active,
     .navmenu .active:focus {
-      color: var(--nav-dropdown-hover-color);
+      color: #fff ;
     }
   
     .navmenu .active i,
     .navmenu .active:focus i {
-      background-color: var(--accent-color);
-      color: var(--contrast-color);
+      color: #fff ;
+      background-color: #1a3e57;
       transform: rotate(180deg);
     }
   
@@ -479,17 +515,17 @@
       z-index: 99;
       padding: 10px 0;
       margin: 10px 20px;
-      background-color: var(--nav-dropdown-background-color);
+      background-color: #1a3e57;
       transition: all 0.5s ease-in-out;
     }
   
     .navmenu .dropdown ul ul {
-      background-color: rgba(33, 37, 41, 0.1);
+      background-color: #1a3e57;
     }
   
     .navmenu .dropdown>.dropdown-active {
       display: block;
-      background-color: rgba(33, 37, 41, 0.03);
+      background-color: #1a3e57;
     }
   
     .mobile-nav-active {
@@ -510,7 +546,7 @@
       position: fixed;
       overflow: hidden;
       inset: 0;
-      background: rgba(33, 37, 41, 0.8);
+      background-color: #1a3e57;
       transition: 0.3s;
     }
   
@@ -524,6 +560,47 @@
         margin: 0 15px 0 0;
         padding: 6px 15px;
     }
+
+    #faq-question{
+      width: 80%;
+      margin-left: 8%;
+    }
+
+    #title-page p{
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    #sub-header-mobile{
+      display: none;
+      position: absolute;
+      top: 9%;
+      right: 0px;
+      flex-direction: column;
+      width: 40%;
+      background-color: #1a3e57;
+      align-items: center;
+      color: #fff;
+      justify-content: space-evenly;
+    }
+
+    #sub-header-mobile a{
+      color: #fff;
+      margin-bottom: 4px;
+      line-height: 50px;
+      font-size: 17px;
+    }
+
+    #The-Dropdown{
+      cursor: pointer;
+      margin-right: 5%;
+      display: flex;
+    }
+
+    #The-Dropdown img{
+      width: 30px;
+      height: 30px;
+    }
   }
   
   /*--------------------------------------------------------------
@@ -531,10 +608,16 @@
   --------------------------------------------------------------*/
   .footer {
     color: var(--default-color);
-    background-color: var(--background-color);
+    background-color:  color-mix(in srgb, var(--default-color), transparent 95%);
     font-size: 14px;
     padding-bottom: 50px;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: fit-content;
+    bottom: 0px;
   }
   
   .footer .footer-top {
@@ -675,6 +758,11 @@
   .footer .copyright {
     padding-top: 25px;
     padding-bottom: 25px;
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: color-mix(in srgb, var(--default-color), transparent 95%);
   }
   
@@ -823,14 +911,10 @@
   .section {
     color: var(--default-color);
     background-color: var(--background-color);
-    padding: 60px 0;
-    scroll-margin-top: 900px;
     overflow: clip;
   }
   
   @media (max-width: 1199px) {
-  
-    section,
     .section {
       scroll-margin-top: 66px;
     }

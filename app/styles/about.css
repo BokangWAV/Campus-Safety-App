@@ -1,0 +1,35 @@
+section{
+    margin-top: 80px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+section h1{
+    font-size: 60px;
+    margin-bottom: 30px;
+}
+
+.aboutUsContent{
+    width: 95%;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.aboutUsContent .paragraphContent{
+    margin-top: 5px;
+}
+
+
+
+@media (max-width: 768px) {
+    section h1{
+        font-size: 40px;
+    }
+
+    .aboutUsContent{
+        width: 100%;
+    }
+}
