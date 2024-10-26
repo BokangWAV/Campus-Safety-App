@@ -1,14 +1,24 @@
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js"
+import { auth } from "../modules/init.js";
+
 window.onload = async function () {
     try {
         
-        const uid = window.localStorage.getItem('uid');
-        console.log(uid);
-        const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${uid}`);
+      const uid = window.localStorage.getItem('uid');
+      const token = window.localStorage.getItem('accessToken');
+      const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/users/${uid}`, {
+          method: 'GET',
+          headers: {
+              userid:uid,
+              authtoken: token,
+            'Content-Type': 'application/json',
+          }
+        })
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
   
       const result = await response.json();
 
-        console.log(response)
+        console.log(result)
       //console.log('User data fetched:', result); // Debugging line
   
       const user = Array.isArray(result) ? result[0] : result; // Assuming user is at index 0, if it's in an array
@@ -25,6 +35,10 @@ window.onload = async function () {
 
       if(window.localStorage.getItem('userProfile') != ""){
         document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
+      
+      if( user.profileIntro){
+        document.getElementById('fullIntroDiv').style.display = 'flex';
+      }
     }
     if(window.localStorage.getItem('userRole') == "manager"){
       document.getElementById('managerAlert').style.display = 'flex'
@@ -41,7 +55,17 @@ window.onload = async function () {
       if(window.localStorage.getItem("userRole") == 'manager'){
         document.querySelector("#managerReq").style.display = "none"
       }else{
-        const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/applications/${uid}`);
+        const uid = window.localStorage.getItem('uid');
+        const token = window.localStorage.getItem('accessToken');
+        const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/applications/${uid}`, {
+            method: 'GET',
+            headers: {
+                userid:uid,
+                authtoken: token,
+              'Content-Type': 'application/json',
+            }
+          })
+
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
   
         const result = await response.json();
@@ -51,11 +75,16 @@ window.onload = async function () {
       }
         if(result.length == 0){
           document.querySelector("#managerReq").addEventListener("click",async function(event){
+            document.querySelector("#managerReq").style.cursor = "pointer"
             try{
-              const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/applications/${uid}`,{
+              const response = await fetch(`https://sdp-campus-safety.azurewebsites.net/applications/${uid}`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'}
-              });
+                headers: {
+                    userid:uid,
+                    authtoken: token,
+                  'Content-Type': 'application/json',
+                }
+              })
 
               if(response.ok){
                 alert("Application has been successful. Response to be granted by managers.");
@@ -76,6 +105,7 @@ window.onload = async function () {
             }
           })
         }else{
+          document.querySelector("#managerReq").style.cursor = "pointer"
           let concernedDiv = document.querySelector(".role-change-div");
           concernedDiv.querySelector("#managerReq").remove();
           let par = document.createElement("p");
@@ -98,4 +128,12 @@ window.onload = async function () {
       
     }  
   };
+
+
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+      window.localStorage.setItem('accessToken', user.accessToken)
+  }
+});
     

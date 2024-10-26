@@ -1,6 +1,18 @@
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js"
+import { auth } from "../modules/init.js";
+
 async function fetchData(url) {
     try {
-        const response = await fetch(url);
+        const token = window.localStorage.getItem('accessToken');
+        const uid = window.localStorage.getItem('uid');
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+              userid:uid,
+              authtoken: token,
+            'Content-Type': 'application/json',
+          }
+        })
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -108,12 +120,18 @@ document.addEventListener("DOMContentLoaded", async function (){
             let userID = event.target.dataset.userID;
             let applID = event.target.dataset.applID;
             let thisDiv = event.target.parentElement.parentElement;
+            const uid = window.localStorage.getItem('uid');
+            const token = window.localStorage.getItem('accessToken');
             let url =`https://sdp-campus-safety.azurewebsites.net/applications/${userID}`;
             
             console.log(url);
             fetch(url, {
                 method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
+                headers: {
+                    userid:uid,
+                    authtoken: token,
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({
                     status: "rejected",
                     applicationID: Number.parseInt(applID),
@@ -144,12 +162,18 @@ document.addEventListener("DOMContentLoaded", async function (){
             let userID = event.target.dataset.userID;
             let applID = event.target.dataset.applID;
             let thisDiv = event.target.parentElement.parentElement;
+            const uid = window.localStorage.getItem('uid');
+            const token = window.localStorage.getItem('accessToken');
             let url =`https://sdp-campus-safety.azurewebsites.net/applications/${userID}`;
             
             console.log(url);
             fetch(url, {
                 method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
+                headers: {
+                    userid:uid,
+                    authtoken: token,
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({
                     status: "accepted",
                     applicationID: Number.parseInt(applID),
@@ -316,3 +340,10 @@ function addCard(articleTitle ,articleContent, articleID, articleStatus){
 
     return card;
 }
+
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        window.localStorage.setItem('accessToken', user.accessToken)
+    }
+  });

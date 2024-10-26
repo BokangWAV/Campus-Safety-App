@@ -16,6 +16,8 @@
 
   <!-- Stylesheet -->
   <link href="styles/request.css" rel="stylesheet">
+  <link href="./styles/dashboard.css" rel="stylesheet">
+  
 </head>
 
 <body>
@@ -63,18 +65,18 @@
       <p>View, manage and review all user requests for role change & article approval.</p>
     </div>
 
-    <div class="role-section">
+    <div class="role-section" id="role-section">
       <h2>Role requests</h2>
       <p>Reject or approve role change from user to manager.</p>
     </div>
 
-    <div class="pending-section">
+    <div class="pending-section" id="pending-section">
       <h2>Pending articles</h2>
       <p>Review and approve articles to be posted in the site.</p>
       
     </div>
 
-    <div class="approved-section">
+    <div class="approved-section" id="approved-section">
       <h2>Approved articles</h2>
       
     </div>
@@ -83,7 +85,7 @@
 
   <div id="preloader"></div>
 
-  <script src="/scripts/request.js" type="module"></script>
+  <script src="./scripts/request.js" type="module"></script>
   <script>
     document.getElementById('mobile-nav-toggle').addEventListener('click',() =>{
         const menu = document.getElementById('headerMenu');

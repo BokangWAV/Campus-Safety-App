@@ -1,3 +1,8 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
 
 body {
   font-family: 'Open Sans', sans-serif;
@@ -8,9 +13,18 @@ body {
   display: flex;
   flex-direction: column;
   height: 100dvh;
-  overflow-y: scroll;
-}
-
+  box-sizing: border-box;
+  width: 100%;
+  overflow: hidden;
+  overflow-y: auto;
+  width: 100%;
+  -ms-overflow-style: none; /* Hides scrollbar in IE and Edge */
+  }
+  
+  /* Hides scrollbar for WebKit-based browsers (Chrome, Safari, Edge) */
+  body::-webkit-scrollbar {
+      display: none;
+  }
 /* Header Styles */
 .header {
   width: 100%;
@@ -99,7 +113,7 @@ body {
 
 /* Main Content Styles */
 .dashboard-container {
-  margin-top: 60px;
+  margin-top: 90px;
   padding: 2rem;
   flex-grow: 1;
   overflow: hidden;
@@ -144,8 +158,11 @@ body {
 }
 
 .dashboard-header {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   text-align: center;
-  margin: 6rem;
+  margin-bottom: 60px;
 }
 
 .dashboard-header h1 {
@@ -172,10 +189,14 @@ body {
   flex: 1 1 calc(33.333% - 1rem);
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   padding: 2rem;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin: 3px;
+  margin-bottom: 3px;
+  margin-top: 3px;
+
 }
 
 .dashboard-card:hover {
@@ -301,7 +322,11 @@ body {
     height: 50px;
     padding: 1rem 2rem;
     font-size: 24px;
-    width: 400px;
+    width: 100%;
+}
+
+#headerMenu{
+  height: fit-content;
 }
 
 .header ul {
@@ -411,6 +436,14 @@ body {
   margin-right: 20px;
 }
 
+#MobileProfile{
+  display: flex;
+}
+
+#mobileNotification{
+  display: flex;
+}
+
 }
 
 
@@ -421,8 +454,14 @@ body {
     max-width: 55svh;
   }
 
+  #headerMenu{
+    height: fit-content;
+    transform: translateY(-10px);
+  }
+
   .header{
     padding: 10px;
+    
   }
 
   .dashboard-container{
@@ -440,6 +479,7 @@ body {
     align-items: center;
     margin: 0;
     width: 100%;
+    
   }
 
   .dashboard-card {
@@ -546,4 +586,14 @@ body {
 
 .btn-write-article:hover {
   background-color: #45a049;
+}
+
+#innerContainer{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  overflow-x: hidden;
 }

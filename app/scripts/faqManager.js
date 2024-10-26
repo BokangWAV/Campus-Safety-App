@@ -1,6 +1,15 @@
 async function fetchData(url) {
     try {
-        const response = await fetch(url);
+        const token = window.localStorage.getItem('accessToken');
+        const uid = window.localStorage.getItem('uid');
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+              userid:uid,
+              authtoken: token,
+            'Content-Type': 'application/json',
+          }
+        })
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -49,32 +58,33 @@ document.addEventListener("DOMContentLoaded", async function(){
                 par.style.color = "black"
 
                 let buttonContainer = document.createElement("div");
-                buttonContainer.style.display = "flex";
-                buttonContainer.style.flexWrap = "wrap";
+                buttonContainer.id = 'FAQButtonDiv';
+                // buttonContainer.style.display = "flex";
+                // buttonContainer.style.flexWrap = "wrap";
 
                 let approve = document.createElement("button");
                 approve.id = "approve";
                 approve.textContent = "Approve";
                 approve.dataset.faqid = question.FAQID;
 
-                approve.style.border = "none";
-                approve.style.border = "none";
-                approve.style.backgroundColor = "#4CAF50";
-                approve.style.color = "white";
-                approve.style.margin = "10px";
-                approve.style.padding = "20px";
+                // approve.style.border = "none";
+                // approve.style.border = "none";
+                // approve.style.backgroundColor = "#4CAF50";
+                // approve.style.color = "white";
+                // approve.style.margin = "10px";
+                // approve.style.padding = "20px";
 
                 let deleteBtn = document.createElement("button");
                 deleteBtn.id = "delete";
                 deleteBtn.textContent = "Delete";
                 deleteBtn.dataset.faqid = question.FAQID;
 
-                deleteBtn.style.border = "none";
-                deleteBtn.style.border = "none";
-                deleteBtn.style.backgroundColor = "red";
-                deleteBtn.style.padding = "20px";
-                deleteBtn.style.margin = "10px";
-                deleteBtn.style.color = "white";
+                // deleteBtn.style.border = "none";
+                // deleteBtn.style.border = "none";
+                // deleteBtn.style.backgroundColor = "red";
+                // deleteBtn.style.padding = "20px";
+                // deleteBtn.style.margin = "10px";
+                // deleteBtn.style.color = "white";
 
                 let headQ = document.createElement("h3");
                 headQ.textContent = "Question";

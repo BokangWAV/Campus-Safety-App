@@ -25,6 +25,7 @@ let userUID = 0;
 onAuthStateChanged(auth, (user) => {
     if (user) {
         // User is signed in
+        window.localStorage.setItem('accessToken', user.accessToken)
         console.log("User ID:", user.uid);
         console.log("Email:", user.email);
         console.log("Display Name:", user.displayName);
@@ -59,6 +60,46 @@ async function fetchData(url) {
 }
 
 document.addEventListener("DOMContentLoaded", async function() {
+    let textArea = document.createElement("textarea");
+    textArea.id = "faq-textarea";
+    textArea.name = "faq-textarea";
+    textArea.style.resize = 'none';
+
+    let btn = document.createElement("button");
+    btn.id = "submission";
+    btn.type = "button";
+    btn.textContent = "Submit FAQ";
+    
+    const faqQuestionContainer = document.querySelector(".faq-question");
+    faqQuestionContainer.appendChild(textArea);
+    faqQuestionContainer.appendChild(btn);
+
+    btn.addEventListener("click", () => {
+        let value = textArea.value;
+
+        const data = {
+            question: value
+        }
+        
+        disableButton();
+        postFAQ(data, userUID)
+            .then(() => {
+                textArea.value = "";
+                disableButton();
+            })
+            .catch(error => {
+                console.error("Error posting FAQ:", error);
+                alert("Failed to post article. Please try again.");
+            })
+            .finally(() => {
+                enableButton();
+            });
+
+        textArea.value = "";
+    });
+
+
+
     try {
         const list = await fetchData('https://sdp-campus-safety.azurewebsites.net/FAQs');
 
@@ -87,42 +128,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     }
 
     
-        let textArea = document.createElement("textarea");
-        textArea.id = "faq-textarea";
-        textArea.name = "faq-textarea";
-
-        let btn = document.createElement("button");
-        btn.id = "submission";
-        btn.type = "button";
-        btn.textContent = "Submit FAQ";
         
-        const faqQuestionContainer = document.querySelector(".faq-question");
-        faqQuestionContainer.appendChild(textArea);
-        faqQuestionContainer.appendChild(btn);
-
-        btn.addEventListener("click", () => {
-            let value = textArea.value;
-
-            const data = {
-                question: value
-            }
-            
-            disableButton();
-            postFAQ(data, userUID)
-                .then(() => {
-                    textArea.value = "";
-                    disableButton();
-                })
-                .catch(error => {
-                    console.error("Error posting FAQ:", error);
-                    alert("Failed to post article. Please try again.");
-                })
-                .finally(() => {
-                    enableButton();
-                });
-
-            textArea.value = "";
-        });
 });
 function addCard(question, answer, index){
     document.querySelector(".faq-list").innerHTML += `<div id="card"><i>${question}</i><div class="question" id=faq${index}><p>${answer}</p></div></div>`

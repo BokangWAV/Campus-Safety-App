@@ -71,3 +71,15 @@
   .back-link:hover {
     text-decoration: underline;
   }
+
+  @media (max-width: 800px) {
+    .form-container {
+      background-color: #f4f4f4;
+      padding: 15px;
+      padding-bottom: 30px;
+      border-radius: 8px;
+      max-width: 700px;
+      margin: 0px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  }

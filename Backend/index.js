@@ -10,7 +10,7 @@ const port = process.env.PORT || 8080;
 const { getAllArticles, getPendingArticles, getApprovedArticles, addArticle, deleteArticle, addLike, approveArticle } = require('./modules/article.js');
 
 // Get all the functions to operate on users
-const {getAllUsers, getUser, addUser, updateProfile, updateProfilePicture, setRole} = require('./modules/users.js');
+const {getAllUsers, getUser, addUser, updateProfile, updateProfilePicture, setRole, updateProfileIntro} = require('./modules/users.js');
 
 //Get all the functions to use for Reports
 const { addReport, getAllReports, getUserReport, removeReport } = require('./modules/report.js');
@@ -30,6 +30,9 @@ const { sendAnnouncement} = require('./modules/announcement.js');
 //Get all functions to use for applications
 const { getApplications,  addApplication,  approveApplication, getApplication} = require('./modules/applications.js');
 
+// Get the verify user from the auth.js
+const {verifyUser} = require('./modules/authorise.js');
+
 app.use(cors());
 app.use(express.json())
 
@@ -37,6 +40,7 @@ app.use(express.json())
 //----------------------------------- WELCOME THE USERS TO THE API ---------------------------------------//
 app.get('/', async (req, res)=>{
     res.json({message: "Welcome to the Campus Safety API"});    //Json response to Welcome the person querying
+    
 });
 
 
@@ -44,6 +48,15 @@ app.get('/', async (req, res)=>{
 //------------------------------------- USER SECTION -----------------------------------------------------//
 //Get all user in the database
 app.get('/users', async (req, res)=>{
+    const  { authtoken, uid }  = req.headers;   // User Token and userId in the header
+
+    const verify = await verifyUser(authtoken, uid);
+    if( verify.status!== 200){
+        return res.sendStatus(verify.status);
+    }else if( verify.status!== 'manager'){
+        return res.sendStatus(403)
+    }
+
     const response = await getAllUsers();   //Calls function to get all users
     res.json(response); //Return the response
 });
@@ -51,6 +64,13 @@ app.get('/users', async (req, res)=>{
 //Get user using their uid
 app.get('/users/:uid', async (req, res)=>{
     const uid = req.params['uid'];  //Gets the user id from the parameters
+    const  { authtoken, userid }  = req.headers;    // User Token and userId in the header
+
+    const verify = await verifyUser(authtoken, userid);
+    if( verify.status!== 200){
+        return res.sendStatus(verify.status);
+    }
+
     const response = await getUser(uid);    //Calls function to get that specific user
     res.json(response); //Return the response
 });
@@ -59,6 +79,13 @@ app.get('/users/:uid', async (req, res)=>{
 app.post('/users/:uid', async (req, res)=>{
     const uid = req.params['uid'];  //Gets the uid passed from the parameter
     const user = req.body;  //These are the details of the user
+    const  { authtoken, userid }  = req.headers;    // User Token and userId in the header
+
+    // Verify if this transaction should happen or not
+    const verify = await verifyUser(authtoken, userid);
+    if( verify.status!== 200){
+        return res.sendStatus(verify.status);
+    }
 
 
     //If the user is added then all is well send response code 200
@@ -66,7 +93,7 @@ app.post('/users/:uid', async (req, res)=>{
     if(await addUser(uid, user)){
         res.status(200).send('User added successfully');
     }else{
-        res.status(404).send('Unable to add user');
+        res.status(500).send('Unable to add user');
     }
     
 });
@@ -75,13 +102,21 @@ app.post('/users/:uid', async (req, res)=>{
 app.put('/users/profile/:uid', async (req, res)=>{
     const uid = req.params['uid'];  //Gets the uid passed from the parameter
     const user = req.body;  //These are the details of the user
+    const  { authtoken, userid }  = req.headers;    // User Token and userId in the header
+
+    // Verify if this transaction should happen or not
+    const verify = await verifyUser(authtoken, userid);
+    if( verify.status!== 200){
+        return res.sendStatus(verify.status);
+    }
+
 
     //If the user is details is updated then all is well send response code 200
     //Else send an error
     if(await updateProfile(uid, user)){
         res.status(200).send('Updated profile successfully');
     }else{
-        res.status(404).send('Unable to update profile');
+        res.status(500).send('Unable to update profile');
     }
     
 });
@@ -106,13 +141,21 @@ app.put('/user/profilePicture/:uid', async (req, res)=>{
     
     const uid = req.params['uid'];  //Gets the uid passed from the parameter
     const profileURL = req.body.url;  //This is the URL to the profile picture
+    const  { authtoken, userid }  = req.headers;    // User Token and userId in the header
+
+    // Verify if this transaction should happen or not
+    const verify = await verifyUser(authtoken, userid);
+    if( verify.status!== 200){
+        return res.sendStatus(verify.status);
+    }
+
 
     //If the user profile is updated then all is well send response code 200
     //Else send an error
     if(await updateProfilePicture(uid, profileURL)){
         res.status(200).send('Updated Profile Picture successfully');
     }else{
-        res.status(404).send('Unable to update Profile Picture');
+        res.status(500).send('Unable to update Profile Picture');
     }
 })
 
@@ -123,20 +166,60 @@ app.put('/user/role/:managerUid/:uid', async (req, res)=>{
     const managerUID = req.params['managerUid'];  //Gets the uid passed from the parameter
     const uid = req.params['uid']
     const role = req.body.role;
+    const  { authtoken, userid }  = req.headers;    // User Token and userId in the header
+
+    // Verify if this transaction should happen or not
+    const verify = await verifyUser(authtoken, userid);
+    if( verify.status!== 200){
+        return res.sendStatus(verify.status);
+    }
+
 
     //If the user profile is updated then all is well send response code 200
     //Else send an error
     if(await setRole(managerUID, uid, role)){
         res.status(200).send('Updated Profile Picture successfully');
     }else{
-        res.status(404).send('Unable to update Profile Picture');
+        res.status(500).send('Unable to update Profile Picture');
     }
 })
+
+//This is the endpoint to update the Profile Intro attribute
+app.put('/user/profileIntro/:uid', async (req, res)=>{
+    const uid = req.params['uid']
+    const  { authtoken, userid }  = req.headers;    // User Token and userId in the header
+
+    // Verify if this transaction should happen or not
+    const verify = await verifyUser(authtoken, userid);
+    if( verify.status!== 200){
+        return res.sendStatus(verify.status);
+    }
+
+
+    //If the user profile is updated then all is well send response code 200
+    //Else send an error
+    if(await updateProfileIntro(uid)){
+        res.status(200).send('Updated Profile Picture successfully');
+    }else{
+        res.status(500).send('Unable to update Profile Picture');
+    }
+})
+
 
 
 //------------------------------------- APPLICATIONS SECTION ----------------------------------------------//
 // This is to get all applications by user to be a manager
 app.get('/applications', async (req, res)=>{
+    const  { authtoken, userid }  = req.headers;    // User Token and userId in the header
+
+    // Verify if this transaction should happen or not
+    const verify = await verifyUser(authtoken, userid);
+    if( verify.status!== 200){
+        return res.sendStatus(verify.status);
+    }else if( verify.role !== 'manager'){
+        return res.sendStatus(403)
+    }
+
     const response = await getApplications();
 
     res.json(response);
@@ -145,6 +228,13 @@ app.get('/applications', async (req, res)=>{
 // This is to get a user's application
 app.get('/applications/:uid', async (req, res)=>{
     const uid = req.params['uid'];
+    const  { authtoken, userid }  = req.headers;    // User Token and userId in the header
+
+    // Verify if this transaction should happen or not
+    const verify = await verifyUser(authtoken, userid);
+    if( verify.status!== 200){
+        return res.sendStatus(verify.status);
+    }
 
     const reponse = await getApplication(uid);
 
@@ -154,11 +244,19 @@ app.get('/applications/:uid', async (req, res)=>{
 //This is the add an application to be a manager
 app.post('/applications/:uid', async (req, res)=>{
     const uid = req.params['uid'];
+    const  { authtoken, userid }  = req.headers;    // User Token and userId in the header
+
+    // Verify if this transaction should happen or not
+    const verify = await verifyUser(authtoken, userid);
+    if( verify.status!== 200){
+        return res.sendStatus(verify.status);
+    }
+
 
     if(await addApplication(uid)){
         res.status(200).send("Added successfully");
     }else{
-        res.status(404).send("Unable to add application");
+        res.status(500).send("Unable to add application");
     }
 })
 
@@ -168,11 +266,19 @@ app.put('/applications/:uid', async (req, res)=>{
     const status = req.body.status;
     const applicationID = req.body.applicationID;
     const managerID = req.body.managerID;
+    const  { authtoken, userid }  = req.headers;    // User Token and userId in the header
+
+    // Verify if this transaction should happen or not
+    const verify = await verifyUser(authtoken, userid);
+    if( verify.status!== 200){
+        return res.sendStatus(verify.status);
+    }
+
 
     if(await approveApplication(uid, status, applicationID, managerID)){
         res.status(200).send("Application approved")
     }else{
-        res.status(404).send("Unable to approve Application")
+        res.status(500).send("Unable to approve Application")
     }
 })
 
@@ -207,7 +313,7 @@ app.post('/articles/:uid', async (req, res) =>{
     if(await addArticle(uid, article)){
         res.status(200).send('Article added successfully');
     }else{
-        res.status(404).send('Unable to add article');
+        res.status(500).send('Unable to add article');
     }
 });
 
@@ -220,7 +326,7 @@ app.delete('/articles/:articleID', async (req, res)=>{
     if(await deleteArticle(uid)){
         res.status(200).send('Deleted article successfully');
     }else{
-        res.status(404).send('Unable to delete article');
+        res.status(500).send('Unable to delete article');
     }
 });
 
@@ -234,7 +340,7 @@ app.put('/articles/like/:articleID', async (req, res)=>{
     if(await addLike(uid)){
         res.status(200).send('Updated Likes successfully');
     }else{
-        res.status(404).send('Unable to update Likes');
+        res.status(500).send('Unable to update Likes');
     }
 });
 
@@ -248,7 +354,7 @@ app.put('/articles/approve/:articleID', async (req, res)=>{
     if(await approveArticle(uid)){
         res.status(200).send('Updated Likes successfully');
     }else{
-        res.status(404).send('Unable to update Likes');
+        res.status(500).send('Unable to update Likes');
     }
 });
 
@@ -272,7 +378,7 @@ app.post('/reports/:uid', async (req, res)=>{
     if(await addReport(uid, report)){
         res.status(200).send('Report added successfully');
     }else{
-        res.status(404).send('Unable to add report');
+        res.status(500).send('Unable to add report');
     }
 });
 
@@ -293,7 +399,7 @@ app.put('/reports/:reportID', async (req, res)=>{
     if(await removeReport(reportID)){
         res.status(200).send('Updated Likes successfully');
     }else{
-        res.status(404).send('Unable to update Likes');
+        res.status(500).send('Unable to update Likes');
     }
 })
 
@@ -317,7 +423,7 @@ app.post('/alert/:uid', async (req, res)=>{
     if(await addAlert(uid, alert)){
         res.status(200).send('Alert added successfully');
     }else{
-        res.status(404).send('Unable to add alert');
+        res.status(500).send('Unable to add alert');
     }
 });
 
@@ -330,7 +436,7 @@ app.delete('/alert/:uid', async (req, res)=>{
     if(await deleteReport(alertuid)){
         res.status(200).send('Deleted alert successfully');
     }else{
-        res.status(404).send('Unable to delete alert');
+        res.status(500).send('Unable to delete alert');
     }
 });
 
@@ -343,7 +449,7 @@ app.put('/alert/:uid', async (req, res)=>{
     if(await updateViewAlert(reportID)){
         res.status(200).send('Updated alert successfully');
     }else{
-        res.status(404).send('Unable to update alert');
+        res.status(500).send('Unable to update alert');
     }
 });
 
@@ -358,7 +464,7 @@ app.put('/alert/manager/:uid', async (req, res)=>{
     if(await managerViewAlert(reportID)){
         res.status(200).send('Updated alert successfully');
     }else{
-        res.status(404).send('Unable to update alert');
+        res.status(500).send('Unable to update alert');
     }
 })
 
@@ -409,7 +515,7 @@ app.put('/notifications/status/:uid', async (req, res)=>{
     if(await updateNotificationStatus(uid, notificationID)){
         res.status(200).send('Updated Likes successfully');
     }else{
-        res.status(404).send('Unable to update Likes');
+        res.status(500).send('Unable to update Likes');
     }
 });
 
@@ -451,7 +557,7 @@ app.put('/FAQ/:FAQID', async (req, res)=>{
     if(await respondFAQ(FAQID, answer)){
         res.status(200).send("Responded Successfully")
     }else{
-        res.status(404).send("Unable to respond");
+        res.status(500).send("Unable to respond");
     }
 });
 
@@ -463,7 +569,7 @@ app.put('/FAQ/publish/:FAQID', async (req, res)=>{
     if(await displayFAQ(FAQID)){
         res.status(200).send("Displayed Successfully");
     }else{
-        res.status(404).send("Unable to display FAQ")
+        res.status(500).send("Unable to display FAQ")
     }
 
 })
@@ -476,7 +582,7 @@ app.delete('/FAQ/:FAQID', async (req, res)=>{
     if( await deleteFAQ(FAQID)){
         res.status(200).send("Deleted Successfully")
     }else(
-        res.status(404).send("Unable to delete FAQ")
+        res.status(500).send("Unable to delete FAQ")
     )
 })
 
@@ -488,7 +594,7 @@ app.post('/FAQ', async (req, res)=>{
     if( await addFAQ(FAQ)){
         res.status(200).send("Added FAQ");
     }else{
-        res.status(404).send("Unable to add FAQ");
+        res.status(500).send("Unable to add FAQ");
     }
 })
 
@@ -502,7 +608,7 @@ app.post('/announcement/:uid', async (req, res)=>{
     if(await sendAnnouncement(uid, announcement)){
         res.status(200).send("Announcement Sent")
     }else{
-        res.status(404).send("Failed to send Announcement")
+        res.status(500).send("Failed to send Announcement")
     }
     
 });
@@ -565,7 +671,8 @@ cron.schedule('0 0 * * *', async () => {
 //============================================= MAINTANENCE SECTION ===============================================//
 app.get('/maintenance', async (req, res)=>{
     const url = 'https://wiman.azurewebsites.net/api/venues'; 
-    const token = process.env.MAINTENACE_KEY;  
+    const token = process.env.MAINTENACE_KEY; 
+    console.log(token)
 
     var response;
 

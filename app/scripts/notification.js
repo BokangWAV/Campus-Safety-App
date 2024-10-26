@@ -148,10 +148,13 @@ async function displayNotifications(){
       
       incidentImage.className = "incident-pic";
       console.log(notification.incident_image)
-      if ( notification.incident_image.length>0) {
+      if ( notification.incident_image.length>0 && (notification.type === "report")) {
         incidentImage.src = notification.incident_image[0];
         incidentImage.alt = "Incident Image";
-      } else {
+      } else if(notification.type === "safety alert") {
+        incidentImage.src = notification.incident_image;
+        incidentImage.alt = "Incident Image";
+      }else{
         incidentImage.style.display = "none"; // Hide if there's no image
       }
     }
