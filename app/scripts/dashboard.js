@@ -18,7 +18,16 @@ const auth = getAuth(app);
 
 async function fetchData(url) {
     try {
-        const response = await fetch(url);
+        const token = window.localStorage.getItem('accessToken');
+        const uid = window.localStorage.getItem('uid');
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+              userid:uid,
+              authtoken: token,
+            'Content-Type': 'application/json',
+          }
+        })
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
