@@ -11,7 +11,8 @@ async function verifyUser(authtoken, uid){
             console.log(authUser.uid)
             status = 403; 
         }else{
-            role = (await getUser(uid))[0].role;
+            role = (await getUser(uid));
+            if(role.length>0) role = role[0].role
             status = 200;
         }
         
