@@ -20,6 +20,7 @@ const auth = getAuth(app);
 let currentUserName = "";
 let currentUserSurname = "";
 let userUID = 0;
+let articleList = [];
 
 async function fetchData(url) {
     try {
@@ -46,7 +47,6 @@ async function fetchData(url) {
 document.addEventListener("DOMContentLoaded", async function(){
     try {
         const list = await fetchData('https://sdp-campus-safety.azurewebsites.net/articles/Approved');
-        const articleList = [];
         const myMap = new Map(Object.entries(list));
         for(let i = 0; i < myMap.size; i++){
             articleList.push(myMap.get(`${i}`))
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async function(){
         }
             
         sortList(articleList);
-        console.log(articleList);
+        //console.log(articleList);
         document.querySelector("#preloader").remove();
         document.querySelector(".main-container").style.opacity = "1";
         
@@ -84,7 +84,8 @@ document.addEventListener("DOMContentLoaded", async function(){
                                 author,
                                 holder,
                                 hold,
-                                article.articleID
+                                article.articleID,
+                                i
                             );
                         }else{    
                             createArticles(
@@ -92,7 +93,8 @@ document.addEventListener("DOMContentLoaded", async function(){
                                 author,
                                 holder,
                                 hold,
-                                article.articleID
+                                article.articleID,
+                                i
                             );
                         }
                     }
@@ -127,7 +129,7 @@ function sortList(list) {
     return list.sort((a, b) => b.likes - a.likes);
 }
 
-function createArticles(title, author, subtext, fullText, articleId){
+function createArticles(title, author, subtext, fullText, articleId, i){
     const dashboardContent = document.createElement("div");
     dashboardContent.classList.add("dashboard-content");    
 
@@ -157,10 +159,23 @@ function createArticles(title, author, subtext, fullText, articleId){
     const likeBtn = document.createElement("button");
     likeBtn.id = "like";
     likeBtn.dataset.articleId = articleId;
+    //console.log(i);
+    likeBtn.className = `${i}`;
     likeBtn.type = "button";
     // likeBtn.style.backgroundColor = "blue"; 
     // likeBtn.style.padding = "1em";
     likeBtn.textContent = "LIKE";
+
+    const likeArticle = window.localStorage.getItem(`${articleList[i].title} && ${articleList[i].author} && ${articleList[i].articleID}`);
+    if(likeArticle){
+        likeBtn.id = 'liked';
+        likeBtn.disabled = true;
+        likeBtn.textContent = "LIKED";
+    }
+
+    // event.target.id = 'liked';
+    // event.target.disabled = true;
+    // event.target.textContent = "LIKED";
     // likeBtn.style.color = "whitesmoke";  
     // likeBtn.style.textDecoration = "none"
 
@@ -180,9 +195,16 @@ function createArticles(title, author, subtext, fullText, articleId){
             headers: {'Content-Type': 'application/json'}
         }).then(response => {
             if(response.ok){
+                // console.log(event);
+                // console.log(event.target)
+                // console.log(articleList);
+                // console.log(event.target.className)
+                // console.log(event.target.class)
                 event.target.id = 'liked';
                 event.target.disabled = true;
                 event.target.textContent = "LIKED";
+                const index = Number(event.target.className);
+                window.localStorage.setItem(`${articleList[index].title} && ${articleList[index].author} && ${articleList[index].articleID}`, index)
                 //event.target.style.backgroundColor = "#eef100"
                 
                 alert("This article has been liked.");
