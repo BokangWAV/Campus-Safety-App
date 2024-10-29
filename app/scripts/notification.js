@@ -139,7 +139,11 @@ async function displayNotifications(){
     const date = new Date(notification.timestamp._seconds * 1000);
     const dateOptions = { year: 'numeric', month: 'long', day: '2-digit' };
     const formattedDate = date.toLocaleDateString(undefined, dateOptions);  // Date in a human-readable format
-    const formattedTime = date.toLocaleTimeString();
+    const formattedTime = date.toLocaleTimeString("en-US", {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false, // Set to true for 12-hour format
+    });
     timestampDiv.textContent = formattedDate + " at " + formattedTime;
 
     // Incident image (hidden by default)
