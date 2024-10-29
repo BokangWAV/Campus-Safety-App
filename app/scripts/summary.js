@@ -141,7 +141,7 @@ function createHistoryReport(reportContainer, reportDate, description, location)
     const timestampInMilliseconds = reportDate._seconds * 1000 + reportDate._nanoseconds / 1000000;
     const date = new Date(timestampInMilliseconds);
 
-    heading.textContent = `${date.getDate()} ${monthName[date.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+    heading.textContent = `${date.getDate()} ${monthName[date.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
     dashboardCard.appendChild(heading);
 
     const p = document.createElement("p");
