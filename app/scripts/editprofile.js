@@ -35,11 +35,12 @@ window.onload = async function () {
 
       if(window.localStorage.getItem('userProfile') != ""){
         document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
-      
+      }
+      console.log(user)
       if( user.profileIntro){
+        console.log("New user");
         document.getElementById('fullIntroDiv').style.display = 'flex';
       }
-    }
     if(window.localStorage.getItem('userRole') == "manager"){
       document.getElementById('managerAlert').style.display = 'flex'
       document.getElementById('managerRequests').style.display = 'flex'

@@ -36,7 +36,7 @@ document.getElementById('target').addEventListener('click', ()=>{
 
 async function displayPoints() {
 
-  await getMaintanence();
+  
 
   if(window.localStorage.getItem('userProfile') != ""){
       document.getElementById('profileDisplay').src = window.localStorage.getItem('userProfile');
@@ -134,8 +134,8 @@ async function displayPoints() {
     });
     
     
-    getMaintanence();
-    displayReports();
+    await getMaintanence();
+    await displayReports();
     plotAlerts();
     showPosition();
     locationDropdown.disabled = false;
@@ -241,7 +241,11 @@ async function plotAlerts(){
         const date = new Date(elem.alertDate._seconds * 1000);
         const dateOptions = { year: 'numeric', month: 'long', day: '2-digit' };
         const formattedDate = date.toLocaleDateString(undefined, dateOptions);  // Date in a human-readable format
-        const formattedTime = date.toLocaleTimeString();
+        const formattedTime = date.toLocaleTimeString("en-US", {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false, // Set to true for 12-hour format
+        });
         plotLocation(lat, lon, ` <strong>${elem.firstName} ${elem.lastName}</strong> <br> ${formattedDate} ${formattedTime} `, L.icon({
           iconUrl: './assets/Undraw/alert2.png',
           iconSize: [25, 25],
@@ -302,6 +306,7 @@ async function displayAlerts(){
   if(summaryDiv.querySelector('div[id="Summary-Section"]')){
     const temp = document.getElementById("Summary-Section");
     temp.remove();
+    //console.log("removed")
   }
   
 
@@ -395,6 +400,25 @@ async function displayAlerts(){
               <button type="button"  data-index="${index}" id="btn-zoom" class="btn-zoom" > zoom</button>
           </div>
         `;
+
+        // alertSummaryDiv.addEventListener('click', async(event) => {
+        //   if (event.target.classList.contains('btn-call')) {
+        //     const index = event.target.dataset.index;
+        //     window.location.href = `tel:${alerts[index].phoneNumber}`;
+        //   }
+        //   else if (event.target.classList.contains('btn-rescued')) {
+        //     const index = event.target.dataset.index;
+        //     await areYouSure(index);
+        //   }
+        //   else if (event.target.classList.contains('btn-zoom')) {
+        //     const index = event.target.dataset.index;
+        //     const lat = Number(alerts[index].lat);
+        //     const lon = Number(alerts[index].lon);
+        //     initializeMap(lat, lon);
+        
+        //   }
+        
+        // });
 
         
         alertInformationDiv.appendChild(alertDetailsDiv);
@@ -826,21 +850,22 @@ summaryDiv.addEventListener('click', async(event) => {
     reportIndex = index;
     displayPopUp(index);
   }
-  else if (event.target.classList.contains('btn-call')) {
-    const index = event.target.dataset.index;
-    window.location.href = `tel:${alerts[index].phoneNumber}`;
-  }
+  // else if (event.target.classList.contains('btn-call')) {
+  //   const index = event.target.dataset.index;
+  //   window.location.href = `tel:${alerts[index].phoneNumber}`;
+  // }
   else if (event.target.classList.contains('btn-rescued')) {
     const index = event.target.dataset.index;
+    console.log("button clicked at index: ",index)
     await areYouSure(index);
   }
-  else if (event.target.classList.contains('btn-zoom')) {
-    const index = event.target.dataset.index;
-    const lat = Number(alerts[index].lat);
-    const lon = Number(alerts[index].lon);
-    initializeMap(lat, lon);
+  // else if (event.target.classList.contains('btn-zoom')) {
+  //   const index = event.target.dataset.index;
+  //   const lat = Number(alerts[index].lat);
+  //   const lon = Number(alerts[index].lon);
+  //   initializeMap(lat, lon);
 
-  }
+  // }
 
 });
 
@@ -849,6 +874,7 @@ async function rescuedUser(index){
     return
   }
   console.log(alerts[index].alertID)
+  console.log("index: ", index);
   map.eachLayer(function(layer) {
       // Check if the layer is a marker
       if (layer instanceof L.Marker) {
@@ -953,8 +979,12 @@ function displayPopUp(index){
   `;
 
   const PopUpExtra = document.getElementById('PopUp-Extra');
+  const reportlatitude = currentReport.geoLocation.split(', ')[0];
+  const reportLongitude = currentReport.geoLocation.split(', ')[1];
+  console.log(currentReport)
+  console.log('Here', reportlatitude, 'and', reportLongitude)
   PopUpExtra.innerHTML = `
-    <p><strong>Location:</strong>&nbsp   ${currentReport.location}</p>
+    <p><strong>Location:</strong>&nbsp ${currentReport.location}</p>
     <p><strong>Date:</strong>&nbsp  ${currentReport.time}</p>
     <p><strong>status:</strong>&nbsp  ${currentReport.status}</p>
     <p><strong>Urgency Level:</strong>&nbsp  ${currentReport.urgencyLevel}</p>
@@ -1055,15 +1085,16 @@ function nearestBuilding( lat, lon) {
 
 
 async function areYouSure(index){
+  console.log("Are you sure with index: ", index)
   FullAreYouSure.style.display = 'flex'
   document.getElementById('AreUSureCancel').addEventListener('click', ()=>{
-    FullAreYouSure.style.display = 'none'
+    FullAreYouSure.style.display = 'none';
   })
   document.getElementById('AreUSureChande').addEventListener('click', async ()=>{
     document.getElementById('AreUSureChande').disabled = true;
     document.getElementById('AreUSureCancel').disabled = true;
     await rescuedUser(index);
-    FullAreYouSure.click();
+    FullAreYouSure.style.display = 'none';
     document.getElementById('AreUSureChande').disabled = false;
     document.getElementById('AreUSureCancel').disabled = false;
   })

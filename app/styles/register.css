@@ -62,7 +62,6 @@ body{
 }
 .form .message {
   width: 100%;
-  margin-left: 100px;
   color: #ff0000;
   font-size: 12px;
 }
@@ -74,16 +73,11 @@ body{
 
 
 .form p {
-  transition: opacity 1s ease-in, transform 1s ease-in;
   opacity: 0;
-  transform: translateY(20px);
-  display: none;
 }
 
 .form p.show {
   opacity: 1;
-  transform: translateY(0);
-  display: flex;
 }
 
 .Switch{

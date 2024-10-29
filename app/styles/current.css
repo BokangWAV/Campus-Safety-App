@@ -854,10 +854,11 @@ body {
     .header {
         flex-direction: row;
         justify-content: space-between;
-        height: 50px;
+        height: 40px;
         padding: 1rem 2rem;
         font-size: 24px;
         width: 100%;
+        padding-left: 15px;
     }
     
     #headerMenu{
@@ -883,7 +884,7 @@ body {
         flex-direction: column;
         background-color: #1a3e57;
         position: absolute;
-        top: 60px;
+        top: 50px;
         left: 0;
         width: 100%;
         height: 45dvh;
@@ -913,7 +914,8 @@ body {
     #map{
         width: 100%;
         height: 50%;
-        margin-top: 20px;
+        margin-top: 10px;
+        margin-bottom: 0px;
     }
 
     #dashboard-container{
@@ -926,12 +928,23 @@ body {
 
     #aside-bar{
         width: 100%;
-        margin-top: 0px;
         height: 50%;
+        padding-top: 0px;
+        padding-bottom: 50px;
+    }
+
+    #heading{
+        margin-top: 4px;
+        margin-bottom: 10px;
+    }
+
+    #Summary-Section{
+        width: 100%;
     }
 
     #report-Summary{
-        padding-top: 10px;
+        padding-top: 0px;
+        padding-right: 15px;
     }
     #description{
         margin-bottom: 10px;
