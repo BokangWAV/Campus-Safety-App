@@ -113,6 +113,7 @@ function showRegistrationInputs(){
   }
   if(full_form.querySelector('input[id="email-input"]')){
     document.getElementById('email-input').remove();
+    document.getElementById('inform').remove();
     document.getElementById('password_text').remove();
     document.getElementById('RegisterLink').remove();
     document.getElementById('RegisterText').remove();
@@ -241,6 +242,7 @@ function showLogInFields(){
   // Remove the registration stuff if it is there
   if(full_form.querySelector('input[id="confirmPassword_text"]')){
     document.getElementById('firstName_text').remove();
+    document.getElementById('inform').remove();
     document.getElementById('email_text').remove();
     document.getElementById('password_text').remove();
     document.getElementById('confirmPassword_text').remove();
@@ -358,12 +360,8 @@ function verifyRegisterFields(f, l, e, p, cp, pTag, g){
     }else{
       pTag.innerText = '*Fill in all Fields';
     }
-    
-    smoothTRansition();
-    // Trigger the transition
-    requestAnimationFrame(() => {
-      pTag.className = 'message show';
-    });
+
+    pTag.className = 'message show';
   }
 
   return !missing;
@@ -374,20 +372,22 @@ function verifyRegisterFields(f, l, e, p, cp, pTag, g){
 function verifySignInFields(e, p, pTag){
   if(!e){
     pTag.innerText = 'Fill in all Fields';
-    smoothTRansition();
-    // Trigger the transition
-    requestAnimationFrame(() => {
-      pTag.className = 'message show';
-    });
+    pTag.className = 'message show';
+    // smoothTRansition();
+    // // Trigger the transition
+    // requestAnimationFrame(() => {
+    //   pTag.className = 'message show';
+    // });
     return false;
   }
   else if(!p){
     pTag.innerText = '     *Fill in all Fields';
-    smoothTRansition();
-    // Trigger the transition
-    requestAnimationFrame(() => {
-      pTag.className = 'message show';
-    });
+    pTag.className = 'message show';
+    // smoothTRansition();
+    // // Trigger the transition
+    // requestAnimationFrame(() => {
+    //   pTag.className = 'message show';
+    // });
     return false;
   }
 
